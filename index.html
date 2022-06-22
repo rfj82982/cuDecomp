@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>cuDecomp: An Adaptive Pencil Decomposition Library for NVIDIA GPUs &mdash; cuDecomp 2022 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/style.css" type="text/css" />
+      <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Overview" href="overview.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" > 
+            <a href="#" class="icon icon-home"> cuDecomp
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #76b900;
+    }
+
+    .wy-side-nav-search a:link, .wy-nav-top a:link {
+      color: #fff;
+    }
+    .wy-side-nav-search a:visited, .wy-nav-top a:visited {
+      color: #fff;
+    }
+    .wy-side-nav-search a:hover, .wy-nav-top a:hover {
+      color: #fff;
+    }
+
+    .wy-menu-vertical a:link, .wy-menu-vertical a:visited {
+      color: #d9d9d9
+    }
+
+    .wy-menu-vertical a:active {
+      background-color: #76b900
+    }
+
+    .wy-side-nav-search>div.version {
+      color: rgba(0, 0, 0, 0.3)
+    }
+  </style>
+  
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#what-is-cudecomp">What is cuDecomp?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#decomposition-layout">Decomposition Layout</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="basic_usage.html">Basic Usage Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#starting-up-cudecomp">Starting up cuDecomp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#creating-a-grid-descriptor">Creating a grid descriptor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#allocate-pencil-memory">Allocate pencil memory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#working-with-pencil-data">Working with pencil data</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="basic_usage.html#c-c">C/C++</a></li>
+<li class="toctree-l3"><a class="reference internal" href="basic_usage.html#fortran">Fortran</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#allocating-workspace">Allocating workspace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#transposing-the-data">Transposing the data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#updating-halo-regions">Updating halo regions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#cleaning-up-and-finalizing-the-library">Cleaning up and finalizing the library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#building-and-running-the-example">Building and running the example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="autotuning.html">Autotuning</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="autotuning.html#autotuning-process">Autotuning process</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autotuning.html#autotuning-usage">Autotuning usage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="autotuning.html#creating-a-grid-descriptor-with-autotuning-enabled">Creating a grid descriptor with autotuning enabled</a></li>
+<li class="toctree-l3"><a class="reference internal" href="autotuning.html#autotuner-output-and-querying-results">Autotuner output and querying results</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="nvshmem.html">Working with NVSHMEM-enabled builds</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="nvshmem.html#controlling-the-symmetric-heap-size">Controlling the symmetric heap size</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nvshmem.html#mpi-compatibility">MPI compatibility</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">cuDecomp API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/c_api.html">cuDecomp C API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/c_api.html#types">Types</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/c_api.html#internal-types">Internal types</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/c_api.html#grid-descriptor-configuration">Grid Descriptor Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/c_api.html#pencil-information">Pencil Information</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/c_api.html#communication-backends">Communication Backends</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/c_api.html#additional-enumerators">Additional Enumerators</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/c_api.html#functions">Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/c_api.html#library-initialization-finalization">Library Initialization/Finalization</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/c_api.html#grid-descriptor-management">Grid Descriptor Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/c_api.html#workspace-management">Workspace Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/c_api.html#helper-functions">Helper Functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/c_api.html#transposition-functions">Transposition Functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/c_api.html#halo-exchange-functions">Halo Exchange Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/f_api.html">cuDecomp Fortran API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/f_api.html#types">Types</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/f_api.html#internal-types">Internal types</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/f_api.html#grid-descriptor-configuration">Grid Descriptor Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/f_api.html#pencil-information">Pencil Information</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/f_api.html#communication-backends">Communication Backends</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/f_api.html#additional-enumerators">Additional Enumerators</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/f_api.html#functions">Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/f_api.html#library-initialization-finalization">Library Initialization/Finalization</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/f_api.html#grid-descriptor-management">Grid Descriptor Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/f_api.html#workspace-management">Workspace Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/f_api.html#helper-functions">Helper Functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/f_api.html#transposition-functions">Transposition Functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/f_api.html#halo-exchange-functions">Halo Exchange Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">cuDecomp</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home"></a> &raquo;</li>
+      <li>cuDecomp: An Adaptive Pencil Decomposition Library for NVIDIA GPUs</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="cudecomp-an-adaptive-pencil-decomposition-library-for-nvidia-gpus">
+<h1>cuDecomp: An Adaptive Pencil Decomposition Library for NVIDIA GPUs<a class="headerlink" href="#cudecomp-an-adaptive-pencil-decomposition-library-for-nvidia-gpus" title="Permalink to this headline">¶</a></h1>
+<p>These pages contain the documentation for cuDecomp, an adaptive pencil
+decomposition library for NVIDIA GPUs.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><strong>Disclaimer</strong>:
+This library is currently in a research-oriented state, and has been
+released as a companion to a paper presented at the PASC22 conference (<a class="reference external" href="https://pasc22.pasc-conference.org/program/schedule/presentation/?id=pap120&amp;sess=sess176">link</a>).
+We are making it available here as it can be useful in other applications
+outside of this study or as benchmarking tool and usage example for various
+GPU communication libraries to perform transpose and halo communication.</p></li>
+</ul>
+</div></blockquote>
+<p>Please contact us or open a GitHub issue if you are interested in using this library
+in your own solvers and have questions on usage and/or feature requests.</p>
+</section>
+<section id="table-of-contents">
+<h1>Table of Contents<a class="headerlink" href="#table-of-contents" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#what-is-cudecomp">What is cuDecomp?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#decomposition-layout">Decomposition Layout</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="basic_usage.html">Basic Usage Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#starting-up-cudecomp">Starting up cuDecomp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#creating-a-grid-descriptor">Creating a grid descriptor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#allocate-pencil-memory">Allocate pencil memory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#working-with-pencil-data">Working with pencil data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#allocating-workspace">Allocating workspace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#transposing-the-data">Transposing the data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#updating-halo-regions">Updating halo regions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#cleaning-up-and-finalizing-the-library">Cleaning up and finalizing the library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#building-and-running-the-example">Building and running the example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="autotuning.html">Autotuning</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="autotuning.html#autotuning-process">Autotuning process</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autotuning.html#autotuning-usage">Autotuning usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="nvshmem.html">Working with NVSHMEM-enabled builds</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="nvshmem.html#controlling-the-symmetric-heap-size">Controlling the symmetric heap size</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nvshmem.html#mpi-compatibility">MPI compatibility</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">cuDecomp API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/c_api.html">cuDecomp C API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/f_api.html">cuDecomp Fortran API</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="overview.html" class="btn btn-neutral float-right" title="Overview" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, NVIDIA Corporation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>  
+
+  <style>
+  a:link, a:visited {
+    color: #76b900;
+  }
+
+  a:hover {
+    color: #8c0;
+  }
+
+  .rst-content dl:not(.docutils) dt {
+    background: rgba(118, 185, 0, 0.1);
+    color: rgba(59,93,0,1);
+    border-top: solid 3px rgba(59,93,0,1);
+  }
+  </style>
+  
+
+</body>
+</html>

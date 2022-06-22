@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Working with NVSHMEM-enabled builds &mdash; cuDecomp 2022 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/style.css" type="text/css" />
+      <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="cuDecomp API" href="api.html" />
+    <link rel="prev" title="Autotuning" href="autotuning.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" > 
+            <a href="index.html" class="icon icon-home"> cuDecomp
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #76b900;
+    }
+
+    .wy-side-nav-search a:link, .wy-nav-top a:link {
+      color: #fff;
+    }
+    .wy-side-nav-search a:visited, .wy-nav-top a:visited {
+      color: #fff;
+    }
+    .wy-side-nav-search a:hover, .wy-nav-top a:hover {
+      color: #fff;
+    }
+
+    .wy-menu-vertical a:link, .wy-menu-vertical a:visited {
+      color: #d9d9d9
+    }
+
+    .wy-menu-vertical a:active {
+      background-color: #76b900
+    }
+
+    .wy-side-nav-search>div.version {
+      color: rgba(0, 0, 0, 0.3)
+    }
+  </style>
+  
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#what-is-cudecomp">What is cuDecomp?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#decomposition-layout">Decomposition Layout</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="basic_usage.html">Basic Usage Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#starting-up-cudecomp">Starting up cuDecomp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#creating-a-grid-descriptor">Creating a grid descriptor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#allocate-pencil-memory">Allocate pencil memory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#working-with-pencil-data">Working with pencil data</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="basic_usage.html#c-c">C/C++</a></li>
+<li class="toctree-l3"><a class="reference internal" href="basic_usage.html#fortran">Fortran</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#allocating-workspace">Allocating workspace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#transposing-the-data">Transposing the data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#updating-halo-regions">Updating halo regions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#cleaning-up-and-finalizing-the-library">Cleaning up and finalizing the library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#building-and-running-the-example">Building and running the example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="autotuning.html">Autotuning</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="autotuning.html#autotuning-process">Autotuning process</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autotuning.html#autotuning-usage">Autotuning usage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="autotuning.html#creating-a-grid-descriptor-with-autotuning-enabled">Creating a grid descriptor with autotuning enabled</a></li>
+<li class="toctree-l3"><a class="reference internal" href="autotuning.html#autotuner-output-and-querying-results">Autotuner output and querying results</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Working with NVSHMEM-enabled builds</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#controlling-the-symmetric-heap-size">Controlling the symmetric heap size</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mpi-compatibility">MPI compatibility</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">cuDecomp API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/c_api.html">cuDecomp C API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/c_api.html#types">Types</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/c_api.html#internal-types">Internal types</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/c_api.html#grid-descriptor-configuration">Grid Descriptor Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/c_api.html#pencil-information">Pencil Information</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/c_api.html#communication-backends">Communication Backends</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/c_api.html#additional-enumerators">Additional Enumerators</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/c_api.html#functions">Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/c_api.html#library-initialization-finalization">Library Initialization/Finalization</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/c_api.html#grid-descriptor-management">Grid Descriptor Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/c_api.html#workspace-management">Workspace Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/c_api.html#helper-functions">Helper Functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/c_api.html#transposition-functions">Transposition Functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/c_api.html#halo-exchange-functions">Halo Exchange Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/f_api.html">cuDecomp Fortran API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/f_api.html#types">Types</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/f_api.html#internal-types">Internal types</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/f_api.html#grid-descriptor-configuration">Grid Descriptor Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/f_api.html#pencil-information">Pencil Information</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/f_api.html#communication-backends">Communication Backends</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/f_api.html#additional-enumerators">Additional Enumerators</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/f_api.html#functions">Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/f_api.html#library-initialization-finalization">Library Initialization/Finalization</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/f_api.html#grid-descriptor-management">Grid Descriptor Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/f_api.html#workspace-management">Workspace Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/f_api.html#helper-functions">Helper Functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/f_api.html#transposition-functions">Transposition Functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/f_api.html#halo-exchange-functions">Halo Exchange Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">cuDecomp</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Working with NVSHMEM-enabled builds</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/nvshmem.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="working-with-nvshmem-enabled-builds">
+<span id="nvshmem-section-ref"></span><h1>Working with NVSHMEM-enabled builds<a class="headerlink" href="#working-with-nvshmem-enabled-builds" title="Permalink to this headline">¶</a></h1>
+<p>When cuDecomp is built with NVSHMEM enabled, there are a few concepts and potential pitfalls that
+users should be aware of which we will highlight in this section.</p>
+<section id="controlling-the-symmetric-heap-size">
+<h2>Controlling the symmetric heap size<a class="headerlink" href="#controlling-the-symmetric-heap-size" title="Permalink to this headline">¶</a></h2>
+<p>In general, NVSHMEM operations requires memory it operates on to be allocated on its <cite>symmetric heap</cite>, via
+<code class="code docutils literal notranslate"><span class="pre">nvshmem_malloc</span></code>. While cuDecomp attempts to hide this complexity behind <code class="code docutils literal notranslate"><span class="pre">cudecompMalloc</span></code>, it is important
+to understand that memory allocated for usage with NVSHMEM comes out of a separate memory pool than all other
+CUDA allocations. At a high-level, NVSHMEM will preallocate this symmetric heap on each GPU when it is initialized,
+with the heap size set by the <a class="reference external" href="https://docs.nvidia.com/hpc-sdk/nvshmem/api/docs/gen/env.html#c.NVSHMEM_SYMMETRIC_SIZE">NVSHMEM_SYMMETRIC_SIZE</a> environment variable.
+As such, it is important to set the symmetric heap size to a value that is large enough for any necessary allocations from cuDecomp,
+but not much larger as that will waste GPU memory space.</p>
+<p>To help with this, the code will produce warnings like the following</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="nl">CUDECOMP</span><span class="p">:</span><span class="n">WARN</span><span class="o">:</span><span class="w"> </span><span class="n">Attempting</span><span class="w"> </span><span class="n">an</span><span class="w"> </span><span class="n">NVSHMEM</span><span class="w"> </span><span class="n">allocation</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="mi">2147483648</span><span class="w"> </span><span class="n">bytes</span><span class="w"> </span><span class="n">but</span><span class="w"> </span><span class="o">*</span><span class="n">approximately</span><span class="o">*</span><span class="w"> </span><span class="mi">1073741824</span><span class="w"> </span><span class="n">free</span><span class="w"> </span><span class="n">bytes</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="mi">1073741824</span><span class="w"> </span><span class="n">total</span><span class="w"> </span><span class="n">bytes</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">symmetric</span><span class="w"> </span><span class="n">heap</span><span class="w"> </span><span class="n">space</span><span class="w"> </span><span class="n">available</span><span class="p">.</span><span class="w"> </span><span class="n">If</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">allocation</span><span class="w"> </span><span class="n">fails</span><span class="p">,</span><span class="w"> </span><span class="n">set</span><span class="w"> </span><span class="n">NVSHMEM_SYMMETRIC_SIZE</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">2147483648</span><span class="w"> </span><span class="n">and</span><span class="w"> </span><span class="k">try</span><span class="w"> </span><span class="n">again</span><span class="p">.</span><span class="w"></span>
+</pre></div>
+</div>
+<p>if the library detects NVSHMEM allocations that may exceed the symmetric heap size, and suggests an appropriate value for <code class="code docutils literal notranslate"><span class="pre">NVSHMEM_SYMMETRIC_SIZE</span></code>.</p>
+</section>
+<section id="mpi-compatibility">
+<h2>MPI compatibility<a class="headerlink" href="#mpi-compatibility" title="Permalink to this headline">¶</a></h2>
+<p>As noted in the NVSHMEM documentation <a class="reference external" href="https://docs.nvidia.com/hpc-sdk/nvshmem/api/docs/faq.html#interoperability-with-mpi-faqs">here</a>,
+memory allocated on the symmetric heap may lead to crashes when used in MPI calls with some MPI implementations, especially when
+CUDA VMM features in NVSHMEM are enabled. We strongly encourage users to set <code class="code docutils literal notranslate"><span class="pre">NVSHMEM_DISABLE_CUDA_VMM=1</span></code> when using cuDecomp
+with NVSHMEM enabled. However, this is not always sufficient and MPI can still crash when passed NVSHMEM allocated memory.</p>
+<p>Due to this, cuDecomp attempts to avoid using NVSHMEM-allocated memory with MPI where possible but it can arise in a couple of situations:</p>
+<ol class="arabic">
+<li><p>During autotuning, if there is not enough memory to allocate separate workspace buffers for NVSHMEM and non-NVSHMEM backends for testing,
+the library will attempt to run MPI backends using NVSHMEM allocated memory, printing the following message:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="nl">CUDECOMP</span><span class="p">:</span><span class="n">WARN</span><span class="o">:</span><span class="w"> </span><span class="n">Cannot</span><span class="w"> </span><span class="n">allocate</span><span class="w"> </span><span class="n">separate</span><span class="w"> </span><span class="n">workspace</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">non</span><span class="o">-</span><span class="n">NVSHMEM</span><span class="w"> </span><span class="n">backends</span><span class="w"> </span><span class="n">during</span><span class="w"> </span><span class="n">autotuning</span><span class="p">.</span><span class="w"> </span><span class="n">Using</span><span class="w"> </span><span class="n">NVSHMEM</span><span class="w"> </span><span class="n">allocated</span><span class="w"> </span><span class="n">workspace</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">all</span><span class="w"> </span><span class="n">backends</span><span class="p">,</span><span class="w"> </span><span class="n">which</span><span class="w"> </span><span class="n">may</span><span class="w"> </span><span class="n">cause</span><span class="w"> </span><span class="n">issues</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">some</span><span class="w"> </span><span class="n">MPI</span><span class="w"> </span><span class="n">implementations</span><span class="p">.</span><span class="w"> </span><span class="n">See</span><span class="w"> </span><span class="n">documentation</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">more</span><span class="w"> </span><span class="n">details</span><span class="w"> </span><span class="n">and</span><span class="w"> </span><span class="n">suggested</span><span class="w"> </span><span class="n">workarounds</span><span class="p">.</span><span class="w"></span>
+</pre></div>
+</div>
+<p>If this crashes on your system due to MPI incompatibilities, you should disable NVSHMEM backends for your problem configuration.</p>
+</li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">cudecompMalloc</span></code> will allocate memory based on both the transpose and halo communication backends. If one of those backends is
+NVSHMEM-enabled, it will allocate memory using <cite>nvshmem_malloc</cite>. If the other communication backend is using MPI, you may end up
+using an NVSHMEM-allocated workspace for that communication. If this is detected, cuDecomp will print the following message:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="nl">CUDECOMP</span><span class="p">:</span><span class="n">WARN</span><span class="o">:</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="n">work</span><span class="w"> </span><span class="n">buffer</span><span class="w"> </span><span class="n">allocated</span><span class="w"> </span><span class="n">with</span><span class="w"> </span><span class="n">nvshmem_malloc</span><span class="w"> </span><span class="p">(</span><span class="n">via</span><span class="w"> </span><span class="n">cudecompMalloc</span><span class="p">)</span><span class="w"> </span><span class="n">is</span><span class="w"> </span><span class="n">being</span><span class="w"> </span><span class="n">used</span><span class="w"> </span><span class="n">with</span><span class="w"> </span><span class="n">an</span><span class="w"> </span><span class="n">MPI</span><span class="w"> </span><span class="n">communication</span><span class="w"> </span><span class="n">backend</span><span class="p">.</span><span class="w"> </span><span class="n">This</span><span class="w"> </span><span class="n">may</span><span class="w"> </span><span class="n">cause</span><span class="w"> </span><span class="n">issues</span><span class="w"> </span><span class="n">with</span><span class="w"> </span><span class="n">some</span><span class="w"> </span><span class="n">MPI</span><span class="w"> </span><span class="n">implementations</span><span class="p">.</span><span class="w"> </span><span class="n">See</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">documentation</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">additional</span><span class="w"> </span><span class="n">details</span><span class="w"> </span><span class="n">and</span><span class="w"> </span><span class="n">possible</span><span class="w"> </span><span class="n">workarounds</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">you</span><span class="w"> </span><span class="n">encounter</span><span class="w"> </span><span class="n">issues</span><span class="p">.</span><span class="w"></span>
+</pre></div>
+</div>
+<p>If this crashes on your system due to MPI incompatibilities, the suggested workaround is to use two separate grid descriptors,
+one for the transpose communication, and one for the halo communication, in order to avoid mixing workspace allocation types in
+the case where one communication type uses MPI and the others uses NVSHMEM.</p>
+</li>
+</ol>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="autotuning.html" class="btn btn-neutral float-left" title="Autotuning" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="api.html" class="btn btn-neutral float-right" title="cuDecomp API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, NVIDIA Corporation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>  
+
+  <style>
+  a:link, a:visited {
+    color: #76b900;
+  }
+
+  a:hover {
+    color: #8c0;
+  }
+
+  .rst-content dl:not(.docutils) dt {
+    background: rgba(118, 185, 0, 0.1);
+    color: rgba(59,93,0,1);
+    border-top: solid 3px rgba(59,93,0,1);
+  }
+  </style>
+  
+
+</body>
+</html>

@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>cuDecomp C API &mdash; cuDecomp 2022 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/style.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="cuDecomp Fortran API" href="f_api.html" />
+    <link rel="prev" title="cuDecomp API" href="../api.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" > 
+            <a href="../index.html" class="icon icon-home"> cuDecomp
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #76b900;
+    }
+
+    .wy-side-nav-search a:link, .wy-nav-top a:link {
+      color: #fff;
+    }
+    .wy-side-nav-search a:visited, .wy-nav-top a:visited {
+      color: #fff;
+    }
+    .wy-side-nav-search a:hover, .wy-nav-top a:hover {
+      color: #fff;
+    }
+
+    .wy-menu-vertical a:link, .wy-menu-vertical a:visited {
+      color: #d9d9d9
+    }
+
+    .wy-menu-vertical a:active {
+      background-color: #76b900
+    }
+
+    .wy-side-nav-search>div.version {
+      color: rgba(0, 0, 0, 0.3)
+    }
+  </style>
+  
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../overview.html#what-is-cudecomp">What is cuDecomp?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../overview.html#decomposition-layout">Decomposition Layout</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../basic_usage.html">Basic Usage Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../basic_usage.html#starting-up-cudecomp">Starting up cuDecomp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic_usage.html#creating-a-grid-descriptor">Creating a grid descriptor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic_usage.html#allocate-pencil-memory">Allocate pencil memory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic_usage.html#working-with-pencil-data">Working with pencil data</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../basic_usage.html#c-c">C/C++</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../basic_usage.html#fortran">Fortran</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../basic_usage.html#allocating-workspace">Allocating workspace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic_usage.html#transposing-the-data">Transposing the data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic_usage.html#updating-halo-regions">Updating halo regions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic_usage.html#cleaning-up-and-finalizing-the-library">Cleaning up and finalizing the library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic_usage.html#building-and-running-the-example">Building and running the example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../autotuning.html">Autotuning</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../autotuning.html#autotuning-process">Autotuning process</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../autotuning.html#autotuning-usage">Autotuning usage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../autotuning.html#creating-a-grid-descriptor-with-autotuning-enabled">Creating a grid descriptor with autotuning enabled</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../autotuning.html#autotuner-output-and-querying-results">Autotuner output and querying results</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../nvshmem.html">Working with NVSHMEM-enabled builds</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../nvshmem.html#controlling-the-symmetric-heap-size">Controlling the symmetric heap size</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nvshmem.html#mpi-compatibility">MPI compatibility</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">cuDecomp API</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">cuDecomp C API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#types">Types</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#internal-types">Internal types</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#grid-descriptor-configuration">Grid Descriptor Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pencil-information">Pencil Information</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#communication-backends">Communication Backends</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#additional-enumerators">Additional Enumerators</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#library-initialization-finalization">Library Initialization/Finalization</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#grid-descriptor-management">Grid Descriptor Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#workspace-management">Workspace Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#helper-functions">Helper Functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#transposition-functions">Transposition Functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#halo-exchange-functions">Halo Exchange Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="f_api.html">cuDecomp Fortran API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="f_api.html#types">Types</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="f_api.html#internal-types">Internal types</a></li>
+<li class="toctree-l4"><a class="reference internal" href="f_api.html#grid-descriptor-configuration">Grid Descriptor Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="f_api.html#pencil-information">Pencil Information</a></li>
+<li class="toctree-l4"><a class="reference internal" href="f_api.html#communication-backends">Communication Backends</a></li>
+<li class="toctree-l4"><a class="reference internal" href="f_api.html#additional-enumerators">Additional Enumerators</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="f_api.html#functions">Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="f_api.html#library-initialization-finalization">Library Initialization/Finalization</a></li>
+<li class="toctree-l4"><a class="reference internal" href="f_api.html#grid-descriptor-management">Grid Descriptor Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="f_api.html#workspace-management">Workspace Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="f_api.html#helper-functions">Helper Functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="f_api.html#transposition-functions">Transposition Functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="f_api.html#halo-exchange-functions">Halo Exchange Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">cuDecomp</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../api.html">cuDecomp API</a> &raquo;</li>
+      <li>cuDecomp C API</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/c_api.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="cudecomp-c-api">
+<h1>cuDecomp C API<a class="headerlink" href="#cudecomp-c-api" title="Permalink to this headline">¶</a></h1>
+<p>These are all the types and functions available in the cuDecomp C API.</p>
+<section id="types">
+<h2>Types<a class="headerlink" href="#types" title="Permalink to this headline">¶</a></h2>
+<section id="internal-types">
+<h3>Internal types<a class="headerlink" href="#internal-types" title="Permalink to this headline">¶</a></h3>
+<section id="cudecomphandle-t">
+<span id="cudecomphandle-t-ref"></span><h4>cudecompHandle_t<a class="headerlink" href="#cudecomphandle-t" title="Permalink to this headline">¶</a></h4>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv416cudecompHandle_t">
+<span id="_CPPv316cudecompHandle_t"></span><span id="_CPPv216cudecompHandle_t"></span><span id="cudecompHandle_t"></span><span class="target" id="cudecomp_8h_1a92d2d6c0271bef997be7dca1fb568371"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">cudecompHandle</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">cudecompHandle_t</span></span></span><a class="headerlink" href="#_CPPv416cudecompHandle_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>A pointer to a cuDecomp internal handle structure. </p>
+</dd></dl>
+
+<hr class="docutils" />
+</section>
+<section id="cudecompgriddesc-t">
+<span id="cudecompgriddesc-t-ref"></span><h4>cudecompGridDesc_t<a class="headerlink" href="#cudecompgriddesc-t" title="Permalink to this headline">¶</a></h4>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv418cudecompGridDesc_t">
+<span id="_CPPv318cudecompGridDesc_t"></span><span id="_CPPv218cudecompGridDesc_t"></span><span id="cudecompGridDesc_t"></span><span class="target" id="cudecomp_8h_1ae794dfb924a9895a98baeff49f2f89c1"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">cudecompGridDesc</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">cudecompGridDesc_t</span></span></span><a class="headerlink" href="#_CPPv418cudecompGridDesc_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>A pointer to a cuDecomp internal grid descriptor structure. </p>
+</dd></dl>
+
+</section>
+</section>
+<hr class="docutils" />
+<section id="grid-descriptor-configuration">
+<h3>Grid Descriptor Configuration<a class="headerlink" href="#grid-descriptor-configuration" title="Permalink to this headline">¶</a></h3>
+<section id="cudecompgriddescconfig-t">
+<span id="cudecompgriddescconfig-t-ref"></span><h4>cudecompGridDescConfig_t<a class="headerlink" href="#cudecompgriddescconfig-t" title="Permalink to this headline">¶</a></h4>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv424cudecompGridDescConfig_t">
+<span id="_CPPv324cudecompGridDescConfig_t"></span><span id="_CPPv224cudecompGridDescConfig_t"></span><span id="cudecompGridDescConfig_t"></span><span class="target" id="structcudecompGridDescConfig__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cudecompGridDescConfig_t</span></span></span><a class="headerlink" href="#_CPPv424cudecompGridDescConfig_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>A data structure defining configuration options for grid descriptor creation. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N24cudecompGridDescConfig_t5gdimsE">
+<span id="_CPPv3N24cudecompGridDescConfig_t5gdimsE"></span><span id="_CPPv2N24cudecompGridDescConfig_t5gdimsE"></span><span id="cudecompGridDescConfig_t::gdims__int32_tA"></span><span class="target" id="structcudecompGridDescConfig__t_1a7d57f16451193da571103c34a02d040b"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">gdims</span></span></span><span class="p"><span class="pre">[</span></span><span class="m"><span class="pre">3</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#_CPPv4N24cudecompGridDescConfig_t5gdimsE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>dimensions of global data grid </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N24cudecompGridDescConfig_t10gdims_distE">
+<span id="_CPPv3N24cudecompGridDescConfig_t10gdims_distE"></span><span id="_CPPv2N24cudecompGridDescConfig_t10gdims_distE"></span><span id="cudecompGridDescConfig_t::gdims_dist__int32_tA"></span><span class="target" id="structcudecompGridDescConfig__t_1a30d8aee333e57776647c9315d94422bb"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">gdims_dist</span></span></span><span class="p"><span class="pre">[</span></span><span class="m"><span class="pre">3</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#_CPPv4N24cudecompGridDescConfig_t10gdims_distE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>dimensions of global data grid to use for distribution </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N24cudecompGridDescConfig_t5pdimsE">
+<span id="_CPPv3N24cudecompGridDescConfig_t5pdimsE"></span><span id="_CPPv2N24cudecompGridDescConfig_t5pdimsE"></span><span id="cudecompGridDescConfig_t::pdims__int32_tA"></span><span class="target" id="structcudecompGridDescConfig__t_1a6eb61309c0e99ec6e60e001230399cca"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">pdims</span></span></span><span class="p"><span class="pre">[</span></span><span class="m"><span class="pre">2</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#_CPPv4N24cudecompGridDescConfig_t5pdimsE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>dimensions of process grid </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N24cudecompGridDescConfig_t22transpose_comm_backendE">
+<span id="_CPPv3N24cudecompGridDescConfig_t22transpose_comm_backendE"></span><span id="_CPPv2N24cudecompGridDescConfig_t22transpose_comm_backendE"></span><span id="cudecompGridDescConfig_t::transpose_comm_backend__cudecompTransposeCommBackend_t"></span><span class="target" id="structcudecompGridDescConfig__t_1ace32e3d749e3bf58a94672afc96ca567"></span><a class="reference internal" href="#_CPPv430cudecompTransposeCommBackend_t" title="cudecompTransposeCommBackend_t"><span class="n"><span class="pre">cudecompTransposeCommBackend_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">transpose_comm_backend</span></span></span><a class="headerlink" href="#_CPPv4N24cudecompGridDescConfig_t22transpose_comm_backendE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>communication backend to use for transpose communication (default: CUDECOMP_TRANSPOSE_COMM_MPI_P2P) </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N24cudecompGridDescConfig_t25transpose_axis_contiguousE">
+<span id="_CPPv3N24cudecompGridDescConfig_t25transpose_axis_contiguousE"></span><span id="_CPPv2N24cudecompGridDescConfig_t25transpose_axis_contiguousE"></span><span id="cudecompGridDescConfig_t::transpose_axis_contiguous__bA"></span><span class="target" id="structcudecompGridDescConfig__t_1a4b2b42ada86cbd90671d576f69309346"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">transpose_axis_contiguous</span></span></span><span class="p"><span class="pre">[</span></span><span class="m"><span class="pre">3</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#_CPPv4N24cudecompGridDescConfig_t25transpose_axis_contiguousE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>flag (by axis) indicating if memory should be contiguous along pencil axis (default: [false, false, false]) </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N24cudecompGridDescConfig_t17halo_comm_backendE">
+<span id="_CPPv3N24cudecompGridDescConfig_t17halo_comm_backendE"></span><span id="_CPPv2N24cudecompGridDescConfig_t17halo_comm_backendE"></span><span id="cudecompGridDescConfig_t::halo_comm_backend__cudecompHaloCommBackend_t"></span><span class="target" id="structcudecompGridDescConfig__t_1a9d4f3153ccaf10fdc2aeb2115ee85204"></span><a class="reference internal" href="#_CPPv425cudecompHaloCommBackend_t" title="cudecompHaloCommBackend_t"><span class="n"><span class="pre">cudecompHaloCommBackend_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">halo_comm_backend</span></span></span><a class="headerlink" href="#_CPPv4N24cudecompGridDescConfig_t17halo_comm_backendE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>communication backend to use for halo communication (default: CUDECOMP_HALO_COMM_MPI) </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<hr class="docutils" />
+</section>
+<section id="cudecompgriddescautotuneoptions-t">
+<span id="cudecompgriddescautotuneoptions-t-ref"></span><h4>cudecompGridDescAutotuneOptions_t<a class="headerlink" href="#cudecompgriddescautotuneoptions-t" title="Permalink to this headline">¶</a></h4>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv433cudecompGridDescAutotuneOptions_t">
+<span id="_CPPv333cudecompGridDescAutotuneOptions_t"></span><span id="_CPPv233cudecompGridDescAutotuneOptions_t"></span><span id="cudecompGridDescAutotuneOptions_t"></span><span class="target" id="structcudecompGridDescAutotuneOptions__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cudecompGridDescAutotuneOptions_t</span></span></span><a class="headerlink" href="#_CPPv433cudecompGridDescAutotuneOptions_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>A data structure defining autotuning options for grid descriptor creation. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N33cudecompGridDescAutotuneOptions_t9grid_modeE">
+<span id="_CPPv3N33cudecompGridDescAutotuneOptions_t9grid_modeE"></span><span id="_CPPv2N33cudecompGridDescAutotuneOptions_t9grid_modeE"></span><span id="cudecompGridDescAutotuneOptions_t::grid_mode__cudecompAutotuneGridMode_t"></span><span class="target" id="structcudecompGridDescAutotuneOptions__t_1ad622190fd9cfb0ac6622e277f0458a4a"></span><a class="reference internal" href="#_CPPv426cudecompAutotuneGridMode_t" title="cudecompAutotuneGridMode_t"><span class="n"><span class="pre">cudecompAutotuneGridMode_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">grid_mode</span></span></span><a class="headerlink" href="#_CPPv4N33cudecompGridDescAutotuneOptions_t9grid_modeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>which communication (transpose/halo) to use to autotune process grid (default: CUDECOMP_AUTOTUNE_GRID_TRANSPOSE) </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N33cudecompGridDescAutotuneOptions_t5dtypeE">
+<span id="_CPPv3N33cudecompGridDescAutotuneOptions_t5dtypeE"></span><span id="_CPPv2N33cudecompGridDescAutotuneOptions_t5dtypeE"></span><span id="cudecompGridDescAutotuneOptions_t::dtype__cudecompDataType_t"></span><span class="target" id="structcudecompGridDescAutotuneOptions__t_1af10d0368e630fc8da04a965b070da2a3"></span><a class="reference internal" href="#_CPPv418cudecompDataType_t" title="cudecompDataType_t"><span class="n"><span class="pre">cudecompDataType_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dtype</span></span></span><a class="headerlink" href="#_CPPv4N33cudecompGridDescAutotuneOptions_t5dtypeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>datatype to use during autotuning (default: CUDECOMP_DOUBLE) </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N33cudecompGridDescAutotuneOptions_t27allow_uneven_decompositionsE">
+<span id="_CPPv3N33cudecompGridDescAutotuneOptions_t27allow_uneven_decompositionsE"></span><span id="_CPPv2N33cudecompGridDescAutotuneOptions_t27allow_uneven_decompositionsE"></span><span id="cudecompGridDescAutotuneOptions_t::allow_uneven_decompositions__b"></span><span class="target" id="structcudecompGridDescAutotuneOptions__t_1a0529f2a190574e71d5b39542837fef06"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">allow_uneven_decompositions</span></span></span><a class="headerlink" href="#_CPPv4N33cudecompGridDescAutotuneOptions_t27allow_uneven_decompositionsE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>flag to control whether autotuning allows process grids that result in uneven distributions of elements across processes (default: true) </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N33cudecompGridDescAutotuneOptions_t21disable_nccl_backendsE">
+<span id="_CPPv3N33cudecompGridDescAutotuneOptions_t21disable_nccl_backendsE"></span><span id="_CPPv2N33cudecompGridDescAutotuneOptions_t21disable_nccl_backendsE"></span><span id="cudecompGridDescAutotuneOptions_t::disable_nccl_backends__b"></span><span class="target" id="structcudecompGridDescAutotuneOptions__t_1a2d208731662f949b093337fb44bbad0d"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">disable_nccl_backends</span></span></span><a class="headerlink" href="#_CPPv4N33cudecompGridDescAutotuneOptions_t21disable_nccl_backendsE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>flag to disable NCCL backend options during autotuning (default: false) </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N33cudecompGridDescAutotuneOptions_t24disable_nvshmem_backendsE">
+<span id="_CPPv3N33cudecompGridDescAutotuneOptions_t24disable_nvshmem_backendsE"></span><span id="_CPPv2N33cudecompGridDescAutotuneOptions_t24disable_nvshmem_backendsE"></span><span id="cudecompGridDescAutotuneOptions_t::disable_nvshmem_backends__b"></span><span class="target" id="structcudecompGridDescAutotuneOptions__t_1a8012ac5e510f5dd78ee7b52e214589e6"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">disable_nvshmem_backends</span></span></span><a class="headerlink" href="#_CPPv4N33cudecompGridDescAutotuneOptions_t24disable_nvshmem_backendsE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>flag to disable NVSHMEM backend options during autotuning (default: false) </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N33cudecompGridDescAutotuneOptions_t26autotune_transpose_backendE">
+<span id="_CPPv3N33cudecompGridDescAutotuneOptions_t26autotune_transpose_backendE"></span><span id="_CPPv2N33cudecompGridDescAutotuneOptions_t26autotune_transpose_backendE"></span><span id="cudecompGridDescAutotuneOptions_t::autotune_transpose_backend__b"></span><span class="target" id="structcudecompGridDescAutotuneOptions__t_1aed49fb9afec20d783b767770af49381e"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">autotune_transpose_backend</span></span></span><a class="headerlink" href="#_CPPv4N33cudecompGridDescAutotuneOptions_t26autotune_transpose_backendE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>flag to enable transpose backend autotuning (default: false) </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N33cudecompGridDescAutotuneOptions_t29transpose_use_inplace_buffersE">
+<span id="_CPPv3N33cudecompGridDescAutotuneOptions_t29transpose_use_inplace_buffersE"></span><span id="_CPPv2N33cudecompGridDescAutotuneOptions_t29transpose_use_inplace_buffersE"></span><span id="cudecompGridDescAutotuneOptions_t::transpose_use_inplace_buffers__b"></span><span class="target" id="structcudecompGridDescAutotuneOptions__t_1a560da2d8ca6e6324d9b9f80cdd09ad33"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">transpose_use_inplace_buffers</span></span></span><a class="headerlink" href="#_CPPv4N33cudecompGridDescAutotuneOptions_t29transpose_use_inplace_buffersE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>flag to control whether transpose autotuning uses in-place or out-of-place buffers (default: false) </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N33cudecompGridDescAutotuneOptions_t21autotune_halo_backendE">
+<span id="_CPPv3N33cudecompGridDescAutotuneOptions_t21autotune_halo_backendE"></span><span id="_CPPv2N33cudecompGridDescAutotuneOptions_t21autotune_halo_backendE"></span><span id="cudecompGridDescAutotuneOptions_t::autotune_halo_backend__b"></span><span class="target" id="structcudecompGridDescAutotuneOptions__t_1aa17e9805a6346407def2b74dbb17eb53"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">autotune_halo_backend</span></span></span><a class="headerlink" href="#_CPPv4N33cudecompGridDescAutotuneOptions_t21autotune_halo_backendE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>flag to enable halo backend autotuning (default: false) </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N33cudecompGridDescAutotuneOptions_t12halo_extentsE">
+<span id="_CPPv3N33cudecompGridDescAutotuneOptions_t12halo_extentsE"></span><span id="_CPPv2N33cudecompGridDescAutotuneOptions_t12halo_extentsE"></span><span id="cudecompGridDescAutotuneOptions_t::halo_extents__int32_tA"></span><span class="target" id="structcudecompGridDescAutotuneOptions__t_1a0cfbe21afa75405598784abe0ca465f2"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">halo_extents</span></span></span><span class="p"><span class="pre">[</span></span><span class="m"><span class="pre">3</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#_CPPv4N33cudecompGridDescAutotuneOptions_t12halo_extentsE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>extents for halo autotuning (default: [0, 0, 0]) </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N33cudecompGridDescAutotuneOptions_t12halo_periodsE">
+<span id="_CPPv3N33cudecompGridDescAutotuneOptions_t12halo_periodsE"></span><span id="_CPPv2N33cudecompGridDescAutotuneOptions_t12halo_periodsE"></span><span id="cudecompGridDescAutotuneOptions_t::halo_periods__bA"></span><span class="target" id="structcudecompGridDescAutotuneOptions__t_1a9a604c7fb85d21d7ee43065a0492866b"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">halo_periods</span></span></span><span class="p"><span class="pre">[</span></span><span class="m"><span class="pre">3</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#_CPPv4N33cudecompGridDescAutotuneOptions_t12halo_periodsE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>periodicity for halo autotuning (default: [false, false, false]) </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N33cudecompGridDescAutotuneOptions_t9halo_axisE">
+<span id="_CPPv3N33cudecompGridDescAutotuneOptions_t9halo_axisE"></span><span id="_CPPv2N33cudecompGridDescAutotuneOptions_t9halo_axisE"></span><span id="cudecompGridDescAutotuneOptions_t::halo_axis__int32_t"></span><span class="target" id="structcudecompGridDescAutotuneOptions__t_1aabc82dcb47c8081d3cc311d11a0e430a"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">halo_axis</span></span></span><a class="headerlink" href="#_CPPv4N33cudecompGridDescAutotuneOptions_t9halo_axisE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>which axis pencils to use for halo autotuning (default: 0, X-pencils) </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+</section>
+<hr class="docutils" />
+<section id="pencil-information">
+<h3>Pencil Information<a class="headerlink" href="#pencil-information" title="Permalink to this headline">¶</a></h3>
+<section id="cudecomppencilinfo-t">
+<span id="cudecomppencilinfo-t-ref"></span><h4>cudecompPencilInfo_t<a class="headerlink" href="#cudecomppencilinfo-t" title="Permalink to this headline">¶</a></h4>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv420cudecompPencilInfo_t">
+<span id="_CPPv320cudecompPencilInfo_t"></span><span id="_CPPv220cudecompPencilInfo_t"></span><span id="cudecompPencilInfo_t"></span><span class="target" id="structcudecompPencilInfo__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cudecompPencilInfo_t</span></span></span><a class="headerlink" href="#_CPPv420cudecompPencilInfo_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>A data structure containing geometry information about a pencil data buffer. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N20cudecompPencilInfo_t5shapeE">
+<span id="_CPPv3N20cudecompPencilInfo_t5shapeE"></span><span id="_CPPv2N20cudecompPencilInfo_t5shapeE"></span><span id="cudecompPencilInfo_t::shape__int32_tA"></span><span class="target" id="structcudecompPencilInfo__t_1a40d450d31fad6e1c9fc4007c75fd5826"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">shape</span></span></span><span class="p"><span class="pre">[</span></span><span class="m"><span class="pre">3</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#_CPPv4N20cudecompPencilInfo_t5shapeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>pencil shape (in local order, including halo elements) </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N20cudecompPencilInfo_t2loE">
+<span id="_CPPv3N20cudecompPencilInfo_t2loE"></span><span id="_CPPv2N20cudecompPencilInfo_t2loE"></span><span id="cudecompPencilInfo_t::lo__int32_tA"></span><span class="target" id="structcudecompPencilInfo__t_1afc193d96f619e2971deae072953183a9"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">lo</span></span></span><span class="p"><span class="pre">[</span></span><span class="m"><span class="pre">3</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#_CPPv4N20cudecompPencilInfo_t2loE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>lower bound coordinates (in local order, excluding halo elements) </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N20cudecompPencilInfo_t2hiE">
+<span id="_CPPv3N20cudecompPencilInfo_t2hiE"></span><span id="_CPPv2N20cudecompPencilInfo_t2hiE"></span><span id="cudecompPencilInfo_t::hi__int32_tA"></span><span class="target" id="structcudecompPencilInfo__t_1ab06be292eb0211c50fdc29f83b4314ae"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">hi</span></span></span><span class="p"><span class="pre">[</span></span><span class="m"><span class="pre">3</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#_CPPv4N20cudecompPencilInfo_t2hiE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>upper bound coordinates (in local order, excluding halo elements) </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N20cudecompPencilInfo_t5orderE">
+<span id="_CPPv3N20cudecompPencilInfo_t5orderE"></span><span id="_CPPv2N20cudecompPencilInfo_t5orderE"></span><span id="cudecompPencilInfo_t::order__int32_tA"></span><span class="target" id="structcudecompPencilInfo__t_1a471e8e6d3af779fa7bed30f2c5a550b2"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">order</span></span></span><span class="p"><span class="pre">[</span></span><span class="m"><span class="pre">3</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#_CPPv4N20cudecompPencilInfo_t5orderE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>data layout order (e.g. 2,1,0 means memory is ordered Z,Y,X) </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N20cudecompPencilInfo_t12halo_extentsE">
+<span id="_CPPv3N20cudecompPencilInfo_t12halo_extentsE"></span><span id="_CPPv2N20cudecompPencilInfo_t12halo_extentsE"></span><span id="cudecompPencilInfo_t::halo_extents__int32_tA"></span><span class="target" id="structcudecompPencilInfo__t_1a641f7a1d097bd4911cf46d0ffaf0be8e"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">halo_extents</span></span></span><span class="p"><span class="pre">[</span></span><span class="m"><span class="pre">3</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#_CPPv4N20cudecompPencilInfo_t12halo_extentsE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>halo extents by dimension (in global order) </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N20cudecompPencilInfo_t4sizeE">
+<span id="_CPPv3N20cudecompPencilInfo_t4sizeE"></span><span id="_CPPv2N20cudecompPencilInfo_t4sizeE"></span><span id="cudecompPencilInfo_t::size__int64_t"></span><span class="target" id="structcudecompPencilInfo__t_1a351be30e4c35740df37aad0825ec07a4"></span><span class="n"><span class="pre">int64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">size</span></span></span><a class="headerlink" href="#_CPPv4N20cudecompPencilInfo_t4sizeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>number of elements in pencil (including halo elements) </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+</section>
+<section id="communication-backends">
+<h3>Communication Backends<a class="headerlink" href="#communication-backends" title="Permalink to this headline">¶</a></h3>
+<section id="cudecomptranposecommbackend-t">
+<span id="cudecomptransposecommbackend-t-ref"></span><h4>cudecompTranposeCommBackend_t<a class="headerlink" href="#cudecomptranposecommbackend-t" title="Permalink to this headline">¶</a></h4>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv430cudecompTransposeCommBackend_t">
+<span id="_CPPv330cudecompTransposeCommBackend_t"></span><span id="_CPPv230cudecompTransposeCommBackend_t"></span><span class="target" id="cudecomp_8h_1a81c8610da4d49a43afbc7f4f33544a4f"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cudecompTransposeCommBackend_t</span></span></span><a class="headerlink" href="#_CPPv430cudecompTransposeCommBackend_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>This enum lists the different available transpose backend options. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N30cudecompTransposeCommBackend_t31CUDECOMP_TRANSPOSE_COMM_MPI_P2PE">
+<span id="_CPPv3N30cudecompTransposeCommBackend_t31CUDECOMP_TRANSPOSE_COMM_MPI_P2PE"></span><span id="_CPPv2N30cudecompTransposeCommBackend_t31CUDECOMP_TRANSPOSE_COMM_MPI_P2PE"></span><span class="target" id="cudecomp_8h_1a81c8610da4d49a43afbc7f4f33544a4fa6f9a5147ae5d7a4c2507110bb776f456"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CUDECOMP_TRANSPOSE_COMM_MPI_P2P</span></span></span><a class="headerlink" href="#_CPPv4N30cudecompTransposeCommBackend_t31CUDECOMP_TRANSPOSE_COMM_MPI_P2PE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>MPI backend using peer-to-peer algorithm (i.e.,MPI_Isend/MPI_Irecv) </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N30cudecompTransposeCommBackend_t34CUDECOMP_TRANSPOSE_COMM_MPI_P2P_PLE">
+<span id="_CPPv3N30cudecompTransposeCommBackend_t34CUDECOMP_TRANSPOSE_COMM_MPI_P2P_PLE"></span><span id="_CPPv2N30cudecompTransposeCommBackend_t34CUDECOMP_TRANSPOSE_COMM_MPI_P2P_PLE"></span><span class="target" id="cudecomp_8h_1a81c8610da4d49a43afbc7f4f33544a4fa30b2f3e214ec75f5dc745ca5f6159b81"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CUDECOMP_TRANSPOSE_COMM_MPI_P2P_PL</span></span></span><a class="headerlink" href="#_CPPv4N30cudecompTransposeCommBackend_t34CUDECOMP_TRANSPOSE_COMM_MPI_P2P_PLE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>MPI backend using peer-to-peer algorithm with pipelining. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N30cudecompTransposeCommBackend_t31CUDECOMP_TRANSPOSE_COMM_MPI_A2AE">
+<span id="_CPPv3N30cudecompTransposeCommBackend_t31CUDECOMP_TRANSPOSE_COMM_MPI_A2AE"></span><span id="_CPPv2N30cudecompTransposeCommBackend_t31CUDECOMP_TRANSPOSE_COMM_MPI_A2AE"></span><span class="target" id="cudecomp_8h_1a81c8610da4d49a43afbc7f4f33544a4fabafc93aec88d630d62557650e11b1955"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CUDECOMP_TRANSPOSE_COMM_MPI_A2A</span></span></span><a class="headerlink" href="#_CPPv4N30cudecompTransposeCommBackend_t31CUDECOMP_TRANSPOSE_COMM_MPI_A2AE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>MPI backend using MPI_Alltoallv. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N30cudecompTransposeCommBackend_t28CUDECOMP_TRANSPOSE_COMM_NCCLE">
+<span id="_CPPv3N30cudecompTransposeCommBackend_t28CUDECOMP_TRANSPOSE_COMM_NCCLE"></span><span id="_CPPv2N30cudecompTransposeCommBackend_t28CUDECOMP_TRANSPOSE_COMM_NCCLE"></span><span class="target" id="cudecomp_8h_1a81c8610da4d49a43afbc7f4f33544a4fa77a48a8638ce6785f508fe929c8e68ef"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CUDECOMP_TRANSPOSE_COMM_NCCL</span></span></span><a class="headerlink" href="#_CPPv4N30cudecompTransposeCommBackend_t28CUDECOMP_TRANSPOSE_COMM_NCCLE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>NCCL backend. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N30cudecompTransposeCommBackend_t31CUDECOMP_TRANSPOSE_COMM_NCCL_PLE">
+<span id="_CPPv3N30cudecompTransposeCommBackend_t31CUDECOMP_TRANSPOSE_COMM_NCCL_PLE"></span><span id="_CPPv2N30cudecompTransposeCommBackend_t31CUDECOMP_TRANSPOSE_COMM_NCCL_PLE"></span><span class="target" id="cudecomp_8h_1a81c8610da4d49a43afbc7f4f33544a4fa75fea1555df8ee423e7c72b840e3e1bc"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CUDECOMP_TRANSPOSE_COMM_NCCL_PL</span></span></span><a class="headerlink" href="#_CPPv4N30cudecompTransposeCommBackend_t31CUDECOMP_TRANSPOSE_COMM_NCCL_PLE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>NCCL backend with pipelining. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N30cudecompTransposeCommBackend_t31CUDECOMP_TRANSPOSE_COMM_NVSHMEME">
+<span id="_CPPv3N30cudecompTransposeCommBackend_t31CUDECOMP_TRANSPOSE_COMM_NVSHMEME"></span><span id="_CPPv2N30cudecompTransposeCommBackend_t31CUDECOMP_TRANSPOSE_COMM_NVSHMEME"></span><span class="target" id="cudecomp_8h_1a81c8610da4d49a43afbc7f4f33544a4fa4f59bf23d982ab69c12096b4a4f1d5da"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CUDECOMP_TRANSPOSE_COMM_NVSHMEM</span></span></span><a class="headerlink" href="#_CPPv4N30cudecompTransposeCommBackend_t31CUDECOMP_TRANSPOSE_COMM_NVSHMEME" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>NVSHMEM backend. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N30cudecompTransposeCommBackend_t34CUDECOMP_TRANSPOSE_COMM_NVSHMEM_PLE">
+<span id="_CPPv3N30cudecompTransposeCommBackend_t34CUDECOMP_TRANSPOSE_COMM_NVSHMEM_PLE"></span><span id="_CPPv2N30cudecompTransposeCommBackend_t34CUDECOMP_TRANSPOSE_COMM_NVSHMEM_PLE"></span><span class="target" id="cudecomp_8h_1a81c8610da4d49a43afbc7f4f33544a4fa09d73eefafbfd5ceab1839ac8587bac2"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CUDECOMP_TRANSPOSE_COMM_NVSHMEM_PL</span></span></span><a class="headerlink" href="#_CPPv4N30cudecompTransposeCommBackend_t34CUDECOMP_TRANSPOSE_COMM_NVSHMEM_PLE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>NVSHMEM backend with pipelining. </p>
+</dd></dl>
+
+</dd></dl>
+
+<hr class="docutils" />
+</section>
+<section id="cudecomphalocommbackend-t">
+<span id="cudecomphalocommbackend-t-ref"></span><h4>cudecompHaloCommBackend_t<a class="headerlink" href="#cudecomphalocommbackend-t" title="Permalink to this headline">¶</a></h4>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv425cudecompHaloCommBackend_t">
+<span id="_CPPv325cudecompHaloCommBackend_t"></span><span id="_CPPv225cudecompHaloCommBackend_t"></span><span class="target" id="cudecomp_8h_1a285557e9db7baf635f5471e71c455598"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cudecompHaloCommBackend_t</span></span></span><a class="headerlink" href="#_CPPv425cudecompHaloCommBackend_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>This enum lists the different available halo backend options. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N25cudecompHaloCommBackend_t22CUDECOMP_HALO_COMM_MPIE">
+<span id="_CPPv3N25cudecompHaloCommBackend_t22CUDECOMP_HALO_COMM_MPIE"></span><span id="_CPPv2N25cudecompHaloCommBackend_t22CUDECOMP_HALO_COMM_MPIE"></span><span class="target" id="cudecomp_8h_1a285557e9db7baf635f5471e71c455598ac11a28066bf26abd33b59b1e49a80fc0"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CUDECOMP_HALO_COMM_MPI</span></span></span><a class="headerlink" href="#_CPPv4N25cudecompHaloCommBackend_t22CUDECOMP_HALO_COMM_MPIE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>MPI backend. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N25cudecompHaloCommBackend_t31CUDECOMP_HALO_COMM_MPI_BLOCKINGE">
+<span id="_CPPv3N25cudecompHaloCommBackend_t31CUDECOMP_HALO_COMM_MPI_BLOCKINGE"></span><span id="_CPPv2N25cudecompHaloCommBackend_t31CUDECOMP_HALO_COMM_MPI_BLOCKINGE"></span><span class="target" id="cudecomp_8h_1a285557e9db7baf635f5471e71c455598a884ccbba8ceb832a83c017ffd0059be5"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CUDECOMP_HALO_COMM_MPI_BLOCKING</span></span></span><a class="headerlink" href="#_CPPv4N25cudecompHaloCommBackend_t31CUDECOMP_HALO_COMM_MPI_BLOCKINGE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>MPI backend with blocking between each peer transfer. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N25cudecompHaloCommBackend_t23CUDECOMP_HALO_COMM_NCCLE">
+<span id="_CPPv3N25cudecompHaloCommBackend_t23CUDECOMP_HALO_COMM_NCCLE"></span><span id="_CPPv2N25cudecompHaloCommBackend_t23CUDECOMP_HALO_COMM_NCCLE"></span><span class="target" id="cudecomp_8h_1a285557e9db7baf635f5471e71c455598ab02281b5a15d0c7bdebd2a8c7f83eb94"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CUDECOMP_HALO_COMM_NCCL</span></span></span><a class="headerlink" href="#_CPPv4N25cudecompHaloCommBackend_t23CUDECOMP_HALO_COMM_NCCLE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>NCCL backend. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N25cudecompHaloCommBackend_t26CUDECOMP_HALO_COMM_NVSHMEME">
+<span id="_CPPv3N25cudecompHaloCommBackend_t26CUDECOMP_HALO_COMM_NVSHMEME"></span><span id="_CPPv2N25cudecompHaloCommBackend_t26CUDECOMP_HALO_COMM_NVSHMEME"></span><span class="target" id="cudecomp_8h_1a285557e9db7baf635f5471e71c455598a09cbbccf4f36991fda676461ba2a44f3"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CUDECOMP_HALO_COMM_NVSHMEM</span></span></span><a class="headerlink" href="#_CPPv4N25cudecompHaloCommBackend_t26CUDECOMP_HALO_COMM_NVSHMEME" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>NVSHMEM backend. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N25cudecompHaloCommBackend_t35CUDECOMP_HALO_COMM_NVSHMEM_BLOCKINGE">
+<span id="_CPPv3N25cudecompHaloCommBackend_t35CUDECOMP_HALO_COMM_NVSHMEM_BLOCKINGE"></span><span id="_CPPv2N25cudecompHaloCommBackend_t35CUDECOMP_HALO_COMM_NVSHMEM_BLOCKINGE"></span><span class="target" id="cudecomp_8h_1a285557e9db7baf635f5471e71c455598ab9e158aa99f8396d110e9c1a7ad39de7"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CUDECOMP_HALO_COMM_NVSHMEM_BLOCKING</span></span></span><a class="headerlink" href="#_CPPv4N25cudecompHaloCommBackend_t35CUDECOMP_HALO_COMM_NVSHMEM_BLOCKINGE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>NVSHMEM backend with blocking between each peer transfer. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+<hr class="docutils" />
+<section id="additional-enumerators">
+<h3>Additional Enumerators<a class="headerlink" href="#additional-enumerators" title="Permalink to this headline">¶</a></h3>
+<section id="cudecompdatatype-t">
+<span id="cudecompdatatype-t-ref"></span><h4>cudecompDataType_t<a class="headerlink" href="#cudecompdatatype-t" title="Permalink to this headline">¶</a></h4>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv418cudecompDataType_t">
+<span id="_CPPv318cudecompDataType_t"></span><span id="_CPPv218cudecompDataType_t"></span><span class="target" id="cudecomp_8h_1a88b34d60e45549fa0d2c1393b4cb625f"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cudecompDataType_t</span></span></span><a class="headerlink" href="#_CPPv418cudecompDataType_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>This enum defines the data types supported. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N18cudecompDataType_t14CUDECOMP_FLOATE">
+<span id="_CPPv3N18cudecompDataType_t14CUDECOMP_FLOATE"></span><span id="_CPPv2N18cudecompDataType_t14CUDECOMP_FLOATE"></span><span class="target" id="cudecomp_8h_1a88b34d60e45549fa0d2c1393b4cb625fa7c398b79e79c972a2b61aa854b2bc57c"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CUDECOMP_FLOAT</span></span></span><a class="headerlink" href="#_CPPv4N18cudecompDataType_t14CUDECOMP_FLOATE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Single-precision real. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N18cudecompDataType_t15CUDECOMP_DOUBLEE">
+<span id="_CPPv3N18cudecompDataType_t15CUDECOMP_DOUBLEE"></span><span id="_CPPv2N18cudecompDataType_t15CUDECOMP_DOUBLEE"></span><span class="target" id="cudecomp_8h_1a88b34d60e45549fa0d2c1393b4cb625fafa1babc5780a3cb14f01aa681ae35162"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CUDECOMP_DOUBLE</span></span></span><a class="headerlink" href="#_CPPv4N18cudecompDataType_t15CUDECOMP_DOUBLEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Double-precision real. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N18cudecompDataType_t22CUDECOMP_FLOAT_COMPLEXE">
+<span id="_CPPv3N18cudecompDataType_t22CUDECOMP_FLOAT_COMPLEXE"></span><span id="_CPPv2N18cudecompDataType_t22CUDECOMP_FLOAT_COMPLEXE"></span><span class="target" id="cudecomp_8h_1a88b34d60e45549fa0d2c1393b4cb625fa67f0483ff56536f8efadcb71412f6a30"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CUDECOMP_FLOAT_COMPLEX</span></span></span><a class="headerlink" href="#_CPPv4N18cudecompDataType_t22CUDECOMP_FLOAT_COMPLEXE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Single-precision complex (interleaved) </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N18cudecompDataType_t23CUDECOMP_DOUBLE_COMPLEXE">
+<span id="_CPPv3N18cudecompDataType_t23CUDECOMP_DOUBLE_COMPLEXE"></span><span id="_CPPv2N18cudecompDataType_t23CUDECOMP_DOUBLE_COMPLEXE"></span><span class="target" id="cudecomp_8h_1a88b34d60e45549fa0d2c1393b4cb625fa95e52086d85e8e7de7cbd8d2e7ce56ec"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CUDECOMP_DOUBLE_COMPLEX</span></span></span><a class="headerlink" href="#_CPPv4N18cudecompDataType_t23CUDECOMP_DOUBLE_COMPLEXE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Double-precision complex (interleaved) </p>
+</dd></dl>
+
+</dd></dl>
+
+<hr class="docutils" />
+</section>
+<section id="cudecompautotunegridmode-t">
+<span id="cudecompautotunegridmode-t-ref"></span><h4>cudecompAutotuneGridMode_t<a class="headerlink" href="#cudecompautotunegridmode-t" title="Permalink to this headline">¶</a></h4>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv426cudecompAutotuneGridMode_t">
+<span id="_CPPv326cudecompAutotuneGridMode_t"></span><span id="_CPPv226cudecompAutotuneGridMode_t"></span><span class="target" id="cudecomp_8h_1aacffa71f7552919996beb74449dab1cc"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cudecompAutotuneGridMode_t</span></span></span><a class="headerlink" href="#_CPPv426cudecompAutotuneGridMode_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>This enum defines the modes available for process grid autotuning. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N26cudecompAutotuneGridMode_t32CUDECOMP_AUTOTUNE_GRID_TRANSPOSEE">
+<span id="_CPPv3N26cudecompAutotuneGridMode_t32CUDECOMP_AUTOTUNE_GRID_TRANSPOSEE"></span><span id="_CPPv2N26cudecompAutotuneGridMode_t32CUDECOMP_AUTOTUNE_GRID_TRANSPOSEE"></span><span class="target" id="cudecomp_8h_1aacffa71f7552919996beb74449dab1cca70a54ca1187f16d0d9b2e444df6a82ff"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CUDECOMP_AUTOTUNE_GRID_TRANSPOSE</span></span></span><a class="headerlink" href="#_CPPv4N26cudecompAutotuneGridMode_t32CUDECOMP_AUTOTUNE_GRID_TRANSPOSEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Use transpose communication to autotune process grid dimensions. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N26cudecompAutotuneGridMode_t27CUDECOMP_AUTOTUNE_GRID_HALOE">
+<span id="_CPPv3N26cudecompAutotuneGridMode_t27CUDECOMP_AUTOTUNE_GRID_HALOE"></span><span id="_CPPv2N26cudecompAutotuneGridMode_t27CUDECOMP_AUTOTUNE_GRID_HALOE"></span><span class="target" id="cudecomp_8h_1aacffa71f7552919996beb74449dab1ccaf8319a65a50876083fe9fbe6f1bbc4a7"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CUDECOMP_AUTOTUNE_GRID_HALO</span></span></span><a class="headerlink" href="#_CPPv4N26cudecompAutotuneGridMode_t27CUDECOMP_AUTOTUNE_GRID_HALOE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Use halo communication to autotune process grid dimensions. </p>
+</dd></dl>
+
+</dd></dl>
+
+<hr class="docutils" />
+</section>
+<section id="cudecompresult-t">
+<span id="cudecompresult-t-ref"></span><h4>cudecompResult_t<a class="headerlink" href="#cudecompresult-t" title="Permalink to this headline">¶</a></h4>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv416cudecompResult_t">
+<span id="_CPPv316cudecompResult_t"></span><span id="_CPPv216cudecompResult_t"></span><span class="target" id="cudecomp_8h_1a7800dc1cd8730418bfa18285b77f5a38"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cudecompResult_t</span></span></span><a class="headerlink" href="#_CPPv416cudecompResult_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>This enum defines the possible values return values from cuDecomp. Most functions in the cuDecomp library will return one of these values to indicate if an operation has completed successfully or an error occured. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N16cudecompResult_t23CUDECOMP_RESULT_SUCCESSE">
+<span id="_CPPv3N16cudecompResult_t23CUDECOMP_RESULT_SUCCESSE"></span><span id="_CPPv2N16cudecompResult_t23CUDECOMP_RESULT_SUCCESSE"></span><span class="target" id="cudecomp_8h_1a7800dc1cd8730418bfa18285b77f5a38abcf8a6cbe4c2a3c200a76b452b7df602"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CUDECOMP_RESULT_SUCCESS</span></span></span><a class="headerlink" href="#_CPPv4N16cudecompResult_t23CUDECOMP_RESULT_SUCCESSE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>The operation completed successfully. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N16cudecompResult_t29CUDECOMP_RESULT_INVALID_USAGEE">
+<span id="_CPPv3N16cudecompResult_t29CUDECOMP_RESULT_INVALID_USAGEE"></span><span id="_CPPv2N16cudecompResult_t29CUDECOMP_RESULT_INVALID_USAGEE"></span><span class="target" id="cudecomp_8h_1a7800dc1cd8730418bfa18285b77f5a38ae9c7f8c5d4bd5253859fb4fc1cbcee7b"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CUDECOMP_RESULT_INVALID_USAGE</span></span></span><a class="headerlink" href="#_CPPv4N16cudecompResult_t29CUDECOMP_RESULT_INVALID_USAGEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>A user error, typically an invalid argument. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N16cudecompResult_t29CUDECOMP_RESULT_NOT_SUPPORTEDE">
+<span id="_CPPv3N16cudecompResult_t29CUDECOMP_RESULT_NOT_SUPPORTEDE"></span><span id="_CPPv2N16cudecompResult_t29CUDECOMP_RESULT_NOT_SUPPORTEDE"></span><span class="target" id="cudecomp_8h_1a7800dc1cd8730418bfa18285b77f5a38ac7294c43ab3f5d254d9d3a6aa828ec72"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CUDECOMP_RESULT_NOT_SUPPORTED</span></span></span><a class="headerlink" href="#_CPPv4N16cudecompResult_t29CUDECOMP_RESULT_NOT_SUPPORTEDE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>A user error, requesting an invalid or unsupported operation configuration. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N16cudecompResult_t30CUDECOMP_RESULT_INTERNAL_ERRORE">
+<span id="_CPPv3N16cudecompResult_t30CUDECOMP_RESULT_INTERNAL_ERRORE"></span><span id="_CPPv2N16cudecompResult_t30CUDECOMP_RESULT_INTERNAL_ERRORE"></span><span class="target" id="cudecomp_8h_1a7800dc1cd8730418bfa18285b77f5a38abada9a932cf57b94774c6bbae5f13d10"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CUDECOMP_RESULT_INTERNAL_ERROR</span></span></span><a class="headerlink" href="#_CPPv4N16cudecompResult_t30CUDECOMP_RESULT_INTERNAL_ERRORE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>An internal library error, should be reported. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N16cudecompResult_t26CUDECOMP_RESULT_CUDA_ERRORE">
+<span id="_CPPv3N16cudecompResult_t26CUDECOMP_RESULT_CUDA_ERRORE"></span><span id="_CPPv2N16cudecompResult_t26CUDECOMP_RESULT_CUDA_ERRORE"></span><span class="target" id="cudecomp_8h_1a7800dc1cd8730418bfa18285b77f5a38a7a89bd058a00ad585573e207133b2141"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CUDECOMP_RESULT_CUDA_ERROR</span></span></span><a class="headerlink" href="#_CPPv4N16cudecompResult_t26CUDECOMP_RESULT_CUDA_ERRORE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>An error occured in the CUDA Runtime. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N16cudecompResult_t30CUDECOMP_RESULT_CUTENSOR_ERRORE">
+<span id="_CPPv3N16cudecompResult_t30CUDECOMP_RESULT_CUTENSOR_ERRORE"></span><span id="_CPPv2N16cudecompResult_t30CUDECOMP_RESULT_CUTENSOR_ERRORE"></span><span class="target" id="cudecomp_8h_1a7800dc1cd8730418bfa18285b77f5a38a90af3064eedd0475f25c1a38d91f1047"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CUDECOMP_RESULT_CUTENSOR_ERROR</span></span></span><a class="headerlink" href="#_CPPv4N16cudecompResult_t30CUDECOMP_RESULT_CUTENSOR_ERRORE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>An error occured in the cuTENSOR library. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N16cudecompResult_t25CUDECOMP_RESULT_MPI_ERRORE">
+<span id="_CPPv3N16cudecompResult_t25CUDECOMP_RESULT_MPI_ERRORE"></span><span id="_CPPv2N16cudecompResult_t25CUDECOMP_RESULT_MPI_ERRORE"></span><span class="target" id="cudecomp_8h_1a7800dc1cd8730418bfa18285b77f5a38a7162fabcab730cdf596fbf0de7087e3c"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CUDECOMP_RESULT_MPI_ERROR</span></span></span><a class="headerlink" href="#_CPPv4N16cudecompResult_t25CUDECOMP_RESULT_MPI_ERRORE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>An error occurred in the MPI library. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N16cudecompResult_t26CUDECOMP_RESULT_NCCL_ERRORE">
+<span id="_CPPv3N16cudecompResult_t26CUDECOMP_RESULT_NCCL_ERRORE"></span><span id="_CPPv2N16cudecompResult_t26CUDECOMP_RESULT_NCCL_ERRORE"></span><span class="target" id="cudecomp_8h_1a7800dc1cd8730418bfa18285b77f5a38a436a1d652644593e6fe7a2a76bfaff92"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CUDECOMP_RESULT_NCCL_ERROR</span></span></span><a class="headerlink" href="#_CPPv4N16cudecompResult_t26CUDECOMP_RESULT_NCCL_ERRORE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>An error occured in the NCCL library. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N16cudecompResult_t29CUDECOMP_RESULT_NVSHMEM_ERRORE">
+<span id="_CPPv3N16cudecompResult_t29CUDECOMP_RESULT_NVSHMEM_ERRORE"></span><span id="_CPPv2N16cudecompResult_t29CUDECOMP_RESULT_NVSHMEM_ERRORE"></span><span class="target" id="cudecomp_8h_1a7800dc1cd8730418bfa18285b77f5a38aeee74cdf1569f803e6dff1db44a9f8c5"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CUDECOMP_RESULT_NVSHMEM_ERROR</span></span></span><a class="headerlink" href="#_CPPv4N16cudecompResult_t29CUDECOMP_RESULT_NVSHMEM_ERRORE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>An error occured in the NVSHMEM library. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+</section>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+<section id="library-initialization-finalization">
+<h3>Library Initialization/Finalization<a class="headerlink" href="#library-initialization-finalization" title="Permalink to this headline">¶</a></h3>
+<section id="cudecompinit">
+<span id="cudecompinit-ref"></span><h4>cudecompInit<a class="headerlink" href="#cudecompinit" title="Permalink to this headline">¶</a></h4>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv412cudecompInitP16cudecompHandle_t8MPI_Comm">
+<span id="_CPPv312cudecompInitP16cudecompHandle_t8MPI_Comm"></span><span id="_CPPv212cudecompInitP16cudecompHandle_t8MPI_Comm"></span><span id="cudecompInit__cudecompHandle_tP.MPI_Comm"></span><span class="target" id="cudecomp_8h_1a109d052e530bcb26c4c032d554439e06"></span><a class="reference internal" href="#_CPPv416cudecompResult_t" title="cudecompResult_t"><span class="n"><span class="pre">cudecompResult_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cudecompInit</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv416cudecompHandle_t" title="cudecompHandle_t"><span class="n"><span class="pre">cudecompHandle_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">handle</span></span>, <span class="n"><span class="pre">MPI_Comm</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">mpi_comm</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412cudecompInitP16cudecompHandle_t8MPI_Comm" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Initializes the cuDecomp library from an existing MPI communicator. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>handle</strong> – <strong>[out]</strong> A pointer to an uninitialized cutensorHandle_t </p></li>
+<li><p><strong>mpi_comm</strong> – <strong>[in]</strong> MPI communicator containing ranks to use with cuDecomp</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>CUDECOMP_RESULT_SUCCESS on success or error code on failure. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+</section>
+<section id="cudecompfinalize">
+<span id="cudecompfinalize-ref"></span><h4>cudecompFinalize<a class="headerlink" href="#cudecompfinalize" title="Permalink to this headline">¶</a></h4>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv416cudecompFinalize16cudecompHandle_t">
+<span id="_CPPv316cudecompFinalize16cudecompHandle_t"></span><span id="_CPPv216cudecompFinalize16cudecompHandle_t"></span><span id="cudecompFinalize__cudecompHandle_t"></span><span class="target" id="cudecomp_8h_1a95ec8b24da694fc7f9dc1ff323ab1f64"></span><a class="reference internal" href="#_CPPv416cudecompResult_t" title="cudecompResult_t"><span class="n"><span class="pre">cudecompResult_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cudecompFinalize</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv416cudecompHandle_t" title="cudecompHandle_t"><span class="n"><span class="pre">cudecompHandle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">handle</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416cudecompFinalize16cudecompHandle_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Finalizes the cuDecomp library and frees associated resources. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>handle</strong> – <strong>[in]</strong> The initialized cuDecomp library handle</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>CUDECOMP_RESULT_SUCCESS on success or error code on failure. </p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+<hr class="docutils" />
+<section id="grid-descriptor-management">
+<h3>Grid Descriptor Management<a class="headerlink" href="#grid-descriptor-management" title="Permalink to this headline">¶</a></h3>
+<section id="cudecompgriddesccreate">
+<span id="cudecompgriddesccreate-ref"></span><h4>cudecompGridDescCreate<a class="headerlink" href="#cudecompgriddesccreate" title="Permalink to this headline">¶</a></h4>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv422cudecompGridDescCreate16cudecompHandle_tP18cudecompGridDesc_tP24cudecompGridDescConfig_tPK33cudecompGridDescAutotuneOptions_t">
+<span id="_CPPv322cudecompGridDescCreate16cudecompHandle_tP18cudecompGridDesc_tP24cudecompGridDescConfig_tPK33cudecompGridDescAutotuneOptions_t"></span><span id="_CPPv222cudecompGridDescCreate16cudecompHandle_tP18cudecompGridDesc_tP24cudecompGridDescConfig_tPK33cudecompGridDescAutotuneOptions_t"></span><span id="cudecompGridDescCreate__cudecompHandle_t.cudecompGridDesc_tP.cudecompGridDescConfig_tP.cudecompGridDescAutotuneOptions_tCP"></span><span class="target" id="cudecomp_8h_1afcf2b874d1c9762ca1843ce0bb6bfcf0"></span><a class="reference internal" href="#_CPPv416cudecompResult_t" title="cudecompResult_t"><span class="n"><span class="pre">cudecompResult_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cudecompGridDescCreate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv416cudecompHandle_t" title="cudecompHandle_t"><span class="n"><span class="pre">cudecompHandle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">handle</span></span>, <a class="reference internal" href="#_CPPv418cudecompGridDesc_t" title="cudecompGridDesc_t"><span class="n"><span class="pre">cudecompGridDesc_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">grid_desc</span></span>, <a class="reference internal" href="#_CPPv424cudecompGridDescConfig_t" title="cudecompGridDescConfig_t"><span class="n"><span class="pre">cudecompGridDescConfig_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">config</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv433cudecompGridDescAutotuneOptions_t" title="cudecompGridDescAutotuneOptions_t"><span class="n"><span class="pre">cudecompGridDescAutotuneOptions_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">options</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422cudecompGridDescCreate16cudecompHandle_tP18cudecompGridDesc_tP24cudecompGridDescConfig_tPK33cudecompGridDescAutotuneOptions_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Creates a cuDecomp grid descriptor for use with cuDecomp functions. </p>
+<p>This function creates a grid descriptor that cuDecomp requires for most library operations that perform communication or query decomposition information. This grid descriptor contains information about how the global data grid is distributed and other internal resources to facilitate communication. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>handle</strong> – <strong>[in]</strong> The initialized cuDecomp library handle </p></li>
+<li><p><strong>grid_desc</strong> – <strong>[out]</strong> A pointer to an uninitialized cudecompGridDesc_t </p></li>
+<li><p><strong>config</strong> – <strong>[inout]</strong> A pointer to a populated <a class="reference internal" href="#structcudecompGridDescConfig__t"><span class="std std-ref">cudecompGridDescConfig_t</span></a> structure. This config structure defines the required attributes of the decomposition. On successful exit, fields in this structure may be updated to reflect autotuning results. </p></li>
+<li><p><strong>options</strong> – <strong>[in]</strong> A pointer to <a class="reference internal" href="#structcudecompGridDescAutotuneOptions__t"><span class="std std-ref">cudecompGridDescAutotuneOptions_t</span></a> structure. This options structure is used to control the behavior of the process grid and communication backend autotuning. If autotuning is not desired, a NULL pointer can be passed in for this argument.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>CUDECOMP_RESULT_SUCCESS on success or error code on failure. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+</section>
+<section id="cudecompgriddescdestroy">
+<span id="cudecompgriddescdestroy-ref"></span><h4>cudecompGridDescDestroy<a class="headerlink" href="#cudecompgriddescdestroy" title="Permalink to this headline">¶</a></h4>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv423cudecompGridDescDestroy16cudecompHandle_t18cudecompGridDesc_t">
+<span id="_CPPv323cudecompGridDescDestroy16cudecompHandle_t18cudecompGridDesc_t"></span><span id="_CPPv223cudecompGridDescDestroy16cudecompHandle_t18cudecompGridDesc_t"></span><span id="cudecompGridDescDestroy__cudecompHandle_t.cudecompGridDesc_t"></span><span class="target" id="cudecomp_8h_1a81cfe13d48088ae9ed1cc436f334d5c1"></span><a class="reference internal" href="#_CPPv416cudecompResult_t" title="cudecompResult_t"><span class="n"><span class="pre">cudecompResult_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cudecompGridDescDestroy</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv416cudecompHandle_t" title="cudecompHandle_t"><span class="n"><span class="pre">cudecompHandle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">handle</span></span>, <a class="reference internal" href="#_CPPv418cudecompGridDesc_t" title="cudecompGridDesc_t"><span class="n"><span class="pre">cudecompGridDesc_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">grid_desc</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423cudecompGridDescDestroy16cudecompHandle_t18cudecompGridDesc_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Destroys a cuDecomp grid descriptor and frees associated resources. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>handle</strong> – <strong>[in]</strong> The initialized cuDecomp library handle </p></li>
+<li><p><strong>grid_desc</strong> – <strong>[in]</strong> A cuDecomp grid descriptor</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>CUDECOMP_RESULT_SUCCESS on success or error code on failure. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+</section>
+<section id="cudecompgriddescconfigsetdefaults">
+<span id="cudecompgriddescconfigsetdefaults-ref"></span><h4>cudecompGridDescConfigSetDefaults<a class="headerlink" href="#cudecompgriddescconfigsetdefaults" title="Permalink to this headline">¶</a></h4>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv433cudecompGridDescConfigSetDefaultsP24cudecompGridDescConfig_t">
+<span id="_CPPv333cudecompGridDescConfigSetDefaultsP24cudecompGridDescConfig_t"></span><span id="_CPPv233cudecompGridDescConfigSetDefaultsP24cudecompGridDescConfig_t"></span><span id="cudecompGridDescConfigSetDefaults__cudecompGridDescConfig_tP"></span><span class="target" id="cudecomp_8h_1ac9b2cc5639007f73de3a57fc68700951"></span><a class="reference internal" href="#_CPPv416cudecompResult_t" title="cudecompResult_t"><span class="n"><span class="pre">cudecompResult_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cudecompGridDescConfigSetDefaults</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv424cudecompGridDescConfig_t" title="cudecompGridDescConfig_t"><span class="n"><span class="pre">cudecompGridDescConfig_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">config</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv433cudecompGridDescConfigSetDefaultsP24cudecompGridDescConfig_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Initializes a <a class="reference internal" href="#structcudecompGridDescConfig__t"><span class="std std-ref">cudecompGridDescConfig_t</span></a> structure with default values. </p>
+<p>This function initializes entries in a cuDecomp grid descriptor configuration structure to default values. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>config</strong> – <strong>[inout]</strong> A pointer to <a class="reference internal" href="#structcudecompGridDescConfig__t"><span class="std std-ref">cudecompGridDescConfig_t</span></a> structure</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>CUDECOMP_RESULT_SUCCESS on success or error code on failure. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+</section>
+<section id="cudecompgriddescautotuneoptionssetdefaults">
+<span id="cudecompgriddescautotuneoptionssetdefaults-ref"></span><h4>cudecompGridDescAutotuneOptionsSetDefaults<a class="headerlink" href="#cudecompgriddescautotuneoptionssetdefaults" title="Permalink to this headline">¶</a></h4>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv442cudecompGridDescAutotuneOptionsSetDefaultsP33cudecompGridDescAutotuneOptions_t">
+<span id="_CPPv342cudecompGridDescAutotuneOptionsSetDefaultsP33cudecompGridDescAutotuneOptions_t"></span><span id="_CPPv242cudecompGridDescAutotuneOptionsSetDefaultsP33cudecompGridDescAutotuneOptions_t"></span><span id="cudecompGridDescAutotuneOptionsSetDefaults__cudecompGridDescAutotuneOptions_tP"></span><span class="target" id="cudecomp_8h_1a5fd027676e07793c96f404853fcfcd48"></span><a class="reference internal" href="#_CPPv416cudecompResult_t" title="cudecompResult_t"><span class="n"><span class="pre">cudecompResult_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cudecompGridDescAutotuneOptionsSetDefaults</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv433cudecompGridDescAutotuneOptions_t" title="cudecompGridDescAutotuneOptions_t"><span class="n"><span class="pre">cudecompGridDescAutotuneOptions_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">options</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv442cudecompGridDescAutotuneOptionsSetDefaultsP33cudecompGridDescAutotuneOptions_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Initializes a <a class="reference internal" href="#structcudecompGridDescAutotuneOptions__t"><span class="std std-ref">cudecompGridDescAutotuneOptions_t</span></a> structure with default values. </p>
+<p>This function initializes entries in a cuDecomp grid descriptor autotune options structure to default values. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>options</strong> – <strong>[inout]</strong> A pointer to <a class="reference internal" href="#structcudecompGridDescAutotuneOptions__t"><span class="std std-ref">cudecompGridDescAutotuneOptions_t</span></a> structure</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>CUDECOMP_RESULT_SUCCESS on success or error code on failure. </p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+<hr class="docutils" />
+<section id="workspace-management">
+<h3>Workspace Management<a class="headerlink" href="#workspace-management" title="Permalink to this headline">¶</a></h3>
+<section id="cudecompgettransposeworkspacesize">
+<span id="cudecompgettransposeworkspacesize-ref"></span><h4>cudecompGetTransposeWorkspaceSize<a class="headerlink" href="#cudecompgettransposeworkspacesize" title="Permalink to this headline">¶</a></h4>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv433cudecompGetTransposeWorkspaceSize16cudecompHandle_t18cudecompGridDesc_tP7int64_t">
+<span id="_CPPv333cudecompGetTransposeWorkspaceSize16cudecompHandle_t18cudecompGridDesc_tP7int64_t"></span><span id="_CPPv233cudecompGetTransposeWorkspaceSize16cudecompHandle_t18cudecompGridDesc_tP7int64_t"></span><span id="cudecompGetTransposeWorkspaceSize__cudecompHandle_t.cudecompGridDesc_t.int64_tP"></span><span class="target" id="cudecomp_8h_1ab1d293c690d743abcf497b50cf5aeed4"></span><a class="reference internal" href="#_CPPv416cudecompResult_t" title="cudecompResult_t"><span class="n"><span class="pre">cudecompResult_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cudecompGetTransposeWorkspaceSize</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv416cudecompHandle_t" title="cudecompHandle_t"><span class="n"><span class="pre">cudecompHandle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">handle</span></span>, <a class="reference internal" href="#_CPPv418cudecompGridDesc_t" title="cudecompGridDesc_t"><span class="n"><span class="pre">cudecompGridDesc_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">grid_desc</span></span>, <span class="n"><span class="pre">int64_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">workspace_size</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv433cudecompGetTransposeWorkspaceSize16cudecompHandle_t18cudecompGridDesc_tP7int64_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Queries the required transpose workspace size, in elements, for a provided grid descriptor. </p>
+<p>This function queries the required workspace size, in elements, for transposition communication using a provided grid descriptor. This workspace is required to faciliate local transposition/packing/unpacking operations, or for use as a staging buffer. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>handle</strong> – <strong>[in]</strong> The initialized cuDecomp library handle </p></li>
+<li><p><strong>grid_desc</strong> – <strong>[in]</strong> A cuDecomp grid descriptor </p></li>
+<li><p><strong>workspace_size</strong> – <strong>[out]</strong> A pointer to a 64-bit integer to write the workspace size</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>CUDECOMP_RESULT_SUCCESS on success or error code on failure. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+</section>
+<section id="cudecompgethaloworkspacesize">
+<span id="cudecompgethaloworkspacesize-ref"></span><h4>cudecompGetHaloWorkspaceSize<a class="headerlink" href="#cudecompgethaloworkspacesize" title="Permalink to this headline">¶</a></h4>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv428cudecompGetHaloWorkspaceSize16cudecompHandle_t18cudecompGridDesc_t7int32_tA_K7int32_tP7int64_t">
+<span id="_CPPv328cudecompGetHaloWorkspaceSize16cudecompHandle_t18cudecompGridDesc_t7int32_tA_K7int32_tP7int64_t"></span><span id="_CPPv228cudecompGetHaloWorkspaceSize16cudecompHandle_t18cudecompGridDesc_t7int32_tA_K7int32_tP7int64_t"></span><span id="cudecompGetHaloWorkspaceSize__cudecompHandle_t.cudecompGridDesc_t.int32_t.int32_tCA.int64_tP"></span><span class="target" id="cudecomp_8h_1a9839537d093e368aca5475c9a815c0dd"></span><a class="reference internal" href="#_CPPv416cudecompResult_t" title="cudecompResult_t"><span class="n"><span class="pre">cudecompResult_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cudecompGetHaloWorkspaceSize</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv416cudecompHandle_t" title="cudecompHandle_t"><span class="n"><span class="pre">cudecompHandle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">handle</span></span>, <a class="reference internal" href="#_CPPv418cudecompGridDesc_t" title="cudecompGridDesc_t"><span class="n"><span class="pre">cudecompGridDesc_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">grid_desc</span></span>, <span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">axis</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">halo_extents</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span>, <span class="n"><span class="pre">int64_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">workspace_size</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv428cudecompGetHaloWorkspaceSize16cudecompHandle_t18cudecompGridDesc_t7int32_tA_K7int32_tP7int64_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Queries the required halo workspace size, in elements, for a provided grid descriptor. </p>
+<p>This function queries the required workspace size, in elements, for halo communication using a provided grid descriptor. This workspace is required to faciliate local packing operations for halo regions that are not contiguous in memory, or for use as a staging buffer. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>handle</strong> – <strong>[in]</strong> The initialized cuDecomp library handle </p></li>
+<li><p><strong>grid_desc</strong> – <strong>[in]</strong> A cuDecomp grid descriptor </p></li>
+<li><p><strong>axis</strong> – <strong>[in]</strong> The domain axis the desired pencil is aligned with </p></li>
+<li><p><strong>halo_extents</strong> – <strong>[in]</strong> An array of three integers to define halo region extents of the pencil, in global order. The i-th entry in this array should contain the number of halo elements (per direction) expected in the along the i-th global domain axis. Symmetric halos are assumed (e.g. a value of one in halo_extents means there are 2 halo elements, one element on each side). </p></li>
+<li><p><strong>workspace_size</strong> – <strong>[out]</strong> A pointer to a 64-bit integer to write the workspace size</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>CUDECOMP_RESULT_SUCCESS on success or error code on failure. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+</section>
+<section id="cudecompgetdatatypesize">
+<span id="cudecompgetdatatypesize-ref"></span><h4>cudecompGetDataTypeSize<a class="headerlink" href="#cudecompgetdatatypesize" title="Permalink to this headline">¶</a></h4>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv423cudecompGetDataTypeSize18cudecompDataType_tP7int64_t">
+<span id="_CPPv323cudecompGetDataTypeSize18cudecompDataType_tP7int64_t"></span><span id="_CPPv223cudecompGetDataTypeSize18cudecompDataType_tP7int64_t"></span><span id="cudecompGetDataTypeSize__cudecompDataType_t.int64_tP"></span><span class="target" id="cudecomp_8h_1add8f794ac81f38a72e606b3fd640e1fe"></span><a class="reference internal" href="#_CPPv416cudecompResult_t" title="cudecompResult_t"><span class="n"><span class="pre">cudecompResult_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cudecompGetDataTypeSize</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv418cudecompDataType_t" title="cudecompDataType_t"><span class="n"><span class="pre">cudecompDataType_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">dtype</span></span>, <span class="n"><span class="pre">int64_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">dtype_size</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423cudecompGetDataTypeSize18cudecompDataType_tP7int64_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Function to get size (in bytes) of a cuDecomp data type. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dtype</strong> – <strong>[in]</strong> A cudecompDataType_t value </p></li>
+<li><p><strong>dtype_size</strong> – <strong>[out]</strong> A pointer to a 64-bit integer to write the data type size</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>CUDECOMP_RESULT_SUCCESS on success or error code on failure. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+</section>
+<section id="cudecompmalloc">
+<span id="cudecompmalloc-ref"></span><h4>cudecompMalloc<a class="headerlink" href="#cudecompmalloc" title="Permalink to this headline">¶</a></h4>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv414cudecompMalloc16cudecompHandle_t18cudecompGridDesc_tPPv6size_t">
+<span id="_CPPv314cudecompMalloc16cudecompHandle_t18cudecompGridDesc_tPPv6size_t"></span><span id="_CPPv214cudecompMalloc16cudecompHandle_t18cudecompGridDesc_tPPv6size_t"></span><span id="cudecompMalloc__cudecompHandle_t.cudecompGridDesc_t.voidPP.s"></span><span class="target" id="cudecomp_8h_1aaf6bb0836c06ec6b35ab238ecfc40864"></span><a class="reference internal" href="#_CPPv416cudecompResult_t" title="cudecompResult_t"><span class="n"><span class="pre">cudecompResult_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cudecompMalloc</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv416cudecompHandle_t" title="cudecompHandle_t"><span class="n"><span class="pre">cudecompHandle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">handle</span></span>, <a class="reference internal" href="#_CPPv418cudecompGridDesc_t" title="cudecompGridDesc_t"><span class="n"><span class="pre">cudecompGridDesc_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">grid_desc</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">buffer</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">buffer_size_bytes</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414cudecompMalloc16cudecompHandle_t18cudecompGridDesc_tPPv6size_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Allocation function for cuDecomp workspaces. </p>
+<p>This function should be used to allocate cuDecomp workspaces. It will select an appropriate allocator based on the communication backend information found in the provided grid descriptor. At the current time, only NVSHMEM-enabled backends require a special allocation (using nvshmem_malloc). This function is collective and should be called on all workers to avoid deadlocks. Additionally, any memory allocated using this function is invalidated if the provided grid descriptor is destroyed and care are should be taken free memory allocated using this function before the provided grid descriptor is destroyed. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>handle</strong> – <strong>[in]</strong> The initialized cuDecomp library handle </p></li>
+<li><p><strong>grid_desc</strong> – <strong>[in]</strong> A cuDecomp grid descriptor </p></li>
+<li><p><strong>buffer</strong> – <strong>[out]</strong> A pointer to the allocated memory </p></li>
+<li><p><strong>buffer_size_bytes</strong> – <strong>[out]</strong> The size of requested allocation, in bytes</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>CUDECOMP_RESULT_SUCCESS on success or error code on failure. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+</section>
+<section id="cudecompfree">
+<span id="cudecompfree-ref"></span><h4>cudecompFree<a class="headerlink" href="#cudecompfree" title="Permalink to this headline">¶</a></h4>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv412cudecompFree16cudecompHandle_t18cudecompGridDesc_tPv">
+<span id="_CPPv312cudecompFree16cudecompHandle_t18cudecompGridDesc_tPv"></span><span id="_CPPv212cudecompFree16cudecompHandle_t18cudecompGridDesc_tPv"></span><span id="cudecompFree__cudecompHandle_t.cudecompGridDesc_t.voidP"></span><span class="target" id="cudecomp_8h_1abdd7450f35df8f213b388f68e3a46333"></span><a class="reference internal" href="#_CPPv416cudecompResult_t" title="cudecompResult_t"><span class="n"><span class="pre">cudecompResult_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cudecompFree</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv416cudecompHandle_t" title="cudecompHandle_t"><span class="n"><span class="pre">cudecompHandle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">handle</span></span>, <a class="reference internal" href="#_CPPv418cudecompGridDesc_t" title="cudecompGridDesc_t"><span class="n"><span class="pre">cudecompGridDesc_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">grid_desc</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">buffer</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412cudecompFree16cudecompHandle_t18cudecompGridDesc_tPv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Deallocation function for cuDecomp workspaces. </p>
+<p>This function should be used to deallocate memory allocate with cudecompMalloc. It will select an appropriate deallocation function based on the communication backend information found in the provided grid descriptor. At the current time, only NVSHMEM-enabled backends require a special deallocation (using nvshmem_free). This function is collective and should be called on all workers to avoid deadlocks. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>handle</strong> – <strong>[in]</strong> The initialized cuDecomp library handle </p></li>
+<li><p><strong>grid_desc</strong> – <strong>[in]</strong> A cuDecomp grid descriptor </p></li>
+<li><p><strong>buffer</strong> – <strong>[in]</strong> A pointer to the memory to be deallocated</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>CUDECOMP_RESULT_SUCCESS on success or error code on failure. </p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+<hr class="docutils" />
+<section id="helper-functions">
+<h3>Helper Functions<a class="headerlink" href="#helper-functions" title="Permalink to this headline">¶</a></h3>
+<section id="cudecompgetpencilinfo">
+<span id="cudecompgetpencilinfo-ref"></span><h4>cudecompGetPencilInfo<a class="headerlink" href="#cudecompgetpencilinfo" title="Permalink to this headline">¶</a></h4>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv421cudecompGetPencilInfo16cudecompHandle_t18cudecompGridDesc_tP20cudecompPencilInfo_t7int32_tA_K7int32_t">
+<span id="_CPPv321cudecompGetPencilInfo16cudecompHandle_t18cudecompGridDesc_tP20cudecompPencilInfo_t7int32_tA_K7int32_t"></span><span id="_CPPv221cudecompGetPencilInfo16cudecompHandle_t18cudecompGridDesc_tP20cudecompPencilInfo_t7int32_tA_K7int32_t"></span><span id="cudecompGetPencilInfo__cudecompHandle_t.cudecompGridDesc_t.cudecompPencilInfo_tP.int32_t.int32_tCA"></span><span class="target" id="cudecomp_8h_1a1f6edd0f9e8309bdc55f8b47374ef90c"></span><a class="reference internal" href="#_CPPv416cudecompResult_t" title="cudecompResult_t"><span class="n"><span class="pre">cudecompResult_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cudecompGetPencilInfo</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv416cudecompHandle_t" title="cudecompHandle_t"><span class="n"><span class="pre">cudecompHandle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">handle</span></span>, <a class="reference internal" href="#_CPPv418cudecompGridDesc_t" title="cudecompGridDesc_t"><span class="n"><span class="pre">cudecompGridDesc_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">grid_desc</span></span>, <a class="reference internal" href="#_CPPv420cudecompPencilInfo_t" title="cudecompPencilInfo_t"><span class="n"><span class="pre">cudecompPencilInfo_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pencil_info</span></span>, <span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">axis</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">halo_extents</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421cudecompGetPencilInfo16cudecompHandle_t18cudecompGridDesc_tP20cudecompPencilInfo_t7int32_tA_K7int32_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Collects geometry information about assigned pencils, by domain axis. </p>
+<p>This function queries information about the pencil assigned to the calling worker for the given axis. This information is collected in a <a class="reference internal" href="#structcudecompPencilInfo__t"><span class="std std-ref">cudecompPencilInfo_t</span></a> structure, which can be used to access and manipuate data within the user-allocated memory buffer. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>handle</strong> – <strong>[in]</strong> The initialized cuDecomp library handle </p></li>
+<li><p><strong>grid_desc</strong> – <strong>[in]</strong> A created cuDecomp grid descriptor </p></li>
+<li><p><strong>pencil_info</strong> – <strong>[out]</strong> A pointer to a cuDecompPencilInfo_t structure </p></li>
+<li><p><strong>axis</strong> – <strong>[in]</strong> The domain axis the desired pencil is aligned with </p></li>
+<li><p><strong>halo_extents</strong> – <strong>[in]</strong> An array of three integers to define halo region extents of the pencil, in global order. The i-th entry in this array should contain the number of halo elements (per direction) expected in the along the i-th global domain axis. Symmetric halos are assumed (e.g. a value of one in halo_extents means there are 2 halo elements, one element on each side). If no halo regions are necessary, a NULL pointer can be provided in place of this array.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>CUDECOMP_RESULT_SUCCESS on success or error code on failure. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+</section>
+<section id="cudecomptranposecommbackendtostring">
+<span id="cudecomptransposecommbackendtostring-ref"></span><h4>cudecompTranposeCommBackendToString<a class="headerlink" href="#cudecomptranposecommbackendtostring" title="Permalink to this headline">¶</a></h4>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv436cudecompTransposeCommBackendToString30cudecompTransposeCommBackend_t">
+<span id="_CPPv336cudecompTransposeCommBackendToString30cudecompTransposeCommBackend_t"></span><span id="_CPPv236cudecompTransposeCommBackendToString30cudecompTransposeCommBackend_t"></span><span id="cudecompTransposeCommBackendToString__cudecompTransposeCommBackend_t"></span><span class="target" id="cudecomp_8h_1a33fddc0976513daadae070d699430046"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">cudecompTransposeCommBackendToString</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv430cudecompTransposeCommBackend_t" title="cudecompTransposeCommBackend_t"><span class="n"><span class="pre">cudecompTransposeCommBackend_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">comm_backend</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv436cudecompTransposeCommBackendToString30cudecompTransposeCommBackend_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Function to get string name of transpose communication backend. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>comm_backend</strong> – <strong>[in]</strong> A cudecompTransposeCommBackend_t value</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A string representation of the transpose communication backend. Will return string “ERROR” if invalid backend value is provided. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+</section>
+<section id="cudecomphalocommbackendtostring">
+<span id="cudecomphalocommbackendtostring-ref"></span><h4>cudecompHaloCommBackendToString<a class="headerlink" href="#cudecomphalocommbackendtostring" title="Permalink to this headline">¶</a></h4>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv431cudecompHaloCommBackendToString25cudecompHaloCommBackend_t">
+<span id="_CPPv331cudecompHaloCommBackendToString25cudecompHaloCommBackend_t"></span><span id="_CPPv231cudecompHaloCommBackendToString25cudecompHaloCommBackend_t"></span><span id="cudecompHaloCommBackendToString__cudecompHaloCommBackend_t"></span><span class="target" id="cudecomp_8h_1a86d36f385bd9625f74a755d449730b41"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">cudecompHaloCommBackendToString</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv425cudecompHaloCommBackend_t" title="cudecompHaloCommBackend_t"><span class="n"><span class="pre">cudecompHaloCommBackend_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">comm_backend</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv431cudecompHaloCommBackendToString25cudecompHaloCommBackend_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Function to get string name of halo communication backend. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>comm_backend</strong> – <strong>[in]</strong> A cudecompHaloCommBackend_t value</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A string representation of the halo communication backend. Will return string “ERROR” if invalid backend value is provided. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+</section>
+<section id="cudecompgetgriddescconfig">
+<span id="cudecompgetgriddescconfig-ref"></span><h4>cudecompGetGridDescConfig<a class="headerlink" href="#cudecompgetgriddescconfig" title="Permalink to this headline">¶</a></h4>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv425cudecompGetGridDescConfig16cudecompHandle_t18cudecompGridDesc_tP24cudecompGridDescConfig_t">
+<span id="_CPPv325cudecompGetGridDescConfig16cudecompHandle_t18cudecompGridDesc_tP24cudecompGridDescConfig_t"></span><span id="_CPPv225cudecompGetGridDescConfig16cudecompHandle_t18cudecompGridDesc_tP24cudecompGridDescConfig_t"></span><span id="cudecompGetGridDescConfig__cudecompHandle_t.cudecompGridDesc_t.cudecompGridDescConfig_tP"></span><span class="target" id="cudecomp_8h_1afcb2d3642fa63b436334655e9c48854b"></span><a class="reference internal" href="#_CPPv416cudecompResult_t" title="cudecompResult_t"><span class="n"><span class="pre">cudecompResult_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cudecompGetGridDescConfig</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv416cudecompHandle_t" title="cudecompHandle_t"><span class="n"><span class="pre">cudecompHandle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">handle</span></span>, <a class="reference internal" href="#_CPPv418cudecompGridDesc_t" title="cudecompGridDesc_t"><span class="n"><span class="pre">cudecompGridDesc_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">grid_desc</span></span>, <a class="reference internal" href="#_CPPv424cudecompGridDescConfig_t" title="cudecompGridDescConfig_t"><span class="n"><span class="pre">cudecompGridDescConfig_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">config</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425cudecompGetGridDescConfig16cudecompHandle_t18cudecompGridDesc_tP24cudecompGridDescConfig_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Queries the configuration used to create a grid descriptor. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>handle</strong> – <strong>[in]</strong> The initialized cuDecomp library handle </p></li>
+<li><p><strong>grid_desc</strong> – <strong>[in]</strong> cuDecomp grid descriptor </p></li>
+<li><p><strong>config</strong> – <strong>[out]</strong> A pointer to a cuDecompGridDescConfig_t structure.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>CUDECOMP_RESULT_SUCCESS on success or error code on failure. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+</section>
+<section id="cudecompgetshiftedrank">
+<span id="cudecompgetshiftedrank-ref"></span><h4>cudecompGetShiftedRank<a class="headerlink" href="#cudecompgetshiftedrank" title="Permalink to this headline">¶</a></h4>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv422cudecompGetShiftedRank16cudecompHandle_t18cudecompGridDesc_t7int32_t7int32_t7int32_tbP7int32_t">
+<span id="_CPPv322cudecompGetShiftedRank16cudecompHandle_t18cudecompGridDesc_t7int32_t7int32_t7int32_tbP7int32_t"></span><span id="_CPPv222cudecompGetShiftedRank16cudecompHandle_t18cudecompGridDesc_t7int32_t7int32_t7int32_tbP7int32_t"></span><span id="cudecompGetShiftedRank__cudecompHandle_t.cudecompGridDesc_t.int32_t.int32_t.int32_t.b.int32_tP"></span><span class="target" id="cudecomp_8h_1a6efb3948295e37ab23da9b0faa6722b4"></span><a class="reference internal" href="#_CPPv416cudecompResult_t" title="cudecompResult_t"><span class="n"><span class="pre">cudecompResult_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cudecompGetShiftedRank</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv416cudecompHandle_t" title="cudecompHandle_t"><span class="n"><span class="pre">cudecompHandle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">handle</span></span>, <a class="reference internal" href="#_CPPv418cudecompGridDesc_t" title="cudecompGridDesc_t"><span class="n"><span class="pre">cudecompGridDesc_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">grid_desc</span></span>, <span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">axis</span></span>, <span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dim</span></span>, <span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">displacement</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">periodic</span></span>, <span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">shifted_rank</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422cudecompGetShiftedRank16cudecompHandle_t18cudecompGridDesc_t7int32_t7int32_t7int32_tbP7int32_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Function to retrieve the global rank of neighboring processes. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>handle</strong> – <strong>[in]</strong> The initialized cuDecomp library handle </p></li>
+<li><p><strong>grid_desc</strong> – <strong>[in]</strong> A cuDecomp grid descriptor </p></li>
+<li><p><strong>axis</strong> – <strong>[in]</strong> The domain axis the pencil is aligned with </p></li>
+<li><p><strong>dim</strong> – <strong>[in]</strong> Which pencil dimension (global indexed) to retrieve neighboring rank </p></li>
+<li><p><strong>displacement</strong> – <strong>[in]</strong> Displacement of neighboring rank to retrieve. For example, 1 will retrieve the +1-th neighbor rank along dim, while -1 will retrieve the -1-th neighbor rank. </p></li>
+<li><p><strong>periodic</strong> – <strong>[in]</strong> A boolean flag to indicate whether dim should be treated periodically </p></li>
+<li><p><strong>shifted_rank</strong> – <strong>[out]</strong> A pointer to an integer to write the global rank of the requested neighbor. For non-periodic cases, a value of -1 will be written if the displacement results in a position outside the global domain.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>CUDECOMP_RESULT_SUCCESS on success or error code on failure. </p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+<hr class="docutils" />
+<section id="transposition-functions">
+<h3>Transposition Functions<a class="headerlink" href="#transposition-functions" title="Permalink to this headline">¶</a></h3>
+<section id="cudecomptransposextoy">
+<span id="cudecomptransposextoy-ref"></span><h4>cudecompTransposeXToY<a class="headerlink" href="#cudecomptransposextoy" title="Permalink to this headline">¶</a></h4>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv421cudecompTransposeXToY16cudecompHandle_t18cudecompGridDesc_tPvPvPv18cudecompDataType_tA_K7int32_tA_K7int32_t12cudaStream_t">
+<span id="_CPPv321cudecompTransposeXToY16cudecompHandle_t18cudecompGridDesc_tPvPvPv18cudecompDataType_tA_K7int32_tA_K7int32_t12cudaStream_t"></span><span id="_CPPv221cudecompTransposeXToY16cudecompHandle_t18cudecompGridDesc_tPvPvPv18cudecompDataType_tA_K7int32_tA_K7int32_t12cudaStream_t"></span><span id="cudecompTransposeXToY__cudecompHandle_t.cudecompGridDesc_t.voidP.voidP.voidP.cudecompDataType_t.int32_tCA.int32_tCA.cudaStream_t"></span><span class="target" id="cudecomp_8h_1a360648dd5a57ef33610dff284a188452"></span><a class="reference internal" href="#_CPPv416cudecompResult_t" title="cudecompResult_t"><span class="n"><span class="pre">cudecompResult_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cudecompTransposeXToY</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv416cudecompHandle_t" title="cudecompHandle_t"><span class="n"><span class="pre">cudecompHandle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">handle</span></span>, <a class="reference internal" href="#_CPPv418cudecompGridDesc_t" title="cudecompGridDesc_t"><span class="n"><span class="pre">cudecompGridDesc_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">grid_desc</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">input</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">output</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">work</span></span>, <a class="reference internal" href="#_CPPv418cudecompDataType_t" title="cudecompDataType_t"><span class="n"><span class="pre">cudecompDataType_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">dtype</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">input_halo_extents</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">output_halo_extents</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span>, <span class="n"><span class="pre">cudaStream_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">stream</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421cudecompTransposeXToY16cudecompHandle_t18cudecompGridDesc_tPvPvPv18cudecompDataType_tA_K7int32_tA_K7int32_t12cudaStream_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Function to transpose data from X-axis aligned pencils to a Y-axis aligned pencils. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>handle</strong> – <strong>[in]</strong> The initialized cuDecomp library handle </p></li>
+<li><p><strong>grid_desc</strong> – <strong>[in]</strong> A cuDecomp grid descriptor </p></li>
+<li><p><strong>input</strong> – <strong>[in]</strong> A pointer to the memory buffer to read input X-axis aligned pencil data </p></li>
+<li><p><strong>output</strong> – <strong>[out]</strong> A pointer to the memory buffer to write output Y-axis aligned pencil data. If input and output are the same, operation is performed in-place </p></li>
+<li><p><strong>work</strong> – <strong>[in]</strong> A pointer to the transpose workspace memory </p></li>
+<li><p><strong>dtype</strong> – <strong>[in]</strong> The cuDecomp datatype to use for the transpose operation </p></li>
+<li><p><strong>input_halo_extents</strong> – <strong>[in]</strong> An array of three integers to define halo region extents of the input data, in global order. The i-th entry in this array should contain the number of halo elements (per direction) expected in the along the i-th global domain axis. Symmetric halos are assumed (e.g. a value of one in halo_extents means there are 2 halo elements, one element on each side). If the input has no halo regions, a NULL pointer can be provided. </p></li>
+<li><p><strong>output_halo_extents</strong> – <strong>[in]</strong> Similar to input_halo_extents, but for the output data. If the output has no halo regions, a NULL pointer can be provided. </p></li>
+<li><p><strong>stream</strong> – <strong>[in]</strong> CUDA stream to enqueue GPU operations into</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>CUDECOMP_RESULT_SUCCESS on success or error code on failure. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+</section>
+<section id="cudecomptransposeytoz">
+<span id="cudecomptransposeytoz-ref"></span><h4>cudecompTransposeYtoZ<a class="headerlink" href="#cudecomptransposeytoz" title="Permalink to this headline">¶</a></h4>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv421cudecompTransposeYToZ16cudecompHandle_t18cudecompGridDesc_tPvPvPv18cudecompDataType_tA_K7int32_tA_K7int32_t12cudaStream_t">
+<span id="_CPPv321cudecompTransposeYToZ16cudecompHandle_t18cudecompGridDesc_tPvPvPv18cudecompDataType_tA_K7int32_tA_K7int32_t12cudaStream_t"></span><span id="_CPPv221cudecompTransposeYToZ16cudecompHandle_t18cudecompGridDesc_tPvPvPv18cudecompDataType_tA_K7int32_tA_K7int32_t12cudaStream_t"></span><span id="cudecompTransposeYToZ__cudecompHandle_t.cudecompGridDesc_t.voidP.voidP.voidP.cudecompDataType_t.int32_tCA.int32_tCA.cudaStream_t"></span><span class="target" id="cudecomp_8h_1af06ee2faba09ef2f75e443d36ba59706"></span><a class="reference internal" href="#_CPPv416cudecompResult_t" title="cudecompResult_t"><span class="n"><span class="pre">cudecompResult_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cudecompTransposeYToZ</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv416cudecompHandle_t" title="cudecompHandle_t"><span class="n"><span class="pre">cudecompHandle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">handle</span></span>, <a class="reference internal" href="#_CPPv418cudecompGridDesc_t" title="cudecompGridDesc_t"><span class="n"><span class="pre">cudecompGridDesc_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">grid_desc</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">input</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">output</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">work</span></span>, <a class="reference internal" href="#_CPPv418cudecompDataType_t" title="cudecompDataType_t"><span class="n"><span class="pre">cudecompDataType_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">dtype</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">input_halo_extents</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">output_halo_extents</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span>, <span class="n"><span class="pre">cudaStream_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">stream</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421cudecompTransposeYToZ16cudecompHandle_t18cudecompGridDesc_tPvPvPv18cudecompDataType_tA_K7int32_tA_K7int32_t12cudaStream_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Function to transpose data from Y-axis aligned pencils to a Z-axis aligned pencils. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>handle</strong> – <strong>[in]</strong> The initialized cuDecomp library handle </p></li>
+<li><p><strong>grid_desc</strong> – <strong>[in]</strong> A cuDecomp grid descriptor </p></li>
+<li><p><strong>input</strong> – <strong>[in]</strong> A pointer to the memory buffer to read input Y-axis aligned pencil data </p></li>
+<li><p><strong>output</strong> – <strong>[out]</strong> A pointer to the memory buffer to write output Z-axis aligned pencil data. If input and output are the same, operation is performed in-place </p></li>
+<li><p><strong>work</strong> – <strong>[in]</strong> A pointer to the transpose workspace memory </p></li>
+<li><p><strong>dtype</strong> – <strong>[in]</strong> The cuDecomp datatype to use for the transpose operation </p></li>
+<li><p><strong>input_halo_extents</strong> – <strong>[in]</strong> An array of three integers to define halo region extents of the input data, in global order. The i-th entry in this array should contain the number of halo elements (per direction) expected in the along the i-th global domain axis. Symmetric halos are assumed (e.g. a value of one in halo_extents means there are 2 halo elements, one element on each side). If the input has no halo regions, a NULL pointer can be provided. </p></li>
+<li><p><strong>output_halo_extents</strong> – <strong>[in]</strong> Similar to input_halo_extents, but for the output data. If the output has no halo regions, a NULL pointer can be provided. </p></li>
+<li><p><strong>stream</strong> – <strong>[in]</strong> CUDA stream to enqueue GPU operations into</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>CUDECOMP_RESULT_SUCCESS on success or error code on failure. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+</section>
+<section id="cudecomptransposeztoy">
+<span id="cudecomptransposeztoy-ref"></span><h4>cudecompTransposeZToY<a class="headerlink" href="#cudecomptransposeztoy" title="Permalink to this headline">¶</a></h4>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv421cudecompTransposeZToY16cudecompHandle_t18cudecompGridDesc_tPvPvPv18cudecompDataType_tA_K7int32_tA_K7int32_t12cudaStream_t">
+<span id="_CPPv321cudecompTransposeZToY16cudecompHandle_t18cudecompGridDesc_tPvPvPv18cudecompDataType_tA_K7int32_tA_K7int32_t12cudaStream_t"></span><span id="_CPPv221cudecompTransposeZToY16cudecompHandle_t18cudecompGridDesc_tPvPvPv18cudecompDataType_tA_K7int32_tA_K7int32_t12cudaStream_t"></span><span id="cudecompTransposeZToY__cudecompHandle_t.cudecompGridDesc_t.voidP.voidP.voidP.cudecompDataType_t.int32_tCA.int32_tCA.cudaStream_t"></span><span class="target" id="cudecomp_8h_1a7133348a086d2227e01cc70ab281b738"></span><a class="reference internal" href="#_CPPv416cudecompResult_t" title="cudecompResult_t"><span class="n"><span class="pre">cudecompResult_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cudecompTransposeZToY</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv416cudecompHandle_t" title="cudecompHandle_t"><span class="n"><span class="pre">cudecompHandle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">handle</span></span>, <a class="reference internal" href="#_CPPv418cudecompGridDesc_t" title="cudecompGridDesc_t"><span class="n"><span class="pre">cudecompGridDesc_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">grid_desc</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">input</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">output</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">work</span></span>, <a class="reference internal" href="#_CPPv418cudecompDataType_t" title="cudecompDataType_t"><span class="n"><span class="pre">cudecompDataType_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">dtype</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">input_halo_extents</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">output_halo_extents</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span>, <span class="n"><span class="pre">cudaStream_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">stream</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421cudecompTransposeZToY16cudecompHandle_t18cudecompGridDesc_tPvPvPv18cudecompDataType_tA_K7int32_tA_K7int32_t12cudaStream_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Function to transpose data from Z-axis aligned pencils to a Y-axis aligned pencils. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>handle</strong> – <strong>[in]</strong> The initialized cuDecomp library handle </p></li>
+<li><p><strong>grid_desc</strong> – <strong>[in]</strong> A cuDecomp grid descriptor </p></li>
+<li><p><strong>input</strong> – <strong>[in]</strong> A pointer to the memory buffer to read input Z-axis aligned pencil data </p></li>
+<li><p><strong>output</strong> – <strong>[out]</strong> A pointer to the memory buffer to write output Y-axis aligned pencil data. If input and output are the same, operation is performed in-place </p></li>
+<li><p><strong>work</strong> – <strong>[in]</strong> A pointer to the transpose workspace memory </p></li>
+<li><p><strong>dtype</strong> – <strong>[in]</strong> The cuDecomp datatype to use for the transpose operation </p></li>
+<li><p><strong>input_halo_extents</strong> – <strong>[in]</strong> An array of three integers to define halo region extents of the input data, in global order. The i-th entry in this array should contain the number of halo elements (per direction) expected in the along the i-th global domain axis. Symmetric halos are assumed (e.g. a value of one in halo_extents means there are 2 halo elements, one element on each side). If the input has no halo regions, a NULL pointer can be provided. </p></li>
+<li><p><strong>output_halo_extents</strong> – <strong>[in]</strong> Similar to input_halo_extents, but for the output data. If the output has no halo regions, a NULL pointer can be provided. </p></li>
+<li><p><strong>stream</strong> – <strong>[in]</strong> CUDA stream to enqueue GPU operations into</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>CUDECOMP_RESULT_SUCCESS on success or error code on failure. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+</section>
+<section id="cudecomptransposeytox">
+<span id="cudecomptransposeytox-ref"></span><h4>cudecompTransposeYToX<a class="headerlink" href="#cudecomptransposeytox" title="Permalink to this headline">¶</a></h4>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv421cudecompTransposeYToX16cudecompHandle_t18cudecompGridDesc_tPvPvPv18cudecompDataType_tA_K7int32_tA_K7int32_t12cudaStream_t">
+<span id="_CPPv321cudecompTransposeYToX16cudecompHandle_t18cudecompGridDesc_tPvPvPv18cudecompDataType_tA_K7int32_tA_K7int32_t12cudaStream_t"></span><span id="_CPPv221cudecompTransposeYToX16cudecompHandle_t18cudecompGridDesc_tPvPvPv18cudecompDataType_tA_K7int32_tA_K7int32_t12cudaStream_t"></span><span id="cudecompTransposeYToX__cudecompHandle_t.cudecompGridDesc_t.voidP.voidP.voidP.cudecompDataType_t.int32_tCA.int32_tCA.cudaStream_t"></span><span class="target" id="cudecomp_8h_1ac0a698c6768068ad00b26730583e01c6"></span><a class="reference internal" href="#_CPPv416cudecompResult_t" title="cudecompResult_t"><span class="n"><span class="pre">cudecompResult_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cudecompTransposeYToX</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv416cudecompHandle_t" title="cudecompHandle_t"><span class="n"><span class="pre">cudecompHandle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">handle</span></span>, <a class="reference internal" href="#_CPPv418cudecompGridDesc_t" title="cudecompGridDesc_t"><span class="n"><span class="pre">cudecompGridDesc_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">grid_desc</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">input</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">output</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">work</span></span>, <a class="reference internal" href="#_CPPv418cudecompDataType_t" title="cudecompDataType_t"><span class="n"><span class="pre">cudecompDataType_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">dtype</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">input_halo_extents</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">output_halo_extents</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span>, <span class="n"><span class="pre">cudaStream_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">stream</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421cudecompTransposeYToX16cudecompHandle_t18cudecompGridDesc_tPvPvPv18cudecompDataType_tA_K7int32_tA_K7int32_t12cudaStream_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Function to transpose data from Y-axis aligned pencils to a X-axis aligned pencils. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>handle</strong> – <strong>[in]</strong> The initialized cuDecomp library handle </p></li>
+<li><p><strong>grid_desc</strong> – <strong>[in]</strong> A cuDecomp grid descriptor </p></li>
+<li><p><strong>input</strong> – <strong>[in]</strong> A pointer to the memory buffer to read input Y-axis aligned pencil data </p></li>
+<li><p><strong>output</strong> – <strong>[out]</strong> A pointer to the memory buffer to write output X-axis aligned pencil data. If input and output are the same, operation is performed in-place </p></li>
+<li><p><strong>work</strong> – <strong>[in]</strong> A pointer to the transpose workspace memory </p></li>
+<li><p><strong>dtype</strong> – <strong>[in]</strong> The cuDecomp datatype to use for the transpose operation </p></li>
+<li><p><strong>input_halo_extents</strong> – <strong>[in]</strong> An array of three integers to define halo region extents of the input data, in global order. The i-th entry in this array should contain the number of halo elements (per direction) expected in the along the i-th global domain axis. Symmetric halos are assumed (e.g. a value of one in halo_extents means there are 2 halo elements, one element on each side). If the input has no halo regions, a NULL pointer can be provided. </p></li>
+<li><p><strong>output_halo_extents</strong> – <strong>[in]</strong> Similar to input_halo_extents, but for the output data. If the output has no halo regions, a NULL pointer can be provided. </p></li>
+<li><p><strong>stream</strong> – <strong>[in]</strong> CUDA stream to enqueue GPU operations into</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>CUDECOMP_RESULT_SUCCESS on success or error code on failure. </p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+<hr class="docutils" />
+<section id="halo-exchange-functions">
+<h3>Halo Exchange Functions<a class="headerlink" href="#halo-exchange-functions" title="Permalink to this headline">¶</a></h3>
+<section id="cudecompupdatehalosx">
+<span id="cudecompupdatehalosx-ref"></span><h4>cudecompUpdateHalosX<a class="headerlink" href="#cudecompupdatehalosx" title="Permalink to this headline">¶</a></h4>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv420cudecompUpdateHalosX16cudecompHandle_t18cudecompGridDesc_tPvPv18cudecompDataType_tA_K7int32_tA_Kb7int32_t12cudaStream_t">
+<span id="_CPPv320cudecompUpdateHalosX16cudecompHandle_t18cudecompGridDesc_tPvPv18cudecompDataType_tA_K7int32_tA_Kb7int32_t12cudaStream_t"></span><span id="_CPPv220cudecompUpdateHalosX16cudecompHandle_t18cudecompGridDesc_tPvPv18cudecompDataType_tA_K7int32_tA_Kb7int32_t12cudaStream_t"></span><span id="cudecompUpdateHalosX__cudecompHandle_t.cudecompGridDesc_t.voidP.voidP.cudecompDataType_t.int32_tCA.bCA.int32_t.cudaStream_t"></span><span class="target" id="cudecomp_8h_1af55c9c8afd67f9113aa79a474fe1590d"></span><a class="reference internal" href="#_CPPv416cudecompResult_t" title="cudecompResult_t"><span class="n"><span class="pre">cudecompResult_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cudecompUpdateHalosX</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv416cudecompHandle_t" title="cudecompHandle_t"><span class="n"><span class="pre">cudecompHandle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">handle</span></span>, <a class="reference internal" href="#_CPPv418cudecompGridDesc_t" title="cudecompGridDesc_t"><span class="n"><span class="pre">cudecompGridDesc_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">grid_desc</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">input</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">work</span></span>, <a class="reference internal" href="#_CPPv418cudecompDataType_t" title="cudecompDataType_t"><span class="n"><span class="pre">cudecompDataType_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">dtype</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">halo_extents</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">halo_periods</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span>, <span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dim</span></span>, <span class="n"><span class="pre">cudaStream_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">stream</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv420cudecompUpdateHalosX16cudecompHandle_t18cudecompGridDesc_tPvPv18cudecompDataType_tA_K7int32_tA_Kb7int32_t12cudaStream_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Function to perform halo communication of X-axis aligned pencil data. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>handle</strong> – <strong>[in]</strong> The initialized cuDecomp library handle </p></li>
+<li><p><strong>grid_desc</strong> – <strong>[in]</strong> A cuDecomp grid descriptor </p></li>
+<li><p><strong>input</strong> – <strong>[inout]</strong> A pointer to the memory buffer to read input X-axis aligned pencil data. On successful completion, this buffer will contain the input X-axis aligned pencil data with the specified halo regions updated. </p></li>
+<li><p><strong>work</strong> – <strong>[in]</strong> A pointer to the halo workspace memory </p></li>
+<li><p><strong>dtype</strong> – <strong>[in]</strong> The cuDecomp datatype to use for the halo operation </p></li>
+<li><p><strong>halo_extents</strong> – <strong>[in]</strong> An array of three integers to define halo region extents of the input data, in global order. The i-th entry in this array should contain the number of halo elements (per direction) expected in the along the i-th global domain axis. Symmetric halos are assumed (e.g. a value of one in halo_extents means there are 2 halo elements, one element on each side) </p></li>
+<li><p><strong>halo_periods</strong> – <strong>[in]</strong> An array of three booleans to define halo periodicity of the input data, in global order. If the i-th entry in this array is true, the domain is treated periodically along the i-th global domain axis. A NULL pointer can be provided if none of the domain axes are periodic. </p></li>
+<li><p><strong>dim</strong> – <strong>[in]</strong> Which pencil dimension (global indexed) to perform the halo update </p></li>
+<li><p><strong>stream</strong> – <strong>[in]</strong> CUDA stream to enqueue GPU operations into</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>CUDECOMP_RESULT_SUCCESS on success or error code on failure. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+</section>
+<section id="cudecompupdatehalosy">
+<span id="cudecompupdatehalosy-ref"></span><h4>cudecompUpdateHalosY<a class="headerlink" href="#cudecompupdatehalosy" title="Permalink to this headline">¶</a></h4>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv420cudecompUpdateHalosY16cudecompHandle_t18cudecompGridDesc_tPvPv18cudecompDataType_tA_K7int32_tA_Kb7int32_t12cudaStream_t">
+<span id="_CPPv320cudecompUpdateHalosY16cudecompHandle_t18cudecompGridDesc_tPvPv18cudecompDataType_tA_K7int32_tA_Kb7int32_t12cudaStream_t"></span><span id="_CPPv220cudecompUpdateHalosY16cudecompHandle_t18cudecompGridDesc_tPvPv18cudecompDataType_tA_K7int32_tA_Kb7int32_t12cudaStream_t"></span><span id="cudecompUpdateHalosY__cudecompHandle_t.cudecompGridDesc_t.voidP.voidP.cudecompDataType_t.int32_tCA.bCA.int32_t.cudaStream_t"></span><span class="target" id="cudecomp_8h_1a5f5886635d7accb531f24b483cc8f3e1"></span><a class="reference internal" href="#_CPPv416cudecompResult_t" title="cudecompResult_t"><span class="n"><span class="pre">cudecompResult_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cudecompUpdateHalosY</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv416cudecompHandle_t" title="cudecompHandle_t"><span class="n"><span class="pre">cudecompHandle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">handle</span></span>, <a class="reference internal" href="#_CPPv418cudecompGridDesc_t" title="cudecompGridDesc_t"><span class="n"><span class="pre">cudecompGridDesc_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">grid_desc</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">input</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">work</span></span>, <a class="reference internal" href="#_CPPv418cudecompDataType_t" title="cudecompDataType_t"><span class="n"><span class="pre">cudecompDataType_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">dtype</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">halo_extents</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">halo_periods</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span>, <span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dim</span></span>, <span class="n"><span class="pre">cudaStream_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">stream</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv420cudecompUpdateHalosY16cudecompHandle_t18cudecompGridDesc_tPvPv18cudecompDataType_tA_K7int32_tA_Kb7int32_t12cudaStream_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Function to perform halo communication of Y-axis aligned pencil data. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>handle</strong> – <strong>[in]</strong> The initialized cuDecomp library handle </p></li>
+<li><p><strong>grid_desc</strong> – <strong>[in]</strong> A cuDecomp grid descriptor </p></li>
+<li><p><strong>input</strong> – <strong>[inout]</strong> A pointer to the memory buffer to read input Y-axis aligned pencil data. On successful completion, this buffer will contain the input Y-axis aligned pencil data with the specified halo regions updated. </p></li>
+<li><p><strong>work</strong> – <strong>[in]</strong> A pointer to the halo workspace memory </p></li>
+<li><p><strong>dtype</strong> – <strong>[in]</strong> The cuDecomp datatype to use for the halo operation </p></li>
+<li><p><strong>halo_extents</strong> – <strong>[in]</strong> An array of three integers to define halo region extents of the input data, in global order. The i-th entry in this array should contain the number of halo elements (per direction) expected in the along the i-th global domain axis. Symmetric halos are assumed (e.g. a value of one in halo_extents means there are 2 halo elements, one element on each side) </p></li>
+<li><p><strong>halo_periods</strong> – <strong>[in]</strong> An array of three booleans to define halo periodicity of the input data, in global order. If the i-th entry in this array is true, the domain is treated periodically along the i-th global domain axis. </p></li>
+<li><p><strong>dim</strong> – <strong>[in]</strong> Which pencil dimension (global indexed) to perform the halo update </p></li>
+<li><p><strong>stream</strong> – <strong>[in]</strong> CUDA stream to enqueue GPU operations into</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>CUDECOMP_RESULT_SUCCESS on success or error code on failure. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+</section>
+<section id="cudecompupdatehalosz">
+<span id="cudecompupdatehalosz-ref"></span><h4>cudecompUpdateHalosZ<a class="headerlink" href="#cudecompupdatehalosz" title="Permalink to this headline">¶</a></h4>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv420cudecompUpdateHalosZ16cudecompHandle_t18cudecompGridDesc_tPvPv18cudecompDataType_tA_K7int32_tA_Kb7int32_t12cudaStream_t">
+<span id="_CPPv320cudecompUpdateHalosZ16cudecompHandle_t18cudecompGridDesc_tPvPv18cudecompDataType_tA_K7int32_tA_Kb7int32_t12cudaStream_t"></span><span id="_CPPv220cudecompUpdateHalosZ16cudecompHandle_t18cudecompGridDesc_tPvPv18cudecompDataType_tA_K7int32_tA_Kb7int32_t12cudaStream_t"></span><span id="cudecompUpdateHalosZ__cudecompHandle_t.cudecompGridDesc_t.voidP.voidP.cudecompDataType_t.int32_tCA.bCA.int32_t.cudaStream_t"></span><span class="target" id="cudecomp_8h_1a9bd161b5d0508c66cef34dc123bfd47d"></span><a class="reference internal" href="#_CPPv416cudecompResult_t" title="cudecompResult_t"><span class="n"><span class="pre">cudecompResult_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cudecompUpdateHalosZ</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv416cudecompHandle_t" title="cudecompHandle_t"><span class="n"><span class="pre">cudecompHandle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">handle</span></span>, <a class="reference internal" href="#_CPPv418cudecompGridDesc_t" title="cudecompGridDesc_t"><span class="n"><span class="pre">cudecompGridDesc_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">grid_desc</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">input</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">work</span></span>, <a class="reference internal" href="#_CPPv418cudecompDataType_t" title="cudecompDataType_t"><span class="n"><span class="pre">cudecompDataType_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">dtype</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">halo_extents</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">halo_periods</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span>, <span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dim</span></span>, <span class="n"><span class="pre">cudaStream_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">stream</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv420cudecompUpdateHalosZ16cudecompHandle_t18cudecompGridDesc_tPvPv18cudecompDataType_tA_K7int32_tA_Kb7int32_t12cudaStream_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Function to perform halo communication of Z-axis aligned pencil data. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>handle</strong> – <strong>[in]</strong> The initialized cuDecomp library handle </p></li>
+<li><p><strong>grid_desc</strong> – <strong>[in]</strong> A cuDecomp grid descriptor </p></li>
+<li><p><strong>input</strong> – <strong>[inout]</strong> A pointer to the memory buffer to read input Z-axis aligned pencil data. On successful completion, this buffer will contain the input Z-axis aligned pencil data with the specified halo regions updated. </p></li>
+<li><p><strong>work</strong> – <strong>[in]</strong> A pointer to the halo workspace memory </p></li>
+<li><p><strong>dtype</strong> – <strong>[in]</strong> The cuDecomp datatype to use for the halo operation </p></li>
+<li><p><strong>halo_extents</strong> – <strong>[in]</strong> An array of three integers to define halo region extents of the input data, in global order. The i-th entry in this array should contain the number of halo elements (per direction) expected in the along the i-th global domain axis. Symmetric halos are assumed (e.g. a value of one in halo_extents means there are 2 halo elements, one element on each side) </p></li>
+<li><p><strong>halo_periods</strong> – <strong>[in]</strong> An array of three booleans to define halo periodicity of the input data, in global order. If the i-th entry in this array is true, the domain is treated periodically along the i-th global domain axis. </p></li>
+<li><p><strong>dim</strong> – <strong>[in]</strong> Which pencil dimension (global indexed) to perform the halo update </p></li>
+<li><p><strong>stream</strong> – <strong>[in]</strong> CUDA stream to enqueue GPU operations into</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>CUDECOMP_RESULT_SUCCESS on success or error code on failure. </p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../api.html" class="btn btn-neutral float-left" title="cuDecomp API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="f_api.html" class="btn btn-neutral float-right" title="cuDecomp Fortran API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, NVIDIA Corporation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>  
+
+  <style>
+  a:link, a:visited {
+    color: #76b900;
+  }
+
+  a:hover {
+    color: #8c0;
+  }
+
+  .rst-content dl:not(.docutils) dt {
+    background: rgba(118, 185, 0, 0.1);
+    color: rgba(59,93,0,1);
+    border-top: solid 3px rgba(59,93,0,1);
+  }
+  </style>
+  
+
+</body>
+</html>

@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>cuDecomp Fortran API &mdash; cuDecomp 2022 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/style.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="cuDecomp C API" href="c_api.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" > 
+            <a href="../index.html" class="icon icon-home"> cuDecomp
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #76b900;
+    }
+
+    .wy-side-nav-search a:link, .wy-nav-top a:link {
+      color: #fff;
+    }
+    .wy-side-nav-search a:visited, .wy-nav-top a:visited {
+      color: #fff;
+    }
+    .wy-side-nav-search a:hover, .wy-nav-top a:hover {
+      color: #fff;
+    }
+
+    .wy-menu-vertical a:link, .wy-menu-vertical a:visited {
+      color: #d9d9d9
+    }
+
+    .wy-menu-vertical a:active {
+      background-color: #76b900
+    }
+
+    .wy-side-nav-search>div.version {
+      color: rgba(0, 0, 0, 0.3)
+    }
+  </style>
+  
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../overview.html#what-is-cudecomp">What is cuDecomp?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../overview.html#decomposition-layout">Decomposition Layout</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../basic_usage.html">Basic Usage Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../basic_usage.html#starting-up-cudecomp">Starting up cuDecomp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic_usage.html#creating-a-grid-descriptor">Creating a grid descriptor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic_usage.html#allocate-pencil-memory">Allocate pencil memory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic_usage.html#working-with-pencil-data">Working with pencil data</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../basic_usage.html#c-c">C/C++</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../basic_usage.html#fortran">Fortran</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../basic_usage.html#allocating-workspace">Allocating workspace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic_usage.html#transposing-the-data">Transposing the data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic_usage.html#updating-halo-regions">Updating halo regions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic_usage.html#cleaning-up-and-finalizing-the-library">Cleaning up and finalizing the library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../basic_usage.html#building-and-running-the-example">Building and running the example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../autotuning.html">Autotuning</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../autotuning.html#autotuning-process">Autotuning process</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../autotuning.html#autotuning-usage">Autotuning usage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../autotuning.html#creating-a-grid-descriptor-with-autotuning-enabled">Creating a grid descriptor with autotuning enabled</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../autotuning.html#autotuner-output-and-querying-results">Autotuner output and querying results</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../nvshmem.html">Working with NVSHMEM-enabled builds</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../nvshmem.html#controlling-the-symmetric-heap-size">Controlling the symmetric heap size</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nvshmem.html#mpi-compatibility">MPI compatibility</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">cuDecomp API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="c_api.html">cuDecomp C API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="c_api.html#types">Types</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="c_api.html#internal-types">Internal types</a></li>
+<li class="toctree-l4"><a class="reference internal" href="c_api.html#grid-descriptor-configuration">Grid Descriptor Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="c_api.html#pencil-information">Pencil Information</a></li>
+<li class="toctree-l4"><a class="reference internal" href="c_api.html#communication-backends">Communication Backends</a></li>
+<li class="toctree-l4"><a class="reference internal" href="c_api.html#additional-enumerators">Additional Enumerators</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="c_api.html#functions">Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="c_api.html#library-initialization-finalization">Library Initialization/Finalization</a></li>
+<li class="toctree-l4"><a class="reference internal" href="c_api.html#grid-descriptor-management">Grid Descriptor Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="c_api.html#workspace-management">Workspace Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="c_api.html#helper-functions">Helper Functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="c_api.html#transposition-functions">Transposition Functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="c_api.html#halo-exchange-functions">Halo Exchange Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">cuDecomp Fortran API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#types">Types</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#internal-types">Internal types</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#grid-descriptor-configuration">Grid Descriptor Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pencil-information">Pencil Information</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#communication-backends">Communication Backends</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#additional-enumerators">Additional Enumerators</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#library-initialization-finalization">Library Initialization/Finalization</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#grid-descriptor-management">Grid Descriptor Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#workspace-management">Workspace Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#helper-functions">Helper Functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#transposition-functions">Transposition Functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#halo-exchange-functions">Halo Exchange Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">cuDecomp</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../api.html">cuDecomp API</a> &raquo;</li>
+      <li>cuDecomp Fortran API</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/f_api.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="cudecomp-fortran-api">
+<h1>cuDecomp Fortran API<a class="headerlink" href="#cudecomp-fortran-api" title="Permalink to this headline">¶</a></h1>
+<p>These are all the types and functions available in the cuDecomp Fortran API.</p>
+<section id="types">
+<h2>Types<a class="headerlink" href="#types" title="Permalink to this headline">¶</a></h2>
+<section id="internal-types">
+<h3>Internal types<a class="headerlink" href="#internal-types" title="Permalink to this headline">¶</a></h3>
+<section id="cudecomphandle">
+<span id="cudecomphandle-t-f-ref"></span><h4>cudecompHandle<a class="headerlink" href="#cudecomphandle" title="Permalink to this headline">¶</a></h4>
+<dl>
+<dt class="sig sig-object f" id="f/_/cudecompHandle">
+<em class="property"><span class="pre">type</span>&#160; </em><span class="sig-name descname"><span class="pre">cudecompHandle</span></span><a class="headerlink" href="#f/_/cudecompHandle" title="Permalink to this definition">¶</a></dt>
+<dd><p>A cuDecomp internal handle structure.</p>
+</dd></dl>
+
+<hr class="docutils" />
+</section>
+<section id="cudecompgriddesc">
+<span id="cudecompgriddesc-t-f-ref"></span><h4>cudecompGridDesc<a class="headerlink" href="#cudecompgriddesc" title="Permalink to this headline">¶</a></h4>
+<dl>
+<dt class="sig sig-object f" id="f/_/cudecompGridDesc">
+<em class="property"><span class="pre">type</span>&#160; </em><span class="sig-name descname"><span class="pre">cudecompGridDesc</span></span><a class="headerlink" href="#f/_/cudecompGridDesc" title="Permalink to this definition">¶</a></dt>
+<dd><p>A cuDecomp internal grid descriptor structure.</p>
+</dd></dl>
+
+</section>
+</section>
+<hr class="docutils" />
+<section id="grid-descriptor-configuration">
+<h3>Grid Descriptor Configuration<a class="headerlink" href="#grid-descriptor-configuration" title="Permalink to this headline">¶</a></h3>
+<section id="cudecompgriddescconfig">
+<span id="cudecompgriddescconfig-t-f-ref"></span><h4>cudecompGridDescConfig<a class="headerlink" href="#cudecompgriddescconfig" title="Permalink to this headline">¶</a></h4>
+<dl>
+<dt class="sig sig-object f" id="f/_/cudecompGridDescConfig">
+<em class="property"><span class="pre">type</span>&#160; </em><span class="sig-name descname"><span class="pre">cudecompGridDescConfig</span></span><a class="headerlink" href="#f/_/cudecompGridDescConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>A data structure defining configuration options for grid descriptor creation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type fields</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span class="sig-name descname">% </span><span class="sig-name descname">gdims</span> (3)<em> [</em><em>integer</em><em>]</em> :: dimensions of global data grid</p></li>
+<li><p><span class="sig-name descname">% </span><span class="sig-name descname">gdims_dist</span> (3)<em> [</em><em>integer</em><em>]</em> :: dimensions of global data grid to use for distribution</p></li>
+<li><p><span class="sig-name descname">% </span><span class="sig-name descname">pdims</span> (2)<em> [</em><em>integer</em><em>]</em> :: dimensions of process grid</p></li>
+<li><p><span class="sig-name descname">% </span><span class="sig-name descname">transpose_comm_backend</span><em> [</em><em>cudecompTransposeCommType</em><em>]</em> :: communication backend to use for transpose communication (default: CUDECOMP_TRANSPOSE_COMM_MPI_P2P)</p></li>
+<li><p><span class="sig-name descname">% </span><span class="sig-name descname">transpose_axis_contiguous</span> (3)<em> [</em><em>logical</em><em>]</em> :: flag (by axis) indicating if memory should be contiguous along pencil axis (default: [false, false, false])</p></li>
+<li><p><span class="sig-name descname">% </span><span class="sig-name descname">halo_comm_backend</span><em> [</em><em>cudecompHaloCommType</em><em>]</em> :: communication backend to use for halo communication (default: CUDECOMP_HALO_COMM_MPI)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+</section>
+<section id="cudecompgriddescautotuneoptions">
+<span id="cudecompgriddescautotuneoptions-t-f-ref"></span><h4>cudecompGridDescAutotuneOptions<a class="headerlink" href="#cudecompgriddescautotuneoptions" title="Permalink to this headline">¶</a></h4>
+<dl>
+<dt class="sig sig-object f" id="f/_/cudecompGridDescAutotuneOptions">
+<em class="property"><span class="pre">type</span>&#160; </em><span class="sig-name descname"><span class="pre">cudecompGridDescAutotuneOptions</span></span><a class="headerlink" href="#f/_/cudecompGridDescAutotuneOptions" title="Permalink to this definition">¶</a></dt>
+<dd><p>A data structure defining autotuning options for grid descriptor creation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type fields</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span class="sig-name descname">% </span><span class="sig-name descname">grid_mode</span><em> [</em><em>cudecompAutotuneGridMode</em><em>]</em> :: which communication (transpose/halo) to use to autotune process grid (default: CUDECOMP_AUTOTUNE_GRID_TRANSPOSE)</p></li>
+<li><p><span class="sig-name descname">% </span><span class="sig-name descname">dtype</span><em> [</em><em>cudecompDataType</em><em>]</em> :: datatype to use during autotuning (default: CUDECOMP_DOUBLE)</p></li>
+<li><p><span class="sig-name descname">% </span><span class="sig-name descname">allow_uneven_distributions</span><em> [</em><em>logical</em><em>]</em> :: flag to control whether autotuning allows process grids that result in uneven distributions of elements across processes (default: true)</p></li>
+<li><p><span class="sig-name descname">% </span><span class="sig-name descname">disable_nccl_backends</span><em> [</em><em>logical</em><em>]</em> :: flag to disable NCCL backend options during autotuning (default: false)</p></li>
+<li><p><span class="sig-name descname">% </span><span class="sig-name descname">disable_nvshmem_backends</span><em> [</em><em>logical</em><em>]</em> :: flag to disable NVSHMEM backend options during autotuning (default: false)</p></li>
+<li><p><span class="sig-name descname">% </span><span class="sig-name descname">autotune_transpose_backend</span><em> [</em><em>logical</em><em>]</em> :: flag to enable transpose backend autotuning (default: false)</p></li>
+<li><p><span class="sig-name descname">% </span><span class="sig-name descname">autotune_halo_backend</span><em> [</em><em>logical</em><em>]</em> :: flag to enable halo backend autotuning (default: false)</p></li>
+<li><p><span class="sig-name descname">% </span><span class="sig-name descname">transpose_use_inplace_buffers</span><em> [</em><em>logical</em><em>]</em> :: flag to control whether transpose autotuning uses in-place or out-of-place buffers (default: false)</p></li>
+<li><p><span class="sig-name descname">% </span><span class="sig-name descname">halo_extents</span> (3)<em> [</em><em>integer</em><em>]</em> :: extents for halo autotuning (default: [0, 0, 0])</p></li>
+<li><p><span class="sig-name descname">% </span><span class="sig-name descname">halo_periods</span> (3)<em> [</em><em>logical</em><em>]</em> :: periodicity for halo autotuning (default: [false, false, false])</p></li>
+<li><p><span class="sig-name descname">% </span><span class="sig-name descname">halo_axis</span><em> [</em><em>integer</em><em>]</em> :: which axis pencils to use for halo autotuning (default: 1, X-pencils)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+<hr class="docutils" />
+<section id="pencil-information">
+<h3>Pencil Information<a class="headerlink" href="#pencil-information" title="Permalink to this headline">¶</a></h3>
+<section id="cudecomppencilinfo">
+<span id="cudecomppencilinfo-t-f-ref"></span><h4>cudecompPencilInfo<a class="headerlink" href="#cudecomppencilinfo" title="Permalink to this headline">¶</a></h4>
+<dl>
+<dt class="sig sig-object f" id="f/_/cudecompPencilInfo">
+<em class="property"><span class="pre">type</span>&#160; </em><span class="sig-name descname"><span class="pre">cudecompPencilInfo</span></span><a class="headerlink" href="#f/_/cudecompPencilInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>A data structure containing geometry information about a pencil data buffer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type fields</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><span class="sig-name descname">% </span><span class="sig-name descname">shape</span> (3)<em> [</em><em>integer</em><em>]</em> :: pencil shape (in local order, including halo elements)</p></li>
+<li><p><span class="sig-name descname">% </span><span class="sig-name descname">lo</span> (3)<em> [</em><em>integer</em><em>]</em> :: lower bound coordinates (in local order, excluding halo elements)</p></li>
+<li><p><span class="sig-name descname">% </span><span class="sig-name descname">hi</span> (3)<em> [</em><em>integer</em><em>]</em> :: upper bound coordinates (in local order, excluding halo elements)</p></li>
+<li><p><span class="sig-name descname">% </span><span class="sig-name descname">order</span> (3)<em> [</em><em>integer</em><em>]</em> :: data layout order (e.g. 3,2,1 means memory is ordered Z,Y,X)</p></li>
+<li><p><span class="sig-name descname">% </span><span class="sig-name descname">halo_extents</span> (3)<em> [</em><em>integer</em><em>]</em> :: halo extents by dimension (in global order)</p></li>
+<li><p><span class="sig-name descname">% </span><span class="sig-name descname">size</span><em> [</em><em>int64</em><em>]</em> :: number of elements in pencil (including halo elements)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+<section id="communication-backends">
+<h3>Communication Backends<a class="headerlink" href="#communication-backends" title="Permalink to this headline">¶</a></h3>
+<section id="cudecomptranposecommbackend">
+<span id="cudecomptransposecommbackend-t-f-ref"></span><h4>cudecompTranposeCommBackend<a class="headerlink" href="#cudecomptranposecommbackend" title="Permalink to this headline">¶</a></h4>
+<p>See documention for equivalent C enumerator, <a class="reference internal" href="c_api.html#cudecomptransposecommbackend-t-ref"><span class="std std-ref">cudecompTranposeCommBackend_t</span></a>.</p>
+<hr class="docutils" />
+</section>
+<section id="cudecomphalocommbackend">
+<span id="cudecomphalocommbackend-t-f-ref"></span><h4>cudecompHaloCommBackend<a class="headerlink" href="#cudecomphalocommbackend" title="Permalink to this headline">¶</a></h4>
+<p>See documention for equivalent C enumerator, <a class="reference internal" href="c_api.html#cudecomphalocommbackend-t-ref"><span class="std std-ref">cudecompHaloCommBackend_t</span></a>.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="additional-enumerators">
+<h3>Additional Enumerators<a class="headerlink" href="#additional-enumerators" title="Permalink to this headline">¶</a></h3>
+<section id="cudecompdatatype">
+<span id="cudecompdatatype-t-f-ref"></span><h4>cudecompDataType<a class="headerlink" href="#cudecompdatatype" title="Permalink to this headline">¶</a></h4>
+<p>See documention for equivalent C enumerator, <a class="reference internal" href="c_api.html#cudecompdatatype-t-ref"><span class="std std-ref">cudecompDataType_t</span></a>.</p>
+<hr class="docutils" />
+</section>
+<section id="cudecompautotunegridmode">
+<span id="cudecompautotunegridmode-t-f-ref"></span><h4>cudecompAutotuneGridMode<a class="headerlink" href="#cudecompautotunegridmode" title="Permalink to this headline">¶</a></h4>
+<p>See documention for equivalent C enumerator, <a class="reference internal" href="c_api.html#cudecompautotunegridmode-t-ref"><span class="std std-ref">cudecompAutotuneGridMode_t</span></a>.</p>
+<hr class="docutils" />
+</section>
+<section id="cudecompresult">
+<span id="cudecompresult-t-f-ref"></span><h4>cudecompResult<a class="headerlink" href="#cudecompresult" title="Permalink to this headline">¶</a></h4>
+<p>See documention for equivalent C enumerator, <a class="reference internal" href="c_api.html#cudecompresult-t-ref"><span class="std std-ref">cudecompResult_t</span></a>.</p>
+</section>
+</section>
+</section>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+<section id="library-initialization-finalization">
+<h3>Library Initialization/Finalization<a class="headerlink" href="#library-initialization-finalization" title="Permalink to this headline">¶</a></h3>
+<section id="cudecompinit">
+<span id="cudecompinit-f-ref"></span><h4>cudecompInit<a class="headerlink" href="#cudecompinit" title="Permalink to this headline">¶</a></h4>
+<dl>
+<dt class="sig sig-object f" id="f/_/cudecompInit">
+<em class="property"><span class="pre">function</span>&#160; </em><span class="sig-name descname"><span class="pre">cudecompInit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">handle</span></em>, <em class="sig-param"><span class="pre">mpi_comm</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/_/cudecompInit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes the cuDecomp library from an existing MPI communicator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>handle</strong><em> [</em><a class="reference internal" href="#f/_/cudecompHandle" title="f/_/cudecompHandle"><em>cudecompHandle</em></a><em>,</em><em>out</em><em>]</em> :: An uninitilzied cuDecomp library handle.</p></li>
+<li><p><strong>mpi_comm</strong><em> [</em><em>MPI_Comm</em><em>,</em><em>in</em><em>]</em> :: MPI communicator containing ranks to use with cuDecomp.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return</dt>
+<dd class="field-even"><p><strong>res</strong><em> [</em><em>cudecompResult</em><em>]</em> :: <code class="code docutils literal notranslate"><span class="pre">CUDECOMP_RESULT_SUCCESS</span></code> on success or error code on failure.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+</section>
+<section id="cudecompfinalize">
+<span id="cudecompfinalize-f-ref"></span><h4>cudecompFinalize<a class="headerlink" href="#cudecompfinalize" title="Permalink to this headline">¶</a></h4>
+<dl>
+<dt class="sig sig-object f" id="f/_/cudecompFinalize">
+<em class="property"><span class="pre">function</span>&#160; </em><span class="sig-name descname"><span class="pre">cudecompFinalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">handle</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/_/cudecompFinalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finalizes the cuDecomp library and frees associated resources.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>handle</strong><em> [</em><a class="reference internal" href="#f/_/cudecompHandle" title="f/_/cudecompHandle"><em>cudecompHandle</em></a><em>,</em><em>in</em><em>]</em> :: The initialized cuDecomp library handle</p>
+</dd>
+<dt class="field-even">Return</dt>
+<dd class="field-even"><p><strong>res</strong><em> [</em><em>cudecompResult</em><em>]</em> :: <code class="code docutils literal notranslate"><span class="pre">CUDECOMP_RESULT_SUCCESS</span></code> on success or error code on failure.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+<section id="grid-descriptor-management">
+<h3>Grid Descriptor Management<a class="headerlink" href="#grid-descriptor-management" title="Permalink to this headline">¶</a></h3>
+<section id="cudecompgriddesccreate">
+<span id="cudecompgriddesccreate-f-ref"></span><h4>cudecompGridDescCreate<a class="headerlink" href="#cudecompgriddesccreate" title="Permalink to this headline">¶</a></h4>
+<dl>
+<dt class="sig sig-object f" id="f/_/cudecompGridDescCreate">
+<em class="property"><span class="pre">function</span>&#160; </em><span class="sig-name descname"><span class="pre">cudecompGridDescCreate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">handle</span></em>, <em class="sig-param"><span class="pre">grid_desc</span></em>, <em class="sig-param"><span class="pre">config</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">options</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#f/_/cudecompGridDescCreate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a cuDecomp grid descriptor for use with cuDecomp functions.</p>
+<p>This function creates a grid descriptor that cuDecomp requires for most library operations that perform communication or query decomposition information. This grid descriptor contains information about how the global data grid is distributed and other internal resources to facilitate communication.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>handle</strong><em> [</em><a class="reference internal" href="#f/_/cudecompHandle" title="f/_/cudecompHandle"><em>cudecompHandle</em></a><em>,</em><em>in</em><em>]</em> :: The initialized cuDecomp library handle</p></li>
+<li><p><strong>grid_desc</strong><em> [</em><a class="reference internal" href="#f/_/cudecompGridDesc" title="f/_/cudecompGridDesc"><em>cudecompGridDesc</em></a><em>,</em><em>out</em><em>]</em> :: An uninitalized cuDecomp grid descriptor.</p></li>
+<li><p><strong>config</strong><em> [</em><a class="reference internal" href="#f/_/cudecompGridDescConfig" title="f/_/cudecompGridDescConfig"><em>cudecompGridDescConfig</em></a><em>,</em><em>inout</em><em>]</em> :: A populated cuDecomp grid descriptor configuration structure. This structure defines the required attributes of the decomposition. On successful exit, fields in this structure may be updated to reflect autotuning results.</p></li>
+<li><p><strong>cudecompGridDescAutotuneOptions</strong><em> [</em><em>in,optional</em><em>]</em> :: A populated cuDeomp grid descriptor autotune options structure. This options structure is used to control the behavior of the process grid and communication backend autotuning.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return</dt>
+<dd class="field-even"><p><strong>res</strong><em> [</em><em>cudecompResult</em><em>]</em> :: <code class="code docutils literal notranslate"><span class="pre">CUDECOMP_RESULT_SUCCESS</span></code> on success or error code on failure.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+</section>
+<section id="cudecompgriddescdestroy">
+<span id="cudecompgriddescdestroy-f-ref"></span><h4>cudecompGridDescDestroy<a class="headerlink" href="#cudecompgriddescdestroy" title="Permalink to this headline">¶</a></h4>
+<dl>
+<dt class="sig sig-object f" id="f/_/cudecompGridDescDestroy">
+<em class="property"><span class="pre">function</span>&#160; </em><span class="sig-name descname"><span class="pre">cudecompGridDescDestroy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">handle</span></em>, <em class="sig-param"><span class="pre">grid_desc</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/_/cudecompGridDescDestroy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Destroys a cuDecomp grid descriptor and frees associated resources.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>handle</strong><em> [</em><a class="reference internal" href="#f/_/cudecompHandle" title="f/_/cudecompHandle"><em>cudecompHandle</em></a><em>,</em><em>in</em><em>]</em> :: The initialized cuDecomp library handle</p></li>
+<li><p><strong>grid_desc</strong><em> [</em><a class="reference internal" href="#f/_/cudecompGridDesc" title="f/_/cudecompGridDesc"><em>cudecompGridDesc</em></a><em>,</em><em>in</em><em>]</em> :: A cuDecomp grid descriptor.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return</dt>
+<dd class="field-even"><p><strong>res</strong><em> [</em><em>cudecompResult</em><em>]</em> :: <code class="code docutils literal notranslate"><span class="pre">CUDECOMP_RESULT_SUCCESS</span></code> on success or error code on failure.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+</section>
+<section id="cudecompgriddescconfigsetdefaults">
+<span id="cudecompgriddescconfigsetdefaults-f-ref"></span><h4>cudecompGridDescConfigSetDefaults<a class="headerlink" href="#cudecompgriddescconfigsetdefaults" title="Permalink to this headline">¶</a></h4>
+<dl>
+<dt class="sig sig-object f" id="f/_/cudecompGridDescConfigSetDefaults">
+<em class="property"><span class="pre">function</span>&#160; </em><span class="sig-name descname"><span class="pre">cudecompGridDescConfigSetDefaults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">config</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/_/cudecompGridDescConfigSetDefaults" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes a cuDecomp grid descriptor configuration structure with default values.</p>
+<p>This function initializes entries in a cuDecomp grid descriptor configuration structure to default values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>config</strong><em> [</em><a class="reference internal" href="#f/_/cudecompGridDescConfig" title="f/_/cudecompGridDescConfig"><em>cudecompGridDescConfig</em></a><em>,</em><em>out</em><em>]</em> :: A cuDecomp grid descriptor configuration structure.</p>
+</dd>
+<dt class="field-even">Return</dt>
+<dd class="field-even"><p><strong>res</strong><em> [</em><em>cudecompResult</em><em>]</em> :: <code class="code docutils literal notranslate"><span class="pre">CUDECOMP_RESULT_SUCCESS</span></code> on success or error code on failure.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+</section>
+<section id="cudecompgriddescautotuneoptionssetdefaults">
+<span id="cudecompgriddescautotuneoptionssetdefaults-f-ref"></span><h4>cudecompGridDescAutotuneOptionsSetDefaults<a class="headerlink" href="#cudecompgriddescautotuneoptionssetdefaults" title="Permalink to this headline">¶</a></h4>
+<dl>
+<dt class="sig sig-object f" id="f/_/cudecompGridDescAutotuneOptionsSetDefaults">
+<em class="property"><span class="pre">function</span>&#160; </em><span class="sig-name descname"><span class="pre">cudecompGridDescAutotuneOptionsSetDefaults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">options</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/_/cudecompGridDescAutotuneOptionsSetDefaults" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes a cuDecomp grid descriptor autotune options structure with default values.</p>
+<p>This function initializes entries in a cuDecomp grid descriptor autotune options structure to default values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>options</strong><em> [</em><a class="reference internal" href="#f/_/cudecompGridDescAutotuneOptions" title="f/_/cudecompGridDescAutotuneOptions"><em>cudecompGridDescAutotuneOptions</em></a><em>,</em><em>out</em><em>]</em> :: A cuDecomp grid descriptor autotune options structure.</p>
+</dd>
+<dt class="field-even">Return</dt>
+<dd class="field-even"><p><strong>res</strong><em> [</em><em>cudecompResult</em><em>]</em> :: <code class="code docutils literal notranslate"><span class="pre">CUDECOMP_RESULT_SUCCESS</span></code> on success or error code on failure.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+<hr class="docutils" />
+<section id="workspace-management">
+<h3>Workspace Management<a class="headerlink" href="#workspace-management" title="Permalink to this headline">¶</a></h3>
+<section id="cudecompgettransposeworkspacesize">
+<span id="cudecompgettransposeworkspacesize-f-ref"></span><h4>cudecompGetTransposeWorkspaceSize<a class="headerlink" href="#cudecompgettransposeworkspacesize" title="Permalink to this headline">¶</a></h4>
+<dl>
+<dt class="sig sig-object f" id="f/_/cudecompGetTransposeWorkspaceSize">
+<em class="property"><span class="pre">function</span>&#160; </em><span class="sig-name descname"><span class="pre">cudecompGetTransposeWorkspaceSize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">handle</span></em>, <em class="sig-param"><span class="pre">grid_desc</span></em>, <em class="sig-param"><span class="pre">workspace_size</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/_/cudecompGetTransposeWorkspaceSize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Queries the required transpose workspace size, in elements, for a provided grid descriptor.</p>
+<p>This function queries the required workspace size, in elements, for transposition communication using a provided grid descriptor. This workspace is required to faciliate local transposition/packing/unpacking operations, or for use as a staging buffer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>handle</strong><em> [</em><a class="reference internal" href="#f/_/cudecompHandle" title="f/_/cudecompHandle"><em>cudecompHandle</em></a><em>,</em><em>in</em><em>]</em> :: The initialized cuDecomp library handle</p></li>
+<li><p><strong>grid_desc</strong><em> [</em><a class="reference internal" href="#f/_/cudecompGridDesc" title="f/_/cudecompGridDesc"><em>cudecompGridDesc</em></a><em>,</em><em>in</em><em>]</em> :: A cuDecomp grid descriptor.</p></li>
+<li><p><strong>workspace_size</strong><em> [</em><em>int64</em><em>,</em><em>out</em><em>]</em> :: the required workspace size.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return</dt>
+<dd class="field-even"><p><strong>res</strong><em> [</em><em>cudecompResult</em><em>]</em> :: <code class="code docutils literal notranslate"><span class="pre">CUDECOMP_RESULT_SUCCESS</span></code> on success or error code on failure.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+</section>
+<section id="cudecompgethaloworkspacesize">
+<span id="cudecompgethaloworkspacesize-f-ref"></span><h4>cudecompGetHaloWorkspaceSize<a class="headerlink" href="#cudecompgethaloworkspacesize" title="Permalink to this headline">¶</a></h4>
+<dl>
+<dt class="sig sig-object f" id="f/_/cudecompGetHaloWorkspaceSize">
+<em class="property"><span class="pre">function</span>&#160; </em><span class="sig-name descname"><span class="pre">cudecompGetHaloWorkspaceSize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">handle</span></em>, <em class="sig-param"><span class="pre">grid_desc</span></em>, <em class="sig-param"><span class="pre">axis</span></em>, <em class="sig-param"><span class="pre">halo_extents</span></em>, <em class="sig-param"><span class="pre">workspace_size</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/_/cudecompGetHaloWorkspaceSize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Queries the required transpose workspace size, in elements, for a provided grid descriptor.</p>
+<p>This function queries the required workspace size, in elements, for transposition communication using a provided grid descriptor. This workspace is required to faciliate local transposition/packing/unpacking operations, or for use as a staging buffer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>handle</strong><em> [</em><a class="reference internal" href="#f/_/cudecompHandle" title="f/_/cudecompHandle"><em>cudecompHandle</em></a><em>,</em><em>in</em><em>]</em> :: The initialized cuDecomp library handle</p></li>
+<li><p><strong>grid_desc</strong><em> [</em><a class="reference internal" href="#f/_/cudecompGridDesc" title="f/_/cudecompGridDesc"><em>cudecompGridDesc</em></a><em>,</em><em>in</em><em>]</em> :: A cuDecomp grid descriptor.</p></li>
+<li><p><strong>axis</strong><em> [</em><em>integer</em><em>,</em><em>in</em><em>]</em> :: The domain axis the desired pencil is aligned with.</p></li>
+<li><p><strong>halo_extents</strong> (3)<em> [</em><em>integer</em><em>,</em><em>in</em><em>]</em> :: An array of three integers to define halo region extents of the pencil, in global order. The i-th entry in this array should contain the number of halo elements (per direction) expected in the along the i-th global domain axis. Symmetric halos are assumed (e.g. a value of one in halo_extents means there are 2 halo elements, one element on each side).</p></li>
+<li><p><strong>workspace_size</strong><em> [</em><em>int64</em><em>,</em><em>out</em><em>]</em> :: the required workspace size.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return</dt>
+<dd class="field-even"><p><strong>res</strong><em> [</em><em>cudecompResult</em><em>]</em> :: <code class="code docutils literal notranslate"><span class="pre">CUDECOMP_RESULT_SUCCESS</span></code> on success or error code on failure.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+</section>
+<section id="cudecompgetdatatypesize">
+<span id="cudecompgetdatatypesize-f-ref"></span><h4>cudecompGetDataTypeSize<a class="headerlink" href="#cudecompgetdatatypesize" title="Permalink to this headline">¶</a></h4>
+<dl>
+<dt class="sig sig-object f" id="f/_/cudecompGetDataTypeSize">
+<em class="property"><span class="pre">function</span>&#160; </em><span class="sig-name descname"><span class="pre">cudecompGetDataTypeSize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">dtype</span></em>, <em class="sig-param"><span class="pre">dtype_size</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/_/cudecompGetDataTypeSize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to get size (in bytes) of a cuDecomp data type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dtype</strong><em> [</em><em>cudecompDataType</em><em>,</em><em>in</em><em>]</em> :: A cudecompDataType value.</p></li>
+<li><p><strong>dtype_size</strong><em> [</em><em>int64</em><em>,</em><em>out</em><em>]</em> :: the data type size in bytes.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return</dt>
+<dd class="field-even"><p><strong>res</strong><em> [</em><em>cudecompResult</em><em>]</em> :: <code class="code docutils literal notranslate"><span class="pre">CUDECOMP_RESULT_SUCCESS</span></code> on success or error code on failure.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+</section>
+<section id="cudecompmalloc">
+<span id="cudecompmalloc-f-ref"></span><h4>cudecompMalloc<a class="headerlink" href="#cudecompmalloc" title="Permalink to this headline">¶</a></h4>
+<dl>
+<dt class="sig sig-object f" id="f/_/cudecompMalloc">
+<em class="property"><span class="pre">function</span>&#160; </em><span class="sig-name descname"><span class="pre">cudecompMalloc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">handle</span></em>, <em class="sig-param"><span class="pre">grid_desc</span></em>, <em class="sig-param"><span class="pre">buffer</span></em>, <em class="sig-param"><span class="pre">buffer_size</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/_/cudecompMalloc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allocation function for cuDecomp workspaces.</p>
+<p>This function should be used to allocate cuDecomp workspaces. It will select an appropriate allocator based on the communication backend information found in the provided grid descriptor. At the current time, only NVSHMEM-enabled backends require a special allocation (using nvshmem_malloc). This function is collective and should be called on all workers to avoid deadlocks. Additionally, any memory allocated using this function is invalidated if the provided grid descriptor is destroyed and care are should be taken free memory allocated using this function before the provided grid descriptor is destroyed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>handle</strong><em> [</em><a class="reference internal" href="#f/_/cudecompHandle" title="f/_/cudecompHandle"><em>cudecompHandle</em></a><em>,</em><em>in</em><em>]</em> :: The initialized cuDecomp library handle</p></li>
+<li><p><strong>grid_desc</strong><em> [</em><a class="reference internal" href="#f/_/cudecompGridDesc" title="f/_/cudecompGridDesc"><em>cudecompGridDesc</em></a><em>,</em><em>in</em><em>]</em> :: A cuDecomp grid descriptor.</p></li>
+<li><p><strong>buffer</strong> (*)<em> [</em><em>T</em><em>,</em><em>out</em><em>]</em> :: A Fortran pointer to device memory of type <code class="code docutils literal notranslate"><span class="pre">T</span></code>, where <code class="code docutils literal notranslate"><span class="pre">T</span></code> is one of <code class="code docutils literal notranslate"><span class="pre">real(real32)</span></code>, <code class="code docutils literal notranslate"><span class="pre">real(real64)</span></code>, <code class="code docutils literal notranslate"><span class="pre">complex(real32)</span></code>, <code class="code docutils literal notranslate"><span class="pre">complex(real64)</span></code>.</p></li>
+<li><p><strong>buffer_size</strong><em> [</em><em>int64</em><em>,</em><em>in</em><em>]</em> :: size of requested allocation, in number of elements of type <code class="code docutils literal notranslate"><span class="pre">T</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return</dt>
+<dd class="field-even"><p><strong>res</strong><em> [</em><em>cudecompResult</em><em>]</em> :: <code class="code docutils literal notranslate"><span class="pre">CUDECOMP_RESULT_SUCCESS</span></code> on success or error code on failure.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+</section>
+<section id="cudecompfree">
+<span id="cudecompfree-f-ref"></span><h4>cudecompFree<a class="headerlink" href="#cudecompfree" title="Permalink to this headline">¶</a></h4>
+<dl>
+<dt class="sig sig-object f" id="f/_/cudecompFree">
+<em class="property"><span class="pre">function</span>&#160; </em><span class="sig-name descname"><span class="pre">cudecompFree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">handle</span></em>, <em class="sig-param"><span class="pre">grid_desc</span></em>, <em class="sig-param"><span class="pre">buffer</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/_/cudecompFree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deallocation function for cuDecomp workspaces.</p>
+<p>This function should be used to deallocate memory allocate with <code class="code docutils literal notranslate"><span class="pre">cudecompMalloc</span></code>. It will select an appropriate deallocation function based on the communication backend information found in the provided grid descriptor. At the current time, only NVSHMEM-enabled backends require a special deallocation (using nvshmem_free). This function is collective and should be called on all workers to avoid deadlocks.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>handle</strong><em> [</em><a class="reference internal" href="#f/_/cudecompHandle" title="f/_/cudecompHandle"><em>cudecompHandle</em></a><em>,</em><em>in</em><em>]</em> :: The initialized cuDecomp library handle</p></li>
+<li><p><strong>grid_desc</strong><em> [</em><a class="reference internal" href="#f/_/cudecompGridDesc" title="f/_/cudecompGridDesc"><em>cudecompGridDesc</em></a><em>,</em><em>in</em><em>]</em> :: A cuDecomp grid descriptor.</p></li>
+<li><p><strong>buffer</strong> (*)<em> [</em><em>T</em><em>,</em><em>out</em><em>]</em> :: A Fortran pointer to device memory of type <code class="code docutils literal notranslate"><span class="pre">T</span></code>, where <code class="code docutils literal notranslate"><span class="pre">T</span></code> is one of <code class="code docutils literal notranslate"><span class="pre">real(real32)</span></code>, <code class="code docutils literal notranslate"><span class="pre">real(real64)</span></code>, <code class="code docutils literal notranslate"><span class="pre">complex(real32)</span></code>, <code class="code docutils literal notranslate"><span class="pre">complex(real64)</span></code>, pointing to memory allocated with <code class="code docutils literal notranslate"><span class="pre">cudecompMalloc</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return</dt>
+<dd class="field-even"><p><strong>res</strong><em> [</em><em>cudecompResult</em><em>]</em> :: <code class="code docutils literal notranslate"><span class="pre">CUDECOMP_RESULT_SUCCESS</span></code> on success or error code on failure.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+<hr class="docutils" />
+<section id="helper-functions">
+<h3>Helper Functions<a class="headerlink" href="#helper-functions" title="Permalink to this headline">¶</a></h3>
+<section id="cudecompgetpencilinfo">
+<span id="cudecompgetpencilinfo-f-ref"></span><h4>cudecompGetPencilInfo<a class="headerlink" href="#cudecompgetpencilinfo" title="Permalink to this headline">¶</a></h4>
+<dl>
+<dt class="sig sig-object f" id="f/_/cudecompGetPencilInfo">
+<em class="property"><span class="pre">function</span>&#160; </em><span class="sig-name descname"><span class="pre">cudecompGetPencilInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">handle</span></em>, <em class="sig-param"><span class="pre">grid_desc</span></em>, <em class="sig-param"><span class="pre">pencil_info</span></em>, <em class="sig-param"><span class="pre">axis</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">halo_extents</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#f/_/cudecompGetPencilInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Collects geometry information about assigned pencils, by domain axis.</p>
+<p>This function queries information about the pencil assigned to the calling worker for the given axis. This information is collected in a cuDecomp pencil information structure, which can be used to access and manipuate data within the user-allocated memory buffer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>handle</strong><em> [</em><a class="reference internal" href="#f/_/cudecompHandle" title="f/_/cudecompHandle"><em>cudecompHandle</em></a><em>,</em><em>in</em><em>]</em> :: The initialized cuDecomp library handle</p></li>
+<li><p><strong>grid_desc</strong><em> [</em><a class="reference internal" href="#f/_/cudecompPencilInfo" title="f/_/cudecompPencilInfo"><em>cudecompPencilInfo</em></a><em>,</em><em>out</em><em>]</em> :: A cuDecomp grid descriptor.</p></li>
+<li><p><strong>grid_desc</strong> :: A cuDecomp pencil information structure.</p></li>
+<li><p><strong>axis</strong><em> [</em><em>integer</em><em>,</em><em>in</em><em>]</em> :: The domain axis the desired pencil is aligned with.</p></li>
+<li><p><strong>halo_extents</strong> (3)<em> [</em><em>integer</em><em>,</em><em>in, optional</em><em>]</em> :: An array of three integers to define halo region extents of the pencil, in global order. The i-th entry in this array should contain the number of halo elements (per direction) expected in the along the i-th global domain axis. Symmetric halos are assumed (e.g. a value of one in halo_extents means there are 2 halo elements, one element on each side).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return</dt>
+<dd class="field-even"><p><strong>res</strong><em> [</em><em>cudecompResult</em><em>]</em> :: <code class="code docutils literal notranslate"><span class="pre">CUDECOMP_RESULT_SUCCESS</span></code> on success or error code on failure.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+</section>
+<section id="cudecomptranposecommbackendtostring">
+<span id="cudecomptransposecommbackendtostring-f-ref"></span><h4>cudecompTranposeCommBackendToString<a class="headerlink" href="#cudecomptranposecommbackendtostring" title="Permalink to this headline">¶</a></h4>
+<dl>
+<dt class="sig sig-object f" id="f/_/cudecompTransposeCommBackendToString">
+<em class="property"><span class="pre">function</span>&#160; </em><span class="sig-name descname"><span class="pre">cudecompTransposeCommBackendToString</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">comm_backend</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/_/cudecompTransposeCommBackendToString" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to get string name of transpose communication backend.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>comm_backend</strong><em> [</em><em>cudecompTransposeCommBackend</em><em>,</em><em>in</em><em>]</em> :: A cuDecompTranposeCommBackend value.</p>
+</dd>
+<dt class="field-even">Return</dt>
+<dd class="field-even"><p><strong>res</strong><em> [</em><em>character(:)</em><em>]</em> :: A string representation of the transpose communication backend. Will return string “ERROR” if invalid backend value is provided.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+</section>
+<section id="cudecomphalocommbackendtostring">
+<span id="cudecomphalocommbackendtostring-f-ref"></span><h4>cudecompHaloCommBackendToString<a class="headerlink" href="#cudecomphalocommbackendtostring" title="Permalink to this headline">¶</a></h4>
+<dl>
+<dt class="sig sig-object f" id="f/_/cudecompHaloCommBackendToString">
+<em class="property"><span class="pre">function</span>&#160; </em><span class="sig-name descname"><span class="pre">cudecompHaloCommBackendToString</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">comm_backend</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/_/cudecompHaloCommBackendToString" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to get string name of transpose communication backend.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>comm_backend</strong><em> [</em><em>cudecompHaloCommBackend</em><em>,</em><em>in</em><em>]</em> :: A cuDecompHaloCommBackend value.</p>
+</dd>
+<dt class="field-even">Return</dt>
+<dd class="field-even"><p><strong>res</strong><em> [</em><em>character(:)</em><em>]</em> :: A string representation of the halo communication backend. Will return string “ERROR” if invalid backend value is provided.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+</section>
+<section id="cudecompgetgriddescconfig">
+<span id="cudecompgetgriddescconfig-f-ref"></span><h4>cudecompGetGridDescConfig<a class="headerlink" href="#cudecompgetgriddescconfig" title="Permalink to this headline">¶</a></h4>
+<dl>
+<dt class="sig sig-object f" id="f/_/cudecompGetGridDescConfig">
+<em class="property"><span class="pre">function</span>&#160; </em><span class="sig-name descname"><span class="pre">cudecompGetGridDescConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">handle</span></em>, <em class="sig-param"><span class="pre">grid_desc</span></em>, <em class="sig-param"><span class="pre">config</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/_/cudecompGetGridDescConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Queries the configuration used to create a grid descriptor.</p>
+<p>This function queries information about the pencil assigned to the calling worker for the given axis. This information is collected in a cuDecomp pencil information structure, which can be used to access and manipuate data within the user-allocated memory buffer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>handle</strong><em> [</em><a class="reference internal" href="#f/_/cudecompHandle" title="f/_/cudecompHandle"><em>cudecompHandle</em></a><em>,</em><em>in</em><em>]</em> :: The initialized cuDecomp library handle</p></li>
+<li><p><strong>grid_desc</strong><em> [</em><a class="reference internal" href="#f/_/cudecompGridDesc" title="f/_/cudecompGridDesc"><em>cudecompGridDesc</em></a><em>,</em><em>in</em><em>]</em> :: A cuDecomp grid descriptor.</p></li>
+<li><p><strong>config</strong><em> [</em><a class="reference internal" href="#f/_/cudecompGridDescConfig" title="f/_/cudecompGridDescConfig"><em>cudecompGridDescConfig</em></a><em>,</em><em>out</em><em>]</em> :: A cuDecomp grid descriptor configuration structure.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return</dt>
+<dd class="field-even"><p><strong>res</strong><em> [</em><em>cudecompResult</em><em>]</em> :: <code class="code docutils literal notranslate"><span class="pre">CUDECOMP_RESULT_SUCCESS</span></code> on success or error code on failure.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+</section>
+<section id="cudecompgetshiftedrank">
+<span id="cudecompgetshiftedrank-f-ref"></span><h4>cudecompGetShiftedRank<a class="headerlink" href="#cudecompgetshiftedrank" title="Permalink to this headline">¶</a></h4>
+<dl>
+<dt class="sig sig-object f" id="f/_/cudecompGetShiftedRank">
+<em class="property"><span class="pre">function</span>&#160; </em><span class="sig-name descname"><span class="pre">cudecompGetShiftedRank</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">handle</span></em>, <em class="sig-param"><span class="pre">grid_desc</span></em>, <em class="sig-param"><span class="pre">axis</span></em>, <em class="sig-param"><span class="pre">dim</span></em>, <em class="sig-param"><span class="pre">displacement</span></em>, <em class="sig-param"><span class="pre">periodic</span></em>, <em class="sig-param"><span class="pre">shifted_rank</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/_/cudecompGetShiftedRank" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to retrieve the global rank of neighboring processes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>handle</strong><em> [</em><a class="reference internal" href="#f/_/cudecompHandle" title="f/_/cudecompHandle"><em>cudecompHandle</em></a><em>,</em><em>in</em><em>]</em> :: The initialized cuDecomp library handle</p></li>
+<li><p><strong>grid_desc</strong><em> [</em><a class="reference internal" href="#f/_/cudecompGridDesc" title="f/_/cudecompGridDesc"><em>cudecompGridDesc</em></a><em>,</em><em>in</em><em>]</em> :: A cuDecomp grid descriptor.</p></li>
+<li><p><strong>axis</strong><em> [</em><em>integer</em><em>,</em><em>in</em><em>]</em> :: The domain axis the pencil is aligned with.</p></li>
+<li><p><strong>dim</strong><em> [</em><em>integer</em><em>,</em><em>in</em><em>]</em> :: Which pencil dimension (global indexed) to retrieve neighboring rank</p></li>
+<li><p><strong>displacement</strong><em> [</em><em>integer</em><em>,</em><em>in</em><em>]</em> :: Displacement of neighboring rank to retrieve. For example, 1 will retrieve the +1-th neighbor rank along dim, while -1 will retrieve the -1-th neighbor rank.</p></li>
+<li><p><strong>periodic</strong><em> [</em><em>logical</em><em>,</em><em>in</em><em>]</em> :: A boolean flag to indicate whether dim should be treated periodically</p></li>
+<li><p><strong>shifted_rank</strong><em> [</em><em>integer</em><em>,</em><em>out</em><em>]</em> :: The global rank of the requested neighbor. For non-periodic cases, a value of -1 will be written if the displacement results in a position outside the global domain.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return</dt>
+<dd class="field-even"><p><strong>res</strong><em> [</em><em>cudecompResult</em><em>]</em> :: <code class="code docutils literal notranslate"><span class="pre">CUDECOMP_RESULT_SUCCESS</span></code> on success or error code on failure.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+<hr class="docutils" />
+<section id="transposition-functions">
+<h3>Transposition Functions<a class="headerlink" href="#transposition-functions" title="Permalink to this headline">¶</a></h3>
+<section id="cudecomptransposextoy">
+<span id="cudecomptransposextoy-f-ref"></span><h4>cudecompTransposeXToY<a class="headerlink" href="#cudecomptransposextoy" title="Permalink to this headline">¶</a></h4>
+<dl>
+<dt class="sig sig-object f" id="f/_/cudecompTransposeXToY">
+<em class="property"><span class="pre">function</span>&#160; </em><span class="sig-name descname"><span class="pre">cudecompTransposeXToY</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">handle</span></em>, <em class="sig-param"><span class="pre">grid_desc</span></em>, <em class="sig-param"><span class="pre">input</span></em>, <em class="sig-param"><span class="pre">output</span></em>, <em class="sig-param"><span class="pre">work</span></em>, <em class="sig-param"><span class="pre">dtype</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">input_halo_extents</span></em>, <em class="sig-param"><span class="pre">output_halo_extents</span></em>, <em class="sig-param"><span class="pre">stream</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#f/_/cudecompTransposeXToY" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to transpose data from X-axis aligned pencils to a Y-axis aligned pencils.</p>
+<p>For this operation, <code class="code docutils literal notranslate"><span class="pre">T</span></code> can be one of <code class="code docutils literal notranslate"><span class="pre">real(real32)</span></code>, <code class="code docutils literal notranslate"><span class="pre">real(real64)</span></code>, <code class="code docutils literal notranslate"><span class="pre">complex(real32)</span></code>, <code class="code docutils literal notranslate"><span class="pre">complex(real64)</span></code>. The data access for this operation is controlled via <code class="code docutils literal notranslate"><span class="pre">dtype</span></code>, irrespective of <code class="code docutils literal notranslate"><span class="pre">T</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>handle</strong><em> [</em><a class="reference internal" href="#f/_/cudecompHandle" title="f/_/cudecompHandle"><em>cudecompHandle</em></a><em>,</em><em>in</em><em>]</em> :: The initialized cuDecomp library handle</p></li>
+<li><p><strong>grid_desc</strong><em> [</em><a class="reference internal" href="#f/_/cudecompGridDesc" title="f/_/cudecompGridDesc"><em>cudecompGridDesc</em></a><em>,</em><em>in</em><em>]</em> :: A cuDecomp grid descriptor.</p></li>
+<li><p><strong>input</strong> (*)<em> [</em><em>T</em><em>,</em><em>in</em><em>]</em> :: Device array containing input X-axis aligned pencil data.</p></li>
+<li><p><strong>output</strong> (*)<em> [</em><em>T</em><em>,</em><em>out</em><em>]</em> :: Device array to write output Y-axis aligned pencil data. If <code class="code docutils literal notranslate"><span class="pre">input</span></code> and <code class="code docutils literal notranslate"><span class="pre">output</span></code> are the same, operation is performed in-place</p></li>
+<li><p><strong>work</strong> (*)<em> [</em><em>T</em><em>,</em><em>in</em><em>]</em> :: Device array to use for transpose workspace.</p></li>
+<li><p><strong>dtype</strong><em> [</em><em>cudecompDataType</em><em>,</em><em>in</em><em>]</em> :: The <code class="code docutils literal notranslate"><span class="pre">cudecompDataType</span></code> to use for the operation.</p></li>
+<li><p><strong>input_halo_extents</strong> (3)<em> [</em><em>integer</em><em>,</em><em>in,optional</em><em>]</em> :: An array of three integers to define halo region extents of the input data, in global order. The i-th entry in this array should contain the number of halo elements (per direction) expected in the along the i-th global domain axis. Symmetric halos are assumed (e.g. a value of one in halo_extents means there are 2 halo elements, one element on each side). If not provided, input data is assumed to have no halos.</p></li>
+<li><p><strong>output_halo_extents</strong> (3)<em> [</em><em>integer</em><em>,</em><em>in,optional</em><em>]</em> :: Similar to <code class="code docutils literal notranslate"><span class="pre">intput_halo_extents</span></code> but for the output data. If not provided, output data is assumed to have no halos.</p></li>
+<li><p><strong>stream</strong><em> [</em><em>integer(cuda_stream_kind)</em><em>,</em><em>in, optional</em><em>]</em> :: CUDA stream to enqueue GPU operations into. If not provided, operations are enqueued in the default stream.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return</dt>
+<dd class="field-even"><p><strong>res</strong><em> [</em><em>cudecompResult</em><em>]</em> :: <code class="code docutils literal notranslate"><span class="pre">CUDECOMP_RESULT_SUCCESS</span></code> on success or error code on failure.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+</section>
+<section id="cudecomptransposeytoz">
+<span id="cudecomptransposeytoz-f-ref"></span><h4>cudecompTransposeYtoZ<a class="headerlink" href="#cudecomptransposeytoz" title="Permalink to this headline">¶</a></h4>
+<dl>
+<dt class="sig sig-object f" id="f/_/cudecompTransposeYToZ">
+<em class="property"><span class="pre">function</span>&#160; </em><span class="sig-name descname"><span class="pre">cudecompTransposeYToZ</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">handle</span></em>, <em class="sig-param"><span class="pre">grid_desc</span></em>, <em class="sig-param"><span class="pre">input</span></em>, <em class="sig-param"><span class="pre">output</span></em>, <em class="sig-param"><span class="pre">work</span></em>, <em class="sig-param"><span class="pre">dtype</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">input_halo_extents</span></em>, <em class="sig-param"><span class="pre">output_halo_extents</span></em>, <em class="sig-param"><span class="pre">stream</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#f/_/cudecompTransposeYToZ" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to transpose data from Y-axis aligned pencils to a Z-axis aligned pencils.</p>
+<p>For this operation, <code class="code docutils literal notranslate"><span class="pre">T</span></code> can be one of <code class="code docutils literal notranslate"><span class="pre">real(real32)</span></code>, <code class="code docutils literal notranslate"><span class="pre">real(real64)</span></code>, <code class="code docutils literal notranslate"><span class="pre">complex(real32)</span></code>, <code class="code docutils literal notranslate"><span class="pre">complex(real64)</span></code>. The data access for this operation is controlled via <code class="code docutils literal notranslate"><span class="pre">dtype</span></code>, irrespective of <code class="code docutils literal notranslate"><span class="pre">T</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>handle</strong><em> [</em><a class="reference internal" href="#f/_/cudecompHandle" title="f/_/cudecompHandle"><em>cudecompHandle</em></a><em>,</em><em>in</em><em>]</em> :: The initialized cuDecomp library handle</p></li>
+<li><p><strong>grid_desc</strong><em> [</em><a class="reference internal" href="#f/_/cudecompGridDesc" title="f/_/cudecompGridDesc"><em>cudecompGridDesc</em></a><em>,</em><em>in</em><em>]</em> :: A cuDecomp grid descriptor.</p></li>
+<li><p><strong>input</strong> (*)<em> [</em><em>T</em><em>,</em><em>in</em><em>]</em> :: Device array containing input Y-axis aligned pencil data.</p></li>
+<li><p><strong>output</strong> (*)<em> [</em><em>T</em><em>,</em><em>out</em><em>]</em> :: Device array to write output Z-axis aligned pencil data. If <code class="code docutils literal notranslate"><span class="pre">input</span></code> and <code class="code docutils literal notranslate"><span class="pre">output</span></code> are the same, operation is performed in-place</p></li>
+<li><p><strong>work</strong> (*)<em> [</em><em>T</em><em>,</em><em>in</em><em>]</em> :: Device array to use for transpose workspace.</p></li>
+<li><p><strong>dtype</strong><em> [</em><em>cudecompDataType</em><em>,</em><em>in</em><em>]</em> :: The <code class="code docutils literal notranslate"><span class="pre">cudecompDataType</span></code> to use for the operation.</p></li>
+<li><p><strong>input_halo_extents</strong> (3)<em> [</em><em>integer</em><em>,</em><em>in,optional</em><em>]</em> :: An array of three integers to define halo region extents of the input data, in global order. The i-th entry in this array should contain the number of halo elements (per direction) expected in the along the i-th global domain axis. Symmetric halos are assumed (e.g. a value of one in halo_extents means there are 2 halo elements, one element on each side). If not provided, input data is assumed to have no halos.</p></li>
+<li><p><strong>output_halo_extents</strong> (3)<em> [</em><em>integer</em><em>,</em><em>in,optional</em><em>]</em> :: Similar to <code class="code docutils literal notranslate"><span class="pre">intput_halo_extents</span></code> but for the output data. If not provided, output data is assumed to have no halos.</p></li>
+<li><p><strong>stream</strong><em> [</em><em>integer(cuda_stream_kind)</em><em>,</em><em>in, optional</em><em>]</em> :: CUDA stream to enqueue GPU operations into. If not provided, operations are enqueued in the default stream.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return</dt>
+<dd class="field-even"><p><strong>res</strong><em> [</em><em>cudecompResult</em><em>]</em> :: <code class="code docutils literal notranslate"><span class="pre">CUDECOMP_RESULT_SUCCESS</span></code> on success or error code on failure.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+</section>
+<section id="cudecomptransposeztoy">
+<span id="cudecomptransposeztoy-f-ref"></span><h4>cudecompTransposeZToY<a class="headerlink" href="#cudecomptransposeztoy" title="Permalink to this headline">¶</a></h4>
+<dl>
+<dt class="sig sig-object f" id="f/_/cudecompTransposeZToY">
+<em class="property"><span class="pre">function</span>&#160; </em><span class="sig-name descname"><span class="pre">cudecompTransposeZToY</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">handle</span></em>, <em class="sig-param"><span class="pre">grid_desc</span></em>, <em class="sig-param"><span class="pre">input</span></em>, <em class="sig-param"><span class="pre">output</span></em>, <em class="sig-param"><span class="pre">work</span></em>, <em class="sig-param"><span class="pre">dtype</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">input_halo_extents</span></em>, <em class="sig-param"><span class="pre">output_halo_extents</span></em>, <em class="sig-param"><span class="pre">stream</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#f/_/cudecompTransposeZToY" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to transpose data from Z-axis aligned pencils to a Y-axis aligned pencils.</p>
+<p>For this operation, <code class="code docutils literal notranslate"><span class="pre">T</span></code> can be one of <code class="code docutils literal notranslate"><span class="pre">real(real32)</span></code>, <code class="code docutils literal notranslate"><span class="pre">real(real64)</span></code>, <code class="code docutils literal notranslate"><span class="pre">complex(real32)</span></code>, <code class="code docutils literal notranslate"><span class="pre">complex(real64)</span></code>. The data access for this operation is controlled via <code class="code docutils literal notranslate"><span class="pre">dtype</span></code>, irrespective of <code class="code docutils literal notranslate"><span class="pre">T</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>handle</strong><em> [</em><a class="reference internal" href="#f/_/cudecompHandle" title="f/_/cudecompHandle"><em>cudecompHandle</em></a><em>,</em><em>in</em><em>]</em> :: The initialized cuDecomp library handle</p></li>
+<li><p><strong>grid_desc</strong><em> [</em><a class="reference internal" href="#f/_/cudecompGridDesc" title="f/_/cudecompGridDesc"><em>cudecompGridDesc</em></a><em>,</em><em>in</em><em>]</em> :: A cuDecomp grid descriptor.</p></li>
+<li><p><strong>input</strong> (*)<em> [</em><em>T</em><em>,</em><em>in</em><em>]</em> :: Device array containing input Z-axis aligned pencil data.</p></li>
+<li><p><strong>output</strong> (*)<em> [</em><em>T</em><em>,</em><em>out</em><em>]</em> :: Device array to write output Y-axis aligned pencil data. If <code class="code docutils literal notranslate"><span class="pre">input</span></code> and <code class="code docutils literal notranslate"><span class="pre">output</span></code> are the same, operation is performed in-place</p></li>
+<li><p><strong>work</strong> (*)<em> [</em><em>T</em><em>,</em><em>in</em><em>]</em> :: Device array to use for transpose workspace.</p></li>
+<li><p><strong>dtype</strong><em> [</em><em>cudecompDataType</em><em>,</em><em>in</em><em>]</em> :: The <code class="code docutils literal notranslate"><span class="pre">cudecompDataType</span></code> to use for the operation.</p></li>
+<li><p><strong>input_halo_extents</strong> (3)<em> [</em><em>integer</em><em>,</em><em>in,optional</em><em>]</em> :: An array of three integers to define halo region extents of the input data, in global order. The i-th entry in this array should contain the number of halo elements (per direction) expected in the along the i-th global domain axis. Symmetric halos are assumed (e.g. a value of one in halo_extents means there are 2 halo elements, one element on each side). If not provided, input data is assumed to have no halos.</p></li>
+<li><p><strong>output_halo_extents</strong> (3)<em> [</em><em>integer</em><em>,</em><em>in,optional</em><em>]</em> :: Similar to <code class="code docutils literal notranslate"><span class="pre">intput_halo_extents</span></code> but for the output data. If not provided, output data is assumed to have no halos.</p></li>
+<li><p><strong>stream</strong><em> [</em><em>integer(cuda_stream_kind)</em><em>,</em><em>in, optional</em><em>]</em> :: CUDA stream to enqueue GPU operations into. If not provided, operations are enqueued in the default stream.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return</dt>
+<dd class="field-even"><p><strong>res</strong><em> [</em><em>cudecompResult</em><em>]</em> :: <code class="code docutils literal notranslate"><span class="pre">CUDECOMP_RESULT_SUCCESS</span></code> on success or error code on failure.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+</section>
+<section id="cudecomptransposeytox">
+<span id="cudecomptransposeytox-f-ref"></span><h4>cudecompTransposeYToX<a class="headerlink" href="#cudecomptransposeytox" title="Permalink to this headline">¶</a></h4>
+<dl>
+<dt class="sig sig-object f" id="f/_/cudecompTransposeYToX">
+<em class="property"><span class="pre">function</span>&#160; </em><span class="sig-name descname"><span class="pre">cudecompTransposeYToX</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">handle</span></em>, <em class="sig-param"><span class="pre">grid_desc</span></em>, <em class="sig-param"><span class="pre">input</span></em>, <em class="sig-param"><span class="pre">output</span></em>, <em class="sig-param"><span class="pre">work</span></em>, <em class="sig-param"><span class="pre">dtype</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">input_halo_extents</span></em>, <em class="sig-param"><span class="pre">output_halo_extents</span></em>, <em class="sig-param"><span class="pre">stream</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#f/_/cudecompTransposeYToX" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to transpose data from Y-axis aligned pencils to a X-axis aligned pencils.</p>
+<p>For this operation, <code class="code docutils literal notranslate"><span class="pre">T</span></code> can be one of <code class="code docutils literal notranslate"><span class="pre">real(real32)</span></code>, <code class="code docutils literal notranslate"><span class="pre">real(real64)</span></code>, <code class="code docutils literal notranslate"><span class="pre">complex(real32)</span></code>, <code class="code docutils literal notranslate"><span class="pre">complex(real64)</span></code>. The data access for this operation is controlled via <code class="code docutils literal notranslate"><span class="pre">dtype</span></code>, irrespective of <code class="code docutils literal notranslate"><span class="pre">T</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>handle</strong><em> [</em><a class="reference internal" href="#f/_/cudecompHandle" title="f/_/cudecompHandle"><em>cudecompHandle</em></a><em>,</em><em>in</em><em>]</em> :: The initialized cuDecomp library handle</p></li>
+<li><p><strong>grid_desc</strong><em> [</em><a class="reference internal" href="#f/_/cudecompGridDesc" title="f/_/cudecompGridDesc"><em>cudecompGridDesc</em></a><em>,</em><em>in</em><em>]</em> :: A cuDecomp grid descriptor.</p></li>
+<li><p><strong>input</strong> (*)<em> [</em><em>T</em><em>,</em><em>in</em><em>]</em> :: Device array containing input Y-axis aligned pencil data.</p></li>
+<li><p><strong>output</strong> (*)<em> [</em><em>T</em><em>,</em><em>out</em><em>]</em> :: Device array to write output X-axis aligned pencil data. If <code class="code docutils literal notranslate"><span class="pre">input</span></code> and <code class="code docutils literal notranslate"><span class="pre">output</span></code> are the same, operation is performed in-place</p></li>
+<li><p><strong>work</strong> (*)<em> [</em><em>T</em><em>,</em><em>in</em><em>]</em> :: Device array to use for transpose workspace.</p></li>
+<li><p><strong>dtype</strong><em> [</em><em>cudecompDataType</em><em>,</em><em>in</em><em>]</em> :: The <code class="code docutils literal notranslate"><span class="pre">cudecompDataType</span></code> to use for the operation.</p></li>
+<li><p><strong>input_halo_extents</strong> (3)<em> [</em><em>integer</em><em>,</em><em>in,optional</em><em>]</em> :: An array of three integers to define halo region extents of the input data, in global order. The i-th entry in this array should contain the number of halo elements (per direction) expected in the along the i-th global domain axis. Symmetric halos are assumed (e.g. a value of one in halo_extents means there are 2 halo elements, one element on each side). If not provided, input data is assumed to have no halos.</p></li>
+<li><p><strong>output_halo_extents</strong> (3)<em> [</em><em>integer</em><em>,</em><em>in,optional</em><em>]</em> :: Similar to <code class="code docutils literal notranslate"><span class="pre">intput_halo_extents</span></code> but for the output data. If not provided, output data is assumed to have no halos.</p></li>
+<li><p><strong>stream</strong><em> [</em><em>integer(cuda_stream_kind)</em><em>,</em><em>in, optional</em><em>]</em> :: CUDA stream to enqueue GPU operations into. If not provided, operations are enqueued in the default stream.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return</dt>
+<dd class="field-even"><p><strong>res</strong><em> [</em><em>cudecompResult</em><em>]</em> :: <code class="code docutils literal notranslate"><span class="pre">CUDECOMP_RESULT_SUCCESS</span></code> on success or error code on failure.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+<hr class="docutils" />
+<section id="halo-exchange-functions">
+<h3>Halo Exchange Functions<a class="headerlink" href="#halo-exchange-functions" title="Permalink to this headline">¶</a></h3>
+<section id="cudecompupdatehalosx">
+<span id="cudecompupdatehalosx-f-ref"></span><h4>cudecompUpdateHalosX<a class="headerlink" href="#cudecompupdatehalosx" title="Permalink to this headline">¶</a></h4>
+<dl>
+<dt class="sig sig-object f" id="f/_/cudecompUpdateHalosX">
+<em class="property"><span class="pre">function</span>&#160; </em><span class="sig-name descname"><span class="pre">cudecompUpdateHalosX</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">handle</span></em>, <em class="sig-param"><span class="pre">grid_desc</span></em>, <em class="sig-param"><span class="pre">input</span></em>, <em class="sig-param"><span class="pre">work</span></em>, <em class="sig-param"><span class="pre">dtype</span></em>, <em class="sig-param"><span class="pre">halo_extents</span></em>, <em class="sig-param"><span class="pre">halo_periods</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">stream</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#f/_/cudecompUpdateHalosX" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to perform halo communication of X-axis aligned pencil data.</p>
+<p>For this operation, <code class="code docutils literal notranslate"><span class="pre">T</span></code> can be one of <code class="code docutils literal notranslate"><span class="pre">real(real32)</span></code>, <code class="code docutils literal notranslate"><span class="pre">real(real64)</span></code>, <code class="code docutils literal notranslate"><span class="pre">complex(real32)</span></code>, <code class="code docutils literal notranslate"><span class="pre">complex(real64)</span></code>. The data access for this operation is controlled via <code class="code docutils literal notranslate"><span class="pre">dtype</span></code>, irrespective of <code class="code docutils literal notranslate"><span class="pre">T</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>handle</strong><em> [</em><a class="reference internal" href="#f/_/cudecompHandle" title="f/_/cudecompHandle"><em>cudecompHandle</em></a><em>,</em><em>in</em><em>]</em> :: The initialized cuDecomp library handle</p></li>
+<li><p><strong>grid_desc</strong><em> [</em><a class="reference internal" href="#f/_/cudecompGridDesc" title="f/_/cudecompGridDesc"><em>cudecompGridDesc</em></a><em>,</em><em>in</em><em>]</em> :: A cuDecomp grid descriptor.</p></li>
+<li><p><strong>input</strong> (*)<em> [</em><em>T</em><em>,</em><em>in,out</em><em>]</em> :: Device array containing input X-axis aligned pencil data. On successful completion, this buffer will contain the input X-axis aligned pencil data with the specified halo regions updated.</p></li>
+<li><p><strong>work</strong> (*)<em> [</em><em>T</em><em>,</em><em>in</em><em>]</em> :: Device array to use for halo workspace.</p></li>
+<li><p><strong>dtype</strong><em> [</em><em>cudecompDataType</em><em>,</em><em>in</em><em>]</em> :: The <code class="code docutils literal notranslate"><span class="pre">cudecompDataType</span></code> to use for the operation.</p></li>
+<li><p><strong>halo_extents</strong> (3)<em> [</em><em>integer</em><em>,</em><em>in</em><em>]</em> :: An array of three integers to define halo region extents of the input data, in global order. The i-th entry in this array should contain the number of halo elements (per direction) expected in the along the i-th global domain axis. Symmetric halos are assumed (e.g. a value of one in halo_extents means there are 2 halo elements, one element on each side).</p></li>
+<li><p><strong>halo_periods</strong> (3)<em> [</em><em>logical</em><em>,</em><em>in</em><em>]</em> :: An array of three boolean values to define halo periodicity of the input data, in global order. If the i-th entry in this array is true, the domain is treated periodically along the i-th global domain axis.</p></li>
+<li><p><strong>stream</strong><em> [</em><em>integer(cuda_stream_kind)</em><em>,</em><em>in, optional</em><em>]</em> :: CUDA stream to enqueue GPU operations into. If not provided, operations are enqueued in the default stream.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return</dt>
+<dd class="field-even"><p><strong>res</strong><em> [</em><em>cudecompResult</em><em>]</em> :: <code class="code docutils literal notranslate"><span class="pre">CUDECOMP_RESULT_SUCCESS</span></code> on success or error code on failure.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+</section>
+<section id="cudecompupdatehalosy">
+<span id="cudecompupdatehalosy-f-ref"></span><h4>cudecompUpdateHalosY<a class="headerlink" href="#cudecompupdatehalosy" title="Permalink to this headline">¶</a></h4>
+<dl>
+<dt class="sig sig-object f" id="f/_/cudecompUpdateHalosY">
+<em class="property"><span class="pre">function</span>&#160; </em><span class="sig-name descname"><span class="pre">cudecompUpdateHalosY</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">handle</span></em>, <em class="sig-param"><span class="pre">grid_desc</span></em>, <em class="sig-param"><span class="pre">input</span></em>, <em class="sig-param"><span class="pre">work</span></em>, <em class="sig-param"><span class="pre">dtype</span></em>, <em class="sig-param"><span class="pre">halo_extents</span></em>, <em class="sig-param"><span class="pre">halo_periods</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">stream</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#f/_/cudecompUpdateHalosY" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to perform halo communication of Y-axis aligned pencil data.</p>
+<p>For this operation, <code class="code docutils literal notranslate"><span class="pre">T</span></code> can be one of <code class="code docutils literal notranslate"><span class="pre">real(real32)</span></code>, <code class="code docutils literal notranslate"><span class="pre">real(real64)</span></code>, <code class="code docutils literal notranslate"><span class="pre">complex(real32)</span></code>, <code class="code docutils literal notranslate"><span class="pre">complex(real64)</span></code>. The data access for this operation is controlled via <code class="code docutils literal notranslate"><span class="pre">dtype</span></code>, irrespective of <code class="code docutils literal notranslate"><span class="pre">T</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>handle</strong><em> [</em><a class="reference internal" href="#f/_/cudecompHandle" title="f/_/cudecompHandle"><em>cudecompHandle</em></a><em>,</em><em>in</em><em>]</em> :: The initialized cuDecomp library handle</p></li>
+<li><p><strong>grid_desc</strong><em> [</em><a class="reference internal" href="#f/_/cudecompGridDesc" title="f/_/cudecompGridDesc"><em>cudecompGridDesc</em></a><em>,</em><em>in</em><em>]</em> :: A cuDecomp grid descriptor.</p></li>
+<li><p><strong>input</strong> (*)<em> [</em><em>T</em><em>,</em><em>in,out</em><em>]</em> :: Device array containing input Y-axis aligned pencil data. On successful completion, this buffer will contain the input X-axis aligned pencil data with the specified halo regions updated.</p></li>
+<li><p><strong>work</strong> (*)<em> [</em><em>T</em><em>,</em><em>in</em><em>]</em> :: Device array to use for halo workspace.</p></li>
+<li><p><strong>dtype</strong><em> [</em><em>cudecompDataType</em><em>,</em><em>in</em><em>]</em> :: The <code class="code docutils literal notranslate"><span class="pre">cudecompDataType</span></code> to use for the operation.</p></li>
+<li><p><strong>halo_extents</strong> (3)<em> [</em><em>integer</em><em>,</em><em>in</em><em>]</em> :: An array of three integers to define halo region extents of the input data, in global order. The i-th entry in this array should contain the number of halo elements (per direction) expected in the along the i-th global domain axis. Symmetric halos are assumed (e.g. a value of one in halo_extents means there are 2 halo elements, one element on each side).</p></li>
+<li><p><strong>halo_periods</strong> (3)<em> [</em><em>logical</em><em>,</em><em>in</em><em>]</em> :: An array of three boolean values to define halo periodicity of the input data, in global order. If the i-th entry in this array is true, the domain is treated periodically along the i-th global domain axis.</p></li>
+<li><p><strong>stream</strong><em> [</em><em>integer(cuda_stream_kind)</em><em>,</em><em>in, optional</em><em>]</em> :: CUDA stream to enqueue GPU operations into. If not provided, operations are enqueued in the default stream.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return</dt>
+<dd class="field-even"><p><strong>res</strong><em> [</em><em>cudecompResult</em><em>]</em> :: <code class="code docutils literal notranslate"><span class="pre">CUDECOMP_RESULT_SUCCESS</span></code> on success or error code on failure.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+</section>
+<section id="cudecompupdatehalosz">
+<span id="cudecompupdatehalosz-f-ref"></span><h4>cudecompUpdateHalosZ<a class="headerlink" href="#cudecompupdatehalosz" title="Permalink to this headline">¶</a></h4>
+<dl>
+<dt class="sig sig-object f" id="f/_/cudecompUpdateHalosZ">
+<em class="property"><span class="pre">function</span>&#160; </em><span class="sig-name descname"><span class="pre">cudecompUpdateHalosZ</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">handle</span></em>, <em class="sig-param"><span class="pre">grid_desc</span></em>, <em class="sig-param"><span class="pre">input</span></em>, <em class="sig-param"><span class="pre">work</span></em>, <em class="sig-param"><span class="pre">dtype</span></em>, <em class="sig-param"><span class="pre">halo_extents</span></em>, <em class="sig-param"><span class="pre">halo_periods</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">stream</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#f/_/cudecompUpdateHalosZ" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to perform halo communication of Z-axis aligned pencil data.</p>
+<p>For this operation, <code class="code docutils literal notranslate"><span class="pre">T</span></code> can be one of <code class="code docutils literal notranslate"><span class="pre">real(real32)</span></code>, <code class="code docutils literal notranslate"><span class="pre">real(real64)</span></code>, <code class="code docutils literal notranslate"><span class="pre">complex(real32)</span></code>, <code class="code docutils literal notranslate"><span class="pre">complex(real64)</span></code>. The data access for this operation is controlled via <code class="code docutils literal notranslate"><span class="pre">dtype</span></code>, irrespective of <code class="code docutils literal notranslate"><span class="pre">T</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>handle</strong><em> [</em><a class="reference internal" href="#f/_/cudecompHandle" title="f/_/cudecompHandle"><em>cudecompHandle</em></a><em>,</em><em>in</em><em>]</em> :: The initialized cuDecomp library handle</p></li>
+<li><p><strong>grid_desc</strong><em> [</em><a class="reference internal" href="#f/_/cudecompGridDesc" title="f/_/cudecompGridDesc"><em>cudecompGridDesc</em></a><em>,</em><em>in</em><em>]</em> :: A cuDecomp grid descriptor.</p></li>
+<li><p><strong>input</strong> (*)<em> [</em><em>T</em><em>,</em><em>in,out</em><em>]</em> :: Device array containing input Z-axis aligned pencil data. On successful completion, this buffer will contain the input X-axis aligned pencil data with the specified halo regions updated.</p></li>
+<li><p><strong>work</strong> (*)<em> [</em><em>T</em><em>,</em><em>in</em><em>]</em> :: Device array to use for halo workspace.</p></li>
+<li><p><strong>dtype</strong><em> [</em><em>cudecompDataType</em><em>,</em><em>in</em><em>]</em> :: The <code class="code docutils literal notranslate"><span class="pre">cudecompDataType</span></code> to use for the operation.</p></li>
+<li><p><strong>halo_extents</strong> (3)<em> [</em><em>integer</em><em>,</em><em>in</em><em>]</em> :: An array of three integers to define halo region extents of the input data, in global order. The i-th entry in this array should contain the number of halo elements (per direction) expected in the along the i-th global domain axis. Symmetric halos are assumed (e.g. a value of one in halo_extents means there are 2 halo elements, one element on each side).</p></li>
+<li><p><strong>halo_periods</strong> (3)<em> [</em><em>logical</em><em>,</em><em>in</em><em>]</em> :: An array of three boolean values to define halo periodicity of the input data, in global order. If the i-th entry in this array is true, the domain is treated periodically along the i-th global domain axis.</p></li>
+<li><p><strong>stream</strong><em> [</em><em>integer(cuda_stream_kind)</em><em>,</em><em>in, optional</em><em>]</em> :: CUDA stream to enqueue GPU operations into. If not provided, operations are enqueued in the default stream.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return</dt>
+<dd class="field-even"><p><strong>res</strong><em> [</em><em>cudecompResult</em><em>]</em> :: <code class="code docutils literal notranslate"><span class="pre">CUDECOMP_RESULT_SUCCESS</span></code> on success or error code on failure.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="c_api.html" class="btn btn-neutral float-left" title="cuDecomp C API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, NVIDIA Corporation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>  
+
+  <style>
+  a:link, a:visited {
+    color: #76b900;
+  }
+
+  a:hover {
+    color: #8c0;
+  }
+
+  .rst-content dl:not(.docutils) dt {
+    background: rgba(118, 185, 0, 0.1);
+    color: rgba(59,93,0,1);
+    border-top: solid 3px rgba(59,93,0,1);
+  }
+  </style>
+  
+
+</body>
+</html>

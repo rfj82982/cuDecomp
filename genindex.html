@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Index &mdash; cuDecomp 2022 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/style.css" type="text/css" />
+      <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/tabs.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="#" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" > 
+            <a href="index.html" class="icon icon-home"> cuDecomp
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #76b900;
+    }
+
+    .wy-side-nav-search a:link, .wy-nav-top a:link {
+      color: #fff;
+    }
+    .wy-side-nav-search a:visited, .wy-nav-top a:visited {
+      color: #fff;
+    }
+    .wy-side-nav-search a:hover, .wy-nav-top a:hover {
+      color: #fff;
+    }
+
+    .wy-menu-vertical a:link, .wy-menu-vertical a:visited {
+      color: #d9d9d9
+    }
+
+    .wy-menu-vertical a:active {
+      background-color: #76b900
+    }
+
+    .wy-side-nav-search>div.version {
+      color: rgba(0, 0, 0, 0.3)
+    }
+  </style>
+  
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#what-is-cudecomp">What is cuDecomp?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#decomposition-layout">Decomposition Layout</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="basic_usage.html">Basic Usage Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#starting-up-cudecomp">Starting up cuDecomp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#creating-a-grid-descriptor">Creating a grid descriptor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#allocate-pencil-memory">Allocate pencil memory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#working-with-pencil-data">Working with pencil data</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="basic_usage.html#c-c">C/C++</a></li>
+<li class="toctree-l3"><a class="reference internal" href="basic_usage.html#fortran">Fortran</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#allocating-workspace">Allocating workspace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#transposing-the-data">Transposing the data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#updating-halo-regions">Updating halo regions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#cleaning-up-and-finalizing-the-library">Cleaning up and finalizing the library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic_usage.html#building-and-running-the-example">Building and running the example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="autotuning.html">Autotuning</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="autotuning.html#autotuning-process">Autotuning process</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autotuning.html#autotuning-usage">Autotuning usage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="autotuning.html#creating-a-grid-descriptor-with-autotuning-enabled">Creating a grid descriptor with autotuning enabled</a></li>
+<li class="toctree-l3"><a class="reference internal" href="autotuning.html#autotuner-output-and-querying-results">Autotuner output and querying results</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="nvshmem.html">Working with NVSHMEM-enabled builds</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="nvshmem.html#controlling-the-symmetric-heap-size">Controlling the symmetric heap size</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nvshmem.html#mpi-compatibility">MPI compatibility</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">cuDecomp API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/c_api.html">cuDecomp C API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/c_api.html#types">Types</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/c_api.html#internal-types">Internal types</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/c_api.html#grid-descriptor-configuration">Grid Descriptor Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/c_api.html#pencil-information">Pencil Information</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/c_api.html#communication-backends">Communication Backends</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/c_api.html#additional-enumerators">Additional Enumerators</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/c_api.html#functions">Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/c_api.html#library-initialization-finalization">Library Initialization/Finalization</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/c_api.html#grid-descriptor-management">Grid Descriptor Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/c_api.html#workspace-management">Workspace Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/c_api.html#helper-functions">Helper Functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/c_api.html#transposition-functions">Transposition Functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/c_api.html#halo-exchange-functions">Halo Exchange Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/f_api.html">cuDecomp Fortran API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/f_api.html#types">Types</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/f_api.html#internal-types">Internal types</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/f_api.html#grid-descriptor-configuration">Grid Descriptor Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/f_api.html#pencil-information">Pencil Information</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/f_api.html#communication-backends">Communication Backends</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/f_api.html#additional-enumerators">Additional Enumerators</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/f_api.html#functions">Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/f_api.html#library-initialization-finalization">Library Initialization/Finalization</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/f_api.html#grid-descriptor-management">Grid Descriptor Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/f_api.html#workspace-management">Workspace Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/f_api.html#helper-functions">Helper Functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/f_api.html#transposition-functions">Transposition Functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/f_api.html#halo-exchange-functions">Halo Exchange Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">cuDecomp</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Index</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+
+<h1 id="index">Index</h1>
+
+<div class="genindex-jumpbox">
+ <a href="#C"><strong>C</strong></a>
+ 
+</div>
+<h2 id="C">C</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/c_api.html#_CPPv426cudecompAutotuneGridMode_t">cudecompAutotuneGridMode_t (C++ enum)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv4N26cudecompAutotuneGridMode_t27CUDECOMP_AUTOTUNE_GRID_HALOE">cudecompAutotuneGridMode_t::CUDECOMP_AUTOTUNE_GRID_HALO (C++ enumerator)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv4N26cudecompAutotuneGridMode_t32CUDECOMP_AUTOTUNE_GRID_TRANSPOSEE">cudecompAutotuneGridMode_t::CUDECOMP_AUTOTUNE_GRID_TRANSPOSE (C++ enumerator)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv418cudecompDataType_t">cudecompDataType_t (C++ enum)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv4N18cudecompDataType_t15CUDECOMP_DOUBLEE">cudecompDataType_t::CUDECOMP_DOUBLE (C++ enumerator)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv4N18cudecompDataType_t23CUDECOMP_DOUBLE_COMPLEXE">cudecompDataType_t::CUDECOMP_DOUBLE_COMPLEX (C++ enumerator)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv4N18cudecompDataType_t14CUDECOMP_FLOATE">cudecompDataType_t::CUDECOMP_FLOAT (C++ enumerator)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv4N18cudecompDataType_t22CUDECOMP_FLOAT_COMPLEXE">cudecompDataType_t::CUDECOMP_FLOAT_COMPLEX (C++ enumerator)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv416cudecompFinalize16cudecompHandle_t">cudecompFinalize (C++ function)</a>
+</li>
+      <li><a href="api/f_api.html#f/_/cudecompFinalize"><strong>cudecompFinalize() (fortran function)</strong></a>
+</li>
+      <li><a href="api/c_api.html#_CPPv412cudecompFree16cudecompHandle_t18cudecompGridDesc_tPv">cudecompFree (C++ function)</a>
+</li>
+      <li><a href="api/f_api.html#f/_/cudecompFree"><strong>cudecompFree() (fortran function)</strong></a>
+</li>
+      <li><a href="api/c_api.html#_CPPv423cudecompGetDataTypeSize18cudecompDataType_tP7int64_t">cudecompGetDataTypeSize (C++ function)</a>
+</li>
+      <li><a href="api/f_api.html#f/_/cudecompGetDataTypeSize"><strong>cudecompGetDataTypeSize() (fortran function)</strong></a>
+</li>
+      <li><a href="api/c_api.html#_CPPv425cudecompGetGridDescConfig16cudecompHandle_t18cudecompGridDesc_tP24cudecompGridDescConfig_t">cudecompGetGridDescConfig (C++ function)</a>
+</li>
+      <li><a href="api/f_api.html#f/_/cudecompGetGridDescConfig"><strong>cudecompGetGridDescConfig() (fortran function)</strong></a>
+</li>
+      <li><a href="api/c_api.html#_CPPv428cudecompGetHaloWorkspaceSize16cudecompHandle_t18cudecompGridDesc_t7int32_tA_K7int32_tP7int64_t">cudecompGetHaloWorkspaceSize (C++ function)</a>
+</li>
+      <li><a href="api/f_api.html#f/_/cudecompGetHaloWorkspaceSize"><strong>cudecompGetHaloWorkspaceSize() (fortran function)</strong></a>
+</li>
+      <li><a href="api/c_api.html#_CPPv421cudecompGetPencilInfo16cudecompHandle_t18cudecompGridDesc_tP20cudecompPencilInfo_t7int32_tA_K7int32_t">cudecompGetPencilInfo (C++ function)</a>
+</li>
+      <li><a href="api/f_api.html#f/_/cudecompGetPencilInfo"><strong>cudecompGetPencilInfo() (fortran function)</strong></a>
+</li>
+      <li><a href="api/c_api.html#_CPPv422cudecompGetShiftedRank16cudecompHandle_t18cudecompGridDesc_t7int32_t7int32_t7int32_tbP7int32_t">cudecompGetShiftedRank (C++ function)</a>
+</li>
+      <li><a href="api/f_api.html#f/_/cudecompGetShiftedRank"><strong>cudecompGetShiftedRank() (fortran function)</strong></a>
+</li>
+      <li><a href="api/c_api.html#_CPPv433cudecompGetTransposeWorkspaceSize16cudecompHandle_t18cudecompGridDesc_tP7int64_t">cudecompGetTransposeWorkspaceSize (C++ function)</a>
+</li>
+      <li><a href="api/f_api.html#f/_/cudecompGetTransposeWorkspaceSize"><strong>cudecompGetTransposeWorkspaceSize() (fortran function)</strong></a>
+</li>
+      <li><a href="api/f_api.html#f/_/cudecompGridDesc"><strong>cudecompGridDesc (fortran type)</strong></a>
+</li>
+      <li><a href="api/c_api.html#_CPPv418cudecompGridDesc_t">cudecompGridDesc_t (C++ type)</a>
+</li>
+      <li><a href="api/f_api.html#f/_/cudecompGridDescAutotuneOptions"><strong>cudecompGridDescAutotuneOptions (fortran type)</strong></a>
+</li>
+      <li><a href="api/c_api.html#_CPPv433cudecompGridDescAutotuneOptions_t">cudecompGridDescAutotuneOptions_t (C++ struct)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv4N33cudecompGridDescAutotuneOptions_t27allow_uneven_decompositionsE">cudecompGridDescAutotuneOptions_t::allow_uneven_decompositions (C++ member)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv4N33cudecompGridDescAutotuneOptions_t21autotune_halo_backendE">cudecompGridDescAutotuneOptions_t::autotune_halo_backend (C++ member)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv4N33cudecompGridDescAutotuneOptions_t26autotune_transpose_backendE">cudecompGridDescAutotuneOptions_t::autotune_transpose_backend (C++ member)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv4N33cudecompGridDescAutotuneOptions_t21disable_nccl_backendsE">cudecompGridDescAutotuneOptions_t::disable_nccl_backends (C++ member)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv4N33cudecompGridDescAutotuneOptions_t24disable_nvshmem_backendsE">cudecompGridDescAutotuneOptions_t::disable_nvshmem_backends (C++ member)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv4N33cudecompGridDescAutotuneOptions_t5dtypeE">cudecompGridDescAutotuneOptions_t::dtype (C++ member)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv4N33cudecompGridDescAutotuneOptions_t9grid_modeE">cudecompGridDescAutotuneOptions_t::grid_mode (C++ member)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv4N33cudecompGridDescAutotuneOptions_t9halo_axisE">cudecompGridDescAutotuneOptions_t::halo_axis (C++ member)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv4N33cudecompGridDescAutotuneOptions_t12halo_extentsE">cudecompGridDescAutotuneOptions_t::halo_extents (C++ member)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv4N33cudecompGridDescAutotuneOptions_t12halo_periodsE">cudecompGridDescAutotuneOptions_t::halo_periods (C++ member)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv4N33cudecompGridDescAutotuneOptions_t29transpose_use_inplace_buffersE">cudecompGridDescAutotuneOptions_t::transpose_use_inplace_buffers (C++ member)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv442cudecompGridDescAutotuneOptionsSetDefaultsP33cudecompGridDescAutotuneOptions_t">cudecompGridDescAutotuneOptionsSetDefaults (C++ function)</a>
+</li>
+      <li><a href="api/f_api.html#f/_/cudecompGridDescAutotuneOptionsSetDefaults"><strong>cudecompGridDescAutotuneOptionsSetDefaults() (fortran function)</strong></a>
+</li>
+      <li><a href="api/f_api.html#f/_/cudecompGridDescConfig"><strong>cudecompGridDescConfig (fortran type)</strong></a>
+</li>
+      <li><a href="api/c_api.html#_CPPv424cudecompGridDescConfig_t">cudecompGridDescConfig_t (C++ struct)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv4N24cudecompGridDescConfig_t5gdimsE">cudecompGridDescConfig_t::gdims (C++ member)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv4N24cudecompGridDescConfig_t10gdims_distE">cudecompGridDescConfig_t::gdims_dist (C++ member)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv4N24cudecompGridDescConfig_t17halo_comm_backendE">cudecompGridDescConfig_t::halo_comm_backend (C++ member)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv4N24cudecompGridDescConfig_t5pdimsE">cudecompGridDescConfig_t::pdims (C++ member)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv4N24cudecompGridDescConfig_t25transpose_axis_contiguousE">cudecompGridDescConfig_t::transpose_axis_contiguous (C++ member)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv4N24cudecompGridDescConfig_t22transpose_comm_backendE">cudecompGridDescConfig_t::transpose_comm_backend (C++ member)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv433cudecompGridDescConfigSetDefaultsP24cudecompGridDescConfig_t">cudecompGridDescConfigSetDefaults (C++ function)</a>
+</li>
+      <li><a href="api/f_api.html#f/_/cudecompGridDescConfigSetDefaults"><strong>cudecompGridDescConfigSetDefaults() (fortran function)</strong></a>
+</li>
+      <li><a href="api/c_api.html#_CPPv422cudecompGridDescCreate16cudecompHandle_tP18cudecompGridDesc_tP24cudecompGridDescConfig_tPK33cudecompGridDescAutotuneOptions_t">cudecompGridDescCreate (C++ function)</a>
+</li>
+      <li><a href="api/f_api.html#f/_/cudecompGridDescCreate"><strong>cudecompGridDescCreate() (fortran function)</strong></a>
+</li>
+      <li><a href="api/c_api.html#_CPPv423cudecompGridDescDestroy16cudecompHandle_t18cudecompGridDesc_t">cudecompGridDescDestroy (C++ function)</a>
+</li>
+      <li><a href="api/f_api.html#f/_/cudecompGridDescDestroy"><strong>cudecompGridDescDestroy() (fortran function)</strong></a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/c_api.html#_CPPv425cudecompHaloCommBackend_t">cudecompHaloCommBackend_t (C++ enum)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv4N25cudecompHaloCommBackend_t22CUDECOMP_HALO_COMM_MPIE">cudecompHaloCommBackend_t::CUDECOMP_HALO_COMM_MPI (C++ enumerator)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv4N25cudecompHaloCommBackend_t31CUDECOMP_HALO_COMM_MPI_BLOCKINGE">cudecompHaloCommBackend_t::CUDECOMP_HALO_COMM_MPI_BLOCKING (C++ enumerator)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv4N25cudecompHaloCommBackend_t23CUDECOMP_HALO_COMM_NCCLE">cudecompHaloCommBackend_t::CUDECOMP_HALO_COMM_NCCL (C++ enumerator)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv4N25cudecompHaloCommBackend_t26CUDECOMP_HALO_COMM_NVSHMEME">cudecompHaloCommBackend_t::CUDECOMP_HALO_COMM_NVSHMEM (C++ enumerator)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv4N25cudecompHaloCommBackend_t35CUDECOMP_HALO_COMM_NVSHMEM_BLOCKINGE">cudecompHaloCommBackend_t::CUDECOMP_HALO_COMM_NVSHMEM_BLOCKING (C++ enumerator)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv431cudecompHaloCommBackendToString25cudecompHaloCommBackend_t">cudecompHaloCommBackendToString (C++ function)</a>
+</li>
+      <li><a href="api/f_api.html#f/_/cudecompHaloCommBackendToString"><strong>cudecompHaloCommBackendToString() (fortran function)</strong></a>
+</li>
+      <li><a href="api/f_api.html#f/_/cudecompHandle"><strong>cudecompHandle (fortran type)</strong></a>
+</li>
+      <li><a href="api/c_api.html#_CPPv416cudecompHandle_t">cudecompHandle_t (C++ type)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv412cudecompInitP16cudecompHandle_t8MPI_Comm">cudecompInit (C++ function)</a>
+</li>
+      <li><a href="api/f_api.html#f/_/cudecompInit"><strong>cudecompInit() (fortran function)</strong></a>
+</li>
+      <li><a href="api/c_api.html#_CPPv414cudecompMalloc16cudecompHandle_t18cudecompGridDesc_tPPv6size_t">cudecompMalloc (C++ function)</a>
+</li>
+      <li><a href="api/f_api.html#f/_/cudecompMalloc"><strong>cudecompMalloc() (fortran function)</strong></a>
+</li>
+      <li><a href="api/f_api.html#f/_/cudecompPencilInfo"><strong>cudecompPencilInfo (fortran type)</strong></a>
+</li>
+      <li><a href="api/c_api.html#_CPPv420cudecompPencilInfo_t">cudecompPencilInfo_t (C++ struct)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv4N20cudecompPencilInfo_t12halo_extentsE">cudecompPencilInfo_t::halo_extents (C++ member)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv4N20cudecompPencilInfo_t2hiE">cudecompPencilInfo_t::hi (C++ member)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv4N20cudecompPencilInfo_t2loE">cudecompPencilInfo_t::lo (C++ member)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv4N20cudecompPencilInfo_t5orderE">cudecompPencilInfo_t::order (C++ member)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv4N20cudecompPencilInfo_t5shapeE">cudecompPencilInfo_t::shape (C++ member)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv4N20cudecompPencilInfo_t4sizeE">cudecompPencilInfo_t::size (C++ member)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv416cudecompResult_t">cudecompResult_t (C++ enum)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv4N16cudecompResult_t26CUDECOMP_RESULT_CUDA_ERRORE">cudecompResult_t::CUDECOMP_RESULT_CUDA_ERROR (C++ enumerator)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv4N16cudecompResult_t30CUDECOMP_RESULT_CUTENSOR_ERRORE">cudecompResult_t::CUDECOMP_RESULT_CUTENSOR_ERROR (C++ enumerator)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv4N16cudecompResult_t30CUDECOMP_RESULT_INTERNAL_ERRORE">cudecompResult_t::CUDECOMP_RESULT_INTERNAL_ERROR (C++ enumerator)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv4N16cudecompResult_t29CUDECOMP_RESULT_INVALID_USAGEE">cudecompResult_t::CUDECOMP_RESULT_INVALID_USAGE (C++ enumerator)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv4N16cudecompResult_t25CUDECOMP_RESULT_MPI_ERRORE">cudecompResult_t::CUDECOMP_RESULT_MPI_ERROR (C++ enumerator)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv4N16cudecompResult_t26CUDECOMP_RESULT_NCCL_ERRORE">cudecompResult_t::CUDECOMP_RESULT_NCCL_ERROR (C++ enumerator)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv4N16cudecompResult_t29CUDECOMP_RESULT_NOT_SUPPORTEDE">cudecompResult_t::CUDECOMP_RESULT_NOT_SUPPORTED (C++ enumerator)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv4N16cudecompResult_t29CUDECOMP_RESULT_NVSHMEM_ERRORE">cudecompResult_t::CUDECOMP_RESULT_NVSHMEM_ERROR (C++ enumerator)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv4N16cudecompResult_t23CUDECOMP_RESULT_SUCCESSE">cudecompResult_t::CUDECOMP_RESULT_SUCCESS (C++ enumerator)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv430cudecompTransposeCommBackend_t">cudecompTransposeCommBackend_t (C++ enum)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv4N30cudecompTransposeCommBackend_t31CUDECOMP_TRANSPOSE_COMM_MPI_A2AE">cudecompTransposeCommBackend_t::CUDECOMP_TRANSPOSE_COMM_MPI_A2A (C++ enumerator)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv4N30cudecompTransposeCommBackend_t31CUDECOMP_TRANSPOSE_COMM_MPI_P2PE">cudecompTransposeCommBackend_t::CUDECOMP_TRANSPOSE_COMM_MPI_P2P (C++ enumerator)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv4N30cudecompTransposeCommBackend_t34CUDECOMP_TRANSPOSE_COMM_MPI_P2P_PLE">cudecompTransposeCommBackend_t::CUDECOMP_TRANSPOSE_COMM_MPI_P2P_PL (C++ enumerator)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv4N30cudecompTransposeCommBackend_t28CUDECOMP_TRANSPOSE_COMM_NCCLE">cudecompTransposeCommBackend_t::CUDECOMP_TRANSPOSE_COMM_NCCL (C++ enumerator)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv4N30cudecompTransposeCommBackend_t31CUDECOMP_TRANSPOSE_COMM_NCCL_PLE">cudecompTransposeCommBackend_t::CUDECOMP_TRANSPOSE_COMM_NCCL_PL (C++ enumerator)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv4N30cudecompTransposeCommBackend_t31CUDECOMP_TRANSPOSE_COMM_NVSHMEME">cudecompTransposeCommBackend_t::CUDECOMP_TRANSPOSE_COMM_NVSHMEM (C++ enumerator)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv4N30cudecompTransposeCommBackend_t34CUDECOMP_TRANSPOSE_COMM_NVSHMEM_PLE">cudecompTransposeCommBackend_t::CUDECOMP_TRANSPOSE_COMM_NVSHMEM_PL (C++ enumerator)</a>
+</li>
+      <li><a href="api/c_api.html#_CPPv436cudecompTransposeCommBackendToString30cudecompTransposeCommBackend_t">cudecompTransposeCommBackendToString (C++ function)</a>
+</li>
+      <li><a href="api/f_api.html#f/_/cudecompTransposeCommBackendToString"><strong>cudecompTransposeCommBackendToString() (fortran function)</strong></a>
+</li>
+      <li><a href="api/c_api.html#_CPPv421cudecompTransposeXToY16cudecompHandle_t18cudecompGridDesc_tPvPvPv18cudecompDataType_tA_K7int32_tA_K7int32_t12cudaStream_t">cudecompTransposeXToY (C++ function)</a>
+</li>
+      <li><a href="api/f_api.html#f/_/cudecompTransposeXToY"><strong>cudecompTransposeXToY() (fortran function)</strong></a>
+</li>
+      <li><a href="api/c_api.html#_CPPv421cudecompTransposeYToX16cudecompHandle_t18cudecompGridDesc_tPvPvPv18cudecompDataType_tA_K7int32_tA_K7int32_t12cudaStream_t">cudecompTransposeYToX (C++ function)</a>
+</li>
+      <li><a href="api/f_api.html#f/_/cudecompTransposeYToX"><strong>cudecompTransposeYToX() (fortran function)</strong></a>
+</li>
+      <li><a href="api/c_api.html#_CPPv421cudecompTransposeYToZ16cudecompHandle_t18cudecompGridDesc_tPvPvPv18cudecompDataType_tA_K7int32_tA_K7int32_t12cudaStream_t">cudecompTransposeYToZ (C++ function)</a>
+</li>
+      <li><a href="api/f_api.html#f/_/cudecompTransposeYToZ"><strong>cudecompTransposeYToZ() (fortran function)</strong></a>
+</li>
+      <li><a href="api/c_api.html#_CPPv421cudecompTransposeZToY16cudecompHandle_t18cudecompGridDesc_tPvPvPv18cudecompDataType_tA_K7int32_tA_K7int32_t12cudaStream_t">cudecompTransposeZToY (C++ function)</a>
+</li>
+      <li><a href="api/f_api.html#f/_/cudecompTransposeZToY"><strong>cudecompTransposeZToY() (fortran function)</strong></a>
+</li>
+      <li><a href="api/c_api.html#_CPPv420cudecompUpdateHalosX16cudecompHandle_t18cudecompGridDesc_tPvPv18cudecompDataType_tA_K7int32_tA_Kb7int32_t12cudaStream_t">cudecompUpdateHalosX (C++ function)</a>
+</li>
+      <li><a href="api/f_api.html#f/_/cudecompUpdateHalosX"><strong>cudecompUpdateHalosX() (fortran function)</strong></a>
+</li>
+      <li><a href="api/c_api.html#_CPPv420cudecompUpdateHalosY16cudecompHandle_t18cudecompGridDesc_tPvPv18cudecompDataType_tA_K7int32_tA_Kb7int32_t12cudaStream_t">cudecompUpdateHalosY (C++ function)</a>
+</li>
+      <li><a href="api/f_api.html#f/_/cudecompUpdateHalosY"><strong>cudecompUpdateHalosY() (fortran function)</strong></a>
+</li>
+      <li><a href="api/c_api.html#_CPPv420cudecompUpdateHalosZ16cudecompHandle_t18cudecompGridDesc_tPvPv18cudecompDataType_tA_K7int32_tA_Kb7int32_t12cudaStream_t">cudecompUpdateHalosZ (C++ function)</a>
+</li>
+      <li><a href="api/f_api.html#f/_/cudecompUpdateHalosZ"><strong>cudecompUpdateHalosZ() (fortran function)</strong></a>
+</li>
+  </ul></td>
+</tr></table>
+
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, NVIDIA Corporation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>  
+
+  <style>
+  a:link, a:visited {
+    color: #76b900;
+  }
+
+  a:hover {
+    color: #8c0;
+  }
+
+  .rst-content dl:not(.docutils) dt {
+    background: rgba(118, 185, 0, 0.1);
+    color: rgba(59,93,0,1);
+    border-top: solid 3px rgba(59,93,0,1);
+  }
+  </style>
+  
+
+</body>
+</html>

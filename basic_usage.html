@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Basic Usage Guide &mdash; cuDecomp 2022 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/style.css" type="text/css" />
+      <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/tabs.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Autotuning" href="autotuning.html" />
+    <link rel="prev" title="Overview" href="overview.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" > 
+            <a href="index.html" class="icon icon-home"> cuDecomp
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #76b900;
+    }
+
+    .wy-side-nav-search a:link, .wy-nav-top a:link {
+      color: #fff;
+    }
+    .wy-side-nav-search a:visited, .wy-nav-top a:visited {
+      color: #fff;
+    }
+    .wy-side-nav-search a:hover, .wy-nav-top a:hover {
+      color: #fff;
+    }
+
+    .wy-menu-vertical a:link, .wy-menu-vertical a:visited {
+      color: #d9d9d9
+    }
+
+    .wy-menu-vertical a:active {
+      background-color: #76b900
+    }
+
+    .wy-side-nav-search>div.version {
+      color: rgba(0, 0, 0, 0.3)
+    }
+  </style>
+  
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#what-is-cudecomp">What is cuDecomp?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#decomposition-layout">Decomposition Layout</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Basic Usage Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#starting-up-cudecomp">Starting up cuDecomp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-a-grid-descriptor">Creating a grid descriptor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#allocate-pencil-memory">Allocate pencil memory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#working-with-pencil-data">Working with pencil data</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#c-c">C/C++</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fortran">Fortran</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#allocating-workspace">Allocating workspace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#transposing-the-data">Transposing the data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#updating-halo-regions">Updating halo regions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cleaning-up-and-finalizing-the-library">Cleaning up and finalizing the library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#building-and-running-the-example">Building and running the example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="autotuning.html">Autotuning</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="autotuning.html#autotuning-process">Autotuning process</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autotuning.html#autotuning-usage">Autotuning usage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="autotuning.html#creating-a-grid-descriptor-with-autotuning-enabled">Creating a grid descriptor with autotuning enabled</a></li>
+<li class="toctree-l3"><a class="reference internal" href="autotuning.html#autotuner-output-and-querying-results">Autotuner output and querying results</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="nvshmem.html">Working with NVSHMEM-enabled builds</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="nvshmem.html#controlling-the-symmetric-heap-size">Controlling the symmetric heap size</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nvshmem.html#mpi-compatibility">MPI compatibility</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">cuDecomp API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/c_api.html">cuDecomp C API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/c_api.html#types">Types</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/c_api.html#internal-types">Internal types</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/c_api.html#grid-descriptor-configuration">Grid Descriptor Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/c_api.html#pencil-information">Pencil Information</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/c_api.html#communication-backends">Communication Backends</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/c_api.html#additional-enumerators">Additional Enumerators</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/c_api.html#functions">Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/c_api.html#library-initialization-finalization">Library Initialization/Finalization</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/c_api.html#grid-descriptor-management">Grid Descriptor Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/c_api.html#workspace-management">Workspace Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/c_api.html#helper-functions">Helper Functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/c_api.html#transposition-functions">Transposition Functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/c_api.html#halo-exchange-functions">Halo Exchange Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api/f_api.html">cuDecomp Fortran API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/f_api.html#types">Types</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/f_api.html#internal-types">Internal types</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/f_api.html#grid-descriptor-configuration">Grid Descriptor Configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/f_api.html#pencil-information">Pencil Information</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/f_api.html#communication-backends">Communication Backends</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/f_api.html#additional-enumerators">Additional Enumerators</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/f_api.html#functions">Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/f_api.html#library-initialization-finalization">Library Initialization/Finalization</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/f_api.html#grid-descriptor-management">Grid Descriptor Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/f_api.html#workspace-management">Workspace Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/f_api.html#helper-functions">Helper Functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/f_api.html#transposition-functions">Transposition Functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/f_api.html#halo-exchange-functions">Halo Exchange Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">cuDecomp</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Basic Usage Guide</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/basic_usage.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="basic-usage-guide">
+<h1>Basic Usage Guide<a class="headerlink" href="#basic-usage-guide" title="Permalink to this headline">¶</a></h1>
+<p>We can now walk through how to set up and run a basic program with cuDecomp. The code snippets in this section are taken from
+the basic usage example [link]. This example assumes we are using 4 GPUs.</p>
+<section id="starting-up-cudecomp">
+<h2>Starting up cuDecomp<a class="headerlink" href="#starting-up-cudecomp" title="Permalink to this headline">¶</a></h2>
+<p>First, initialize MPI and assign CUDA devices. In this example, we assign CUDA devices based on the local rank.</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-0-Qysr" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-0-Qysr" name="Qysr" role="tab" tabindex="0">C++</button><button aria-controls="panel-0-Rm9ydHJhbg==" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-0-Rm9ydHJhbg==" name="Rm9ydHJhbg==" role="tab" tabindex="-1">Fortran</button></div><div aria-labelledby="tab-0-Qysr" class="sphinx-tabs-panel code-tab group-tab" id="panel-0-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">CHECK_MPI_EXIT</span><span class="p">(</span><span class="n">MPI_Init</span><span class="p">(</span><span class="k">nullptr</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">));</span><span class="w"></span>
+<span class="kt">int</span><span class="w"> </span><span class="n">rank</span><span class="p">,</span><span class="w"> </span><span class="n">nranks</span><span class="p">;</span><span class="w"></span>
+<span class="n">CHECK_MPI_EXIT</span><span class="p">(</span><span class="n">MPI_Comm_rank</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">rank</span><span class="p">));</span><span class="w"></span>
+<span class="n">CHECK_MPI_EXIT</span><span class="p">(</span><span class="n">MPI_Comm_size</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">nranks</span><span class="p">));</span><span class="w"></span>
+
+<span class="n">MPI_Comm</span><span class="w"> </span><span class="n">local_comm</span><span class="p">;</span><span class="w"></span>
+<span class="n">MPI_Comm_split_type</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_COMM_TYPE_SHARED</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_INFO_NULL</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">local_comm</span><span class="p">);</span><span class="w"></span>
+<span class="kt">int</span><span class="w"> </span><span class="n">local_rank</span><span class="p">;</span><span class="w"></span>
+<span class="n">MPI_Comm_rank</span><span class="p">(</span><span class="n">local_comm</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">local_rank</span><span class="p">);</span><span class="w"></span>
+<span class="n">CHECK_CUDA_EXIT</span><span class="p">(</span><span class="n">cudaSetDevice</span><span class="p">(</span><span class="n">local_rank</span><span class="p">));</span><span class="w"></span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-Rm9ydHJhbg==" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-0-Rm9ydHJhbg==" name="Rm9ydHJhbg==" role="tabpanel" tabindex="0"><div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">call </span><span class="n">MPI_Init</span><span class="p">(</span><span class="n">ierr</span><span class="p">)</span><span class="w"></span>
+<span class="k">call </span><span class="n">MPI_Comm_rank</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="w"> </span><span class="n">rank</span><span class="p">,</span><span class="w"> </span><span class="n">ierr</span><span class="p">)</span><span class="w"></span>
+<span class="k">call </span><span class="n">MPI_Comm_size</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="w"> </span><span class="n">nranks</span><span class="p">,</span><span class="w"> </span><span class="n">ierr</span><span class="p">)</span><span class="w"></span>
+
+<span class="k">call </span><span class="n">MPI_Comm_split_Type</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_COMM_TYPE_SHARED</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_INFO_NULL</span><span class="p">,</span><span class="w"> </span><span class="n">local_comm</span><span class="p">,</span><span class="w"> </span><span class="n">ierr</span><span class="p">)</span><span class="w"></span>
+<span class="k">call </span><span class="n">MPI_Comm_rank</span><span class="p">(</span><span class="n">local_comm</span><span class="p">,</span><span class="w"> </span><span class="n">local_rank</span><span class="p">,</span><span class="w"> </span><span class="n">ierr</span><span class="p">)</span><span class="w"></span>
+<span class="n">ierr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cudaSetDevice</span><span class="p">(</span><span class="n">local_rank</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+</div></div>
+<p>Next, we can initialize cuDecomp with <a class="reference internal" href="api/c_api.html#cudecompinit-ref"><span class="std std-ref">cudecompInit</span></a> using the MPI global communicator and obtain a handle.</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-1-Qysr" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-1-Qysr" name="Qysr" role="tab" tabindex="0">C++</button><button aria-controls="panel-1-Rm9ydHJhbg==" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-1-Rm9ydHJhbg==" name="Rm9ydHJhbg==" role="tab" tabindex="-1">Fortran</button></div><div aria-labelledby="tab-1-Qysr" class="sphinx-tabs-panel code-tab group-tab" id="panel-1-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">cudecompHandle_t</span><span class="w"> </span><span class="n">handle</span><span class="p">;</span><span class="w"></span>
+<span class="n">CHECK_CUDECOMP_EXIT</span><span class="p">(</span><span class="n">cudecompInit</span><span class="p">(</span><span class="o">&amp;</span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_COMM_WORLD</span><span class="p">));</span><span class="w"></span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-1-Rm9ydHJhbg==" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-1-Rm9ydHJhbg==" name="Rm9ydHJhbg==" role="tabpanel" tabindex="0"><div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">type</span><span class="p">(</span><span class="n">cudecompHandle</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">handle</span><span class="w"></span>
+<span class="p">...</span><span class="w"></span>
+<span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cudecompInit</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_COMM_WORLD</span><span class="p">)</span><span class="w"></span>
+<span class="k">call </span><span class="n">CHECK_CUDECOMP_EXIT</span><span class="p">(</span><span class="n">istat</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+</div></div>
+</section>
+<section id="creating-a-grid-descriptor">
+<h2>Creating a grid descriptor<a class="headerlink" href="#creating-a-grid-descriptor" title="Permalink to this headline">¶</a></h2>
+<p>Next, we need to create a grid descriptor. To do this, we first need to create and populate a grid descriptor
+configuration structure, which provides basic information to the library required to set up the grid descriptor.</p>
+<p>We create an uninitialized configuration struct and initialize it to defaults using <a class="reference internal" href="api/c_api.html#cudecompgriddescconfigsetdefaults-ref"><span class="std std-ref">cudecompGridDescConfigSetDefaults</span></a>.
+Initializing to default values is required to ensure no entries are left uninitialized.</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-2-Qysr" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-2-Qysr" name="Qysr" role="tab" tabindex="0">C++</button><button aria-controls="panel-2-Rm9ydHJhbg==" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-2-Rm9ydHJhbg==" name="Rm9ydHJhbg==" role="tab" tabindex="-1">Fortran</button></div><div aria-labelledby="tab-2-Qysr" class="sphinx-tabs-panel code-tab group-tab" id="panel-2-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">cudecompGridDescConfig_t</span><span class="w"> </span><span class="n">config</span><span class="p">;</span><span class="w"></span>
+<span class="n">CHECK_CUDECOMP_EXIT</span><span class="p">(</span><span class="n">cudecompGridDescConfigSetDefaults</span><span class="p">(</span><span class="o">&amp;</span><span class="n">config</span><span class="p">));</span><span class="w"></span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-2-Rm9ydHJhbg==" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-2-Rm9ydHJhbg==" name="Rm9ydHJhbg==" role="tabpanel" tabindex="0"><div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">type</span><span class="p">(</span><span class="n">cudecompGridDescConfig</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">config</span><span class="w"></span>
+<span class="p">...</span><span class="w"></span>
+<span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cudecompGridDescConfigSetDefaults</span><span class="p">(</span><span class="n">config</span><span class="p">)</span><span class="w"></span>
+<span class="k">call </span><span class="n">CHECK_CUDECOMP_EXIT</span><span class="p">(</span><span class="n">istat</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+</div></div>
+<p>First, we can set the <code class="code docutils literal notranslate"><span class="pre">pdims</span></code> (process grid) entries in the configuration struct. <code class="code docutils literal notranslate"><span class="pre">pdims[0]</span></code> corresponds to <span class="math notranslate nohighlight">\(P_{\text{rows}}\)</span>
+and <code class="code docutils literal notranslate"><span class="pre">pdims[1]</span></code> corresponds to <span class="math notranslate nohighlight">\(P_{\text{cols}}\)</span>. In this example, we use a <span class="math notranslate nohighlight">\(2 \times 2\)</span> process grid.</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-3-Qysr" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-3-Qysr" name="Qysr" role="tab" tabindex="0">C++</button><button aria-controls="panel-3-Rm9ydHJhbg==" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-3-Rm9ydHJhbg==" name="Rm9ydHJhbg==" role="tab" tabindex="-1">Fortran</button></div><div aria-labelledby="tab-3-Qysr" class="sphinx-tabs-panel code-tab group-tab" id="panel-3-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">config</span><span class="p">.</span><span class="n">pdims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="c1">// P_rows</span>
+<span class="n">config</span><span class="p">.</span><span class="n">pdims</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="c1">// P_cols</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-3-Rm9ydHJhbg==" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-3-Rm9ydHJhbg==" name="Rm9ydHJhbg==" role="tabpanel" tabindex="0"><div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="n">config</span><span class="p">%</span><span class="n">pdims</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="c">! [P_rows, P_cols]</span>
+</pre></div>
+</div>
+</div></div>
+<p>Next, we set the <code class="code docutils literal notranslate"><span class="pre">gdims</span></code> (global grid) entries in the configuration struct. These values correspond to the <span class="math notranslate nohighlight">\(X\)</span>, <span class="math notranslate nohighlight">\(Y\)</span>, and <span class="math notranslate nohighlight">\(Z\)</span>
+dimensions of the global grid. In this example, we use a global grid with dimensions <span class="math notranslate nohighlight">\(64 \times 64 \times 64\)</span>.</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-4-Qysr" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-4-Qysr" name="Qysr" role="tab" tabindex="0">C++</button><button aria-controls="panel-4-Rm9ydHJhbg==" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-4-Rm9ydHJhbg==" name="Rm9ydHJhbg==" role="tab" tabindex="-1">Fortran</button></div><div aria-labelledby="tab-4-Qysr" class="sphinx-tabs-panel code-tab group-tab" id="panel-4-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">config</span><span class="p">.</span><span class="n">gdims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">64</span><span class="p">;</span><span class="w"> </span><span class="c1">// X</span>
+<span class="n">config</span><span class="p">.</span><span class="n">gdims</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">64</span><span class="p">;</span><span class="w"> </span><span class="c1">// Y</span>
+<span class="n">config</span><span class="p">.</span><span class="n">gdims</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">64</span><span class="p">;</span><span class="w"> </span><span class="c1">// Z</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-4-Rm9ydHJhbg==" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-4-Rm9ydHJhbg==" name="Rm9ydHJhbg==" role="tabpanel" tabindex="0"><div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="n">config</span><span class="p">%</span><span class="n">gdims</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mi">64</span><span class="p">,</span><span class="w"> </span><span class="mi">64</span><span class="p">,</span><span class="w"> </span><span class="mi">64</span><span class="p">]</span><span class="w"> </span><span class="c">! [X, Y, Z]</span>
+</pre></div>
+</div>
+</div></div>
+<p>For additional flexibility, the configuration structure contains an optional entry <code class="code docutils literal notranslate"><span class="pre">gdims_dist</span></code> that indicates to the library
+that the global domain of dimension <code class="code docutils literal notranslate"><span class="pre">gdims</span></code> should be distributed across processes with elements divided among processes
+as though the global domain was of dimension <code class="code docutils literal notranslate"><span class="pre">gdims_dist</span></code>. This can be useful when dealing with padded domain dimensions.
+The entries in <code class="code docutils literal notranslate"><span class="pre">gdims_dist</span></code> must be less than or equal to the entries in <code class="code docutils literal notranslate"><span class="pre">gdims</span></code> and any extra elements are associated with the last rank in any row or column communicator.</p>
+<p>Next, we set the desired communication backends for transpose (<code class="code docutils literal notranslate"><span class="pre">transpose_comm_backend</span></code>) and/or
+halo communication (<code class="code docutils literal notranslate"><span class="pre">halo_comm_backend</span></code>). See documentation of <a class="reference internal" href="api/c_api.html#cudecomptransposecommbackend-t-ref"><span class="std std-ref">cudecompTranposeCommBackend_t</span></a> and
+<a class="reference internal" href="api/c_api.html#cudecomphalocommbackend-t-ref"><span class="std std-ref">cudecompHaloCommBackend_t</span></a> for the available communication backends options.</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-5-Qysr" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-5-Qysr" name="Qysr" role="tab" tabindex="0">C++</button><button aria-controls="panel-5-Rm9ydHJhbg==" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-5-Rm9ydHJhbg==" name="Rm9ydHJhbg==" role="tab" tabindex="-1">Fortran</button></div><div aria-labelledby="tab-5-Qysr" class="sphinx-tabs-panel code-tab group-tab" id="panel-5-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">config</span><span class="p">.</span><span class="n">transpose_comm_backend</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CUDECOMP_TRANSPOSE_COMM_MPI_P2P</span><span class="p">;</span><span class="w"></span>
+<span class="n">config</span><span class="p">.</span><span class="n">halo_comm_backend</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CUDECOMP_HALO_COMM_MPI</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-5-Rm9ydHJhbg==" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-5-Rm9ydHJhbg==" name="Rm9ydHJhbg==" role="tabpanel" tabindex="0"><div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="n">config</span><span class="p">%</span><span class="n">transpose_comm_backend</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CUDECOMP_TRANSPOSE_COMM_MPI_P2P</span><span class="w"></span>
+<span class="n">config</span><span class="p">%</span><span class="n">halo_comm_backend</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CUDECOMP_HALO_COMM_MPI</span><span class="w"></span>
+</pre></div>
+</div>
+</div></div>
+<p>We can next set the values of <code class="code docutils literal notranslate"><span class="pre">transpose_axis_contiguous</span></code>, which are boolean flags indicating to the library
+the memory layout of the pencil buffers to use, by axis. For each axis, cuDecomp supports two possible memory layouts depending
+on the setting of these flags.</p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><code class="code docutils literal notranslate"><span class="pre">transpose_axis_contiguous</span></code></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(X\)</span>-pencil</p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(Y\)</span>-pencil</p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(Z\)</span>-pencil</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="code docutils literal notranslate"><span class="pre">true</span></code></p></td>
+<td><p><span class="math notranslate nohighlight">\([X, Y, Z]\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\([Y, Z, X]\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\([Z, X, Y]\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="code docutils literal notranslate"><span class="pre">false</span></code></p></td>
+<td><p><span class="math notranslate nohighlight">\([X, Y, Z]\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\([X, Y, Z]\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\([X, Y, Z]\)</span></p></td>
+</tr>
+</tbody>
+</table>
+<p>These memory layouts are listed in column-major order. When this flag is false for an axis, the memory layout
+of the pencil buffers remains in the original memory layout of the global grid, <span class="math notranslate nohighlight">\([X, Y, Z]\)</span>.
+Alternatively, when this flag is true for an axis, the memory layout is permuted (cyclic permutation) so that the data is contiguous
+along the pencil axis (e.g., for the <span class="math notranslate nohighlight">\(Z\)</span>-pencil, the memory is ordered so that data along
+the <span class="math notranslate nohighlight">\(Z\)</span> axis is contiguous). This permuted memory layout can be desirable in situations where the computational
+performance of your code may improve with contiguous access of data along the pencil axis (e.g. to avoid strides
+between signal elements in an FFT). In this example, we set this flag to true for all directions.</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-6-Qysr" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-6-Qysr" name="Qysr" role="tab" tabindex="0">C++</button><button aria-controls="panel-6-Rm9ydHJhbg==" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-6-Rm9ydHJhbg==" name="Rm9ydHJhbg==" role="tab" tabindex="-1">Fortran</button></div><div aria-labelledby="tab-6-Qysr" class="sphinx-tabs-panel code-tab group-tab" id="panel-6-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">config</span><span class="p">.</span><span class="n">transpose_axis_contiguous</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span><span class="w"></span>
+<span class="n">config</span><span class="p">.</span><span class="n">transpose_axis_contiguous</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span><span class="w"></span>
+<span class="n">config</span><span class="p">.</span><span class="n">transpose_axis_contiguous</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-6-Rm9ydHJhbg==" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-6-Rm9ydHJhbg==" name="Rm9ydHJhbg==" role="tabpanel" tabindex="0"><div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="n">config</span><span class="p">%</span><span class="n">transpose_axis_contiguous</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[.</span><span class="n">true</span><span class="p">.,</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.,</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.]</span><span class="w"></span>
+</pre></div>
+</div>
+</div></div>
+<p>With the grid descriptor configuration structure created and populated, we can now create the grid descriptor. The last
+argument in <a class="reference internal" href="api/c_api.html#cudecompgriddesccreate-ref"><span class="std std-ref">cudecompGridDescCreate</span></a> is for an optional structure to set autotuning options. See <a class="reference internal" href="autotuning.html#autotuning-section-ref"><span class="std std-ref">Autotuning</span></a>
+for a detailed overview of this feature. In this example, we will not autotune and pass a <code class="code docutils literal notranslate"><span class="pre">nullptr</span></code> for
+this argument in C/C++, or equivalently, leave it unspecified in Fortran.</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-7-Qysr" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-7-Qysr" name="Qysr" role="tab" tabindex="0">C++</button><button aria-controls="panel-7-Rm9ydHJhbg==" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-7-Rm9ydHJhbg==" name="Rm9ydHJhbg==" role="tab" tabindex="-1">Fortran</button></div><div aria-labelledby="tab-7-Qysr" class="sphinx-tabs-panel code-tab group-tab" id="panel-7-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">cudecompGridDesc_t</span><span class="w"> </span><span class="n">grid_desc</span><span class="p">;</span><span class="w"></span>
+<span class="n">CHECK_CUDECOMP_EXIT</span><span class="p">(</span><span class="n">cudecompGridDescCreate</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">grid_desc</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">config</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">));</span><span class="w"></span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-7-Rm9ydHJhbg==" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-7-Rm9ydHJhbg==" name="Rm9ydHJhbg==" role="tabpanel" tabindex="0"><div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">type</span><span class="p">(</span><span class="n">cudecompGridDesc</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">grid_desc</span><span class="w"></span>
+<span class="p">...</span><span class="w"></span>
+<span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cudecompGridDescCreate</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="n">grid_desc</span><span class="p">,</span><span class="w"> </span><span class="n">config</span><span class="p">)</span><span class="w"></span>
+<span class="k">call </span><span class="n">CHECK_CUDECOMP_EXIT</span><span class="p">(</span><span class="n">istat</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+</div></div>
+</section>
+<section id="allocate-pencil-memory">
+<h2>Allocate pencil memory<a class="headerlink" href="#allocate-pencil-memory" title="Permalink to this headline">¶</a></h2>
+<p>Once the grid descriptor is created, we can now query information about the decomposition and allocate device memory
+to use for the pencil data.</p>
+<p>First, we can query basic information (i.e. metadata) about the pencil configurations that the library
+assigned to this process using the <a class="reference internal" href="api/c_api.html#cudecompgetpencilinfo-ref"><span class="std std-ref">cudecompGetPencilInfo</span></a> function. This function returns a
+pencil info structure (<a class="reference internal" href="api/c_api.html#cudecomppencilinfo-t-ref"><span class="std std-ref">cudecompPencilInfo_t</span></a>) that contains the shape, global lower and upper
+index bounds (<code class="code docutils literal notranslate"><span class="pre">lo</span></code> and <code class="code docutils literal notranslate"><span class="pre">hi</span></code>), size of the pencil, and an <code class="code docutils literal notranslate"><span class="pre">order</span></code> array to indicate the memory layout
+that will be used (to handle permuted, <cite>axis-contiguous</cite> layouts). Additionally, there is a <code class="code docutils literal notranslate"><span class="pre">halo_extents</span></code> data
+member that indicates the depth of halos for the pencil, by axis, if the argument was provided
+to this function. This data member is a copy of the argument provided to the function
+and is stored for convenience.</p>
+<p>It should be noted that these metadata structures are provided solely for users to
+interpret and access data from the data buffers used as input/output arguments to the different
+cuDecomp communication functions. Outside of autotuning, the library does not allocate memory
+for pencil buffers, nor uses these pencil information structures as input arguments.</p>
+<p>In this example, we apply halo elements to the <span class="math notranslate nohighlight">\(X\)</span>-pencils only. For the other pencils,
+we instead pass a <code class="code docutils literal notranslate"><span class="pre">nullptr</span></code> for the <code class="code docutils literal notranslate"><span class="pre">halo_extents</span></code> argument, which is equivalent
+to setting <code class="code docutils literal notranslate"><span class="pre">halo_extents</span> <span class="pre">=</span> <span class="pre">[0,</span> <span class="pre">0,</span> <span class="pre">0]</span></code> in C/C++. For Fortran, <code class="code docutils literal notranslate"><span class="pre">halo_extents</span></code> is optional
+and defaults to no halo regions.</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-8-Qysr" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-8-Qysr" name="Qysr" role="tab" tabindex="0">C++</button><button aria-controls="panel-8-Rm9ydHJhbg==" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-8-Rm9ydHJhbg==" name="Rm9ydHJhbg==" role="tab" tabindex="-1">Fortran</button></div><div aria-labelledby="tab-8-Qysr" class="sphinx-tabs-panel code-tab group-tab" id="panel-8-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// Get X-pencil information (with halo elements).</span>
+<span class="n">cudecompPencilInfo_t</span><span class="w"> </span><span class="n">pinfo_x</span><span class="p">;</span><span class="w"></span>
+<span class="kt">int32_t</span><span class="w"> </span><span class="n">halo_extents_x</span><span class="p">[</span><span class="mi">3</span><span class="p">]{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">};</span><span class="w"></span>
+<span class="n">CHECK_CUDECOMP_EXIT</span><span class="p">(</span><span class="n">cudecompGetPencilInfo</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="n">grid_desc</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">pinfo_x</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">halo_extents_x</span><span class="p">));</span><span class="w"></span>
+
+<span class="c1">// Get Y-pencil information</span>
+<span class="n">cudecompPencilInfo_t</span><span class="w"> </span><span class="n">pinfo_y</span><span class="p">;</span><span class="w"></span>
+<span class="n">CHECK_CUDECOMP_EXIT</span><span class="p">(</span><span class="n">cudecompGetPencilInfo</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="n">grid_desc</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">pinfo_y</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">));</span><span class="w"></span>
+
+<span class="c1">// Get Z-pencil information</span>
+<span class="n">cudecompPencilInfo_t</span><span class="w"> </span><span class="n">pinfo_z</span><span class="p">;</span><span class="w"></span>
+<span class="n">CHECK_CUDECOMP_EXIT</span><span class="p">(</span><span class="n">cudecompGetPencilInfo</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="n">grid_desc</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">pinfo_z</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">));</span><span class="w"></span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-8-Rm9ydHJhbg==" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-8-Rm9ydHJhbg==" name="Rm9ydHJhbg==" role="tabpanel" tabindex="0"><div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">type</span><span class="p">(</span><span class="n">cudecompPencilInfo</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">pinfo_x</span><span class="p">,</span><span class="w"> </span><span class="n">pinfo_y</span><span class="p">,</span><span class="w"> </span><span class="n">pinfo_z</span><span class="w"></span>
+<span class="p">...</span><span class="w"></span>
+
+<span class="c">! Get X-pencil information (with halo elements)</span>
+<span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cudecompGetPencilInfo</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="n">grid_desc</span><span class="p">,</span><span class="w"> </span><span class="n">pinfo_x</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">])</span><span class="w"></span>
+<span class="k">call </span><span class="n">CHECK_CUDECOMP_EXIT</span><span class="p">(</span><span class="n">istat</span><span class="p">)</span><span class="w"></span>
+
+<span class="c">! Get Y-pencil information</span>
+<span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cudecompGetPencilInfo</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="n">grid_desc</span><span class="p">,</span><span class="w"> </span><span class="n">pinfo_y</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
+<span class="k">call </span><span class="n">CHECK_CUDECOMP_EXIT</span><span class="p">(</span><span class="n">istat</span><span class="p">)</span><span class="w"></span>
+
+<span class="c">! Get Z-pencil information</span>
+<span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cudecompGetPencilInfo</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="n">grid_desc</span><span class="p">,</span><span class="w"> </span><span class="n">pinfo_z</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="w"></span>
+<span class="k">call </span><span class="n">CHECK_CUDECOMP_EXIT</span><span class="p">(</span><span class="n">istat</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+</div></div>
+<p>With the information from the pencil info structures, we can now allocate device memory to use with cuDecomp.
+In this example, we allocate a single device buffer <code class="code docutils literal notranslate"><span class="pre">data_d</span></code> that is large enough to hold the largest
+pencil assigned to this process, across the three axes. We also allocate an equivalently sized buffer on the
+host, <code class="code docutils literal notranslate"><span class="pre">data</span></code>, for convenience.</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-9-Qysr" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-9-Qysr" name="Qysr" role="tab" tabindex="0">C++</button><button aria-controls="panel-9-Rm9ydHJhbg==" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-9-Rm9ydHJhbg==" name="Rm9ydHJhbg==" role="tab" tabindex="-1">Fortran</button></div><div aria-labelledby="tab-9-Qysr" class="sphinx-tabs-panel code-tab group-tab" id="panel-9-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">int64_t</span><span class="w"> </span><span class="n">data_num_elements</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">max</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">max</span><span class="p">(</span><span class="n">pinfo_x</span><span class="p">.</span><span class="n">size</span><span class="p">,</span><span class="w"> </span><span class="n">pinfo_y</span><span class="p">.</span><span class="n">size</span><span class="p">),</span><span class="w"> </span><span class="n">pinfo_z</span><span class="p">.</span><span class="n">size</span><span class="p">);</span><span class="w"></span>
+
+<span class="c1">// Allocate device buffer</span>
+<span class="kt">double</span><span class="o">*</span><span class="w"> </span><span class="n">data_d</span><span class="p">;</span><span class="w"></span>
+<span class="n">CHECK_CUDA_EXIT</span><span class="p">(</span><span class="n">cudaMalloc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">data_d</span><span class="p">,</span><span class="w"> </span><span class="n">data_num_elements</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="o">*</span><span class="n">data_d</span><span class="p">)));</span><span class="w"></span>
+
+<span class="c1">// Allocate host buffer</span>
+<span class="kt">double</span><span class="o">*</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">malloc</span><span class="p">(</span><span class="n">data_num_elements</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="o">*</span><span class="n">data</span><span class="p">)));</span><span class="w"></span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-9-Rm9ydHJhbg==" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-9-Rm9ydHJhbg==" name="Rm9ydHJhbg==" role="tabpanel" tabindex="0"><div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="k">data</span><span class="p">(:)</span><span class="w"></span>
+<span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="p">,</span><span class="w"> </span><span class="n">device</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">data_d</span><span class="p">(:)</span><span class="w"></span>
+<span class="kt">integer</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">data_num_elements</span><span class="w"></span>
+<span class="p">...</span><span class="w"></span>
+
+<span class="n">data_num_elements</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">max</span><span class="p">(</span><span class="n">pinfo_x</span><span class="p">%</span><span class="n">size</span><span class="p">,</span><span class="w"> </span><span class="n">pinfo_y</span><span class="p">%</span><span class="n">size</span><span class="p">,</span><span class="w"> </span><span class="n">pinfo_z</span><span class="p">%</span><span class="n">size</span><span class="p">)</span><span class="w"></span>
+
+<span class="c">! Allocate device buffer</span>
+<span class="k">allocate</span><span class="p">(</span><span class="n">data_d</span><span class="p">(</span><span class="n">data_num_elements</span><span class="p">))</span><span class="w"></span>
+
+<span class="c">! Allocate host buffer</span>
+<span class="k">allocate</span><span class="p">(</span><span class="k">data</span><span class="p">(</span><span class="n">data_num_elements</span><span class="p">))</span><span class="w"></span>
+</pre></div>
+</div>
+</div></div>
+</section>
+<section id="working-with-pencil-data">
+<h2>Working with pencil data<a class="headerlink" href="#working-with-pencil-data" title="Permalink to this headline">¶</a></h2>
+<p>The pencil info structures are also used to access and manipulate data within the allocated pencil buffers.
+For illustrative purposes, we will use the <span class="math notranslate nohighlight">\(X\)</span>-pencil info structure here, but this
+will work for any of the axis pencils.</p>
+<section id="c-c">
+<h3>C/C++<a class="headerlink" href="#c-c" title="Permalink to this headline">¶</a></h3>
+<p>First, here are examples of accessing/setting the pencil buffer data on the host in C/C++.</p>
+<p>Here is an example of accessing the <span class="math notranslate nohighlight">\(X\)</span>-pencil buffer data on the host using a flattened loop:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int64_t</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">pinfo_x</span><span class="p">.</span><span class="n">size</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">l</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="c1">// Compute pencil-local coordinates, which are possibly in a permuted order.</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="n">pinfo_x</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span><span class="w"></span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">pinfo_x</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="n">pinfo_x</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span><span class="w"></span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="n">pinfo_x</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">pinfo_x</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1">// Compute global grid coordinates. To compute these, we offset the local coordinates</span>
+<span class="w">  </span><span class="c1">// using the lower bound, lo, and use the order array to map the local coordinate order</span>
+<span class="w">  </span><span class="c1">// to the global coordinate order.</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">gx</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span><span class="w"></span>
+<span class="w">  </span><span class="n">gx</span><span class="p">[</span><span class="n">pinfo_x</span><span class="p">.</span><span class="n">order</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">pinfo_x</span><span class="p">.</span><span class="n">lo</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span><span class="w"></span>
+<span class="w">  </span><span class="n">gx</span><span class="p">[</span><span class="n">pinfo_x</span><span class="p">.</span><span class="n">order</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">pinfo_x</span><span class="p">.</span><span class="n">lo</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span><span class="w"></span>
+<span class="w">  </span><span class="n">gx</span><span class="p">[</span><span class="n">pinfo_x</span><span class="p">.</span><span class="n">order</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">pinfo_x</span><span class="p">.</span><span class="n">lo</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1">// Since the X-pencil also has halo elements, we apply an additional offset for the halo</span>
+<span class="w">  </span><span class="c1">// elements in each direction, again using the order array to apply the extent to the</span>
+<span class="w">  </span><span class="c1">// appropriate global coordinate.</span>
+<span class="w">  </span><span class="n">gx</span><span class="p">[</span><span class="n">pinfo_x</span><span class="p">.</span><span class="n">order</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="w"> </span><span class="o">-=</span><span class="w">  </span><span class="n">pinfo_x</span><span class="p">.</span><span class="n">halo_extents</span><span class="p">[</span><span class="n">pinfo_x</span><span class="p">.</span><span class="n">order</span><span class="p">[</span><span class="mi">0</span><span class="p">]];</span><span class="w"></span>
+<span class="w">  </span><span class="n">gx</span><span class="p">[</span><span class="n">pinfo_x</span><span class="p">.</span><span class="n">order</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span><span class="w"> </span><span class="o">-=</span><span class="w">  </span><span class="n">pinfo_x</span><span class="p">.</span><span class="n">halo_extents</span><span class="p">[</span><span class="n">pinfo_x</span><span class="p">.</span><span class="n">order</span><span class="p">[</span><span class="mi">1</span><span class="p">]];</span><span class="w"></span>
+<span class="w">  </span><span class="n">gx</span><span class="p">[</span><span class="n">pinfo_x</span><span class="p">.</span><span class="n">order</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span><span class="w"> </span><span class="o">-=</span><span class="w">  </span><span class="n">pinfo_x</span><span class="p">.</span><span class="n">halo_extents</span><span class="p">[</span><span class="n">pinfo_x</span><span class="p">.</span><span class="n">order</span><span class="p">[</span><span class="mi">2</span><span class="p">]];</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1">// Finally, we can set the buffer element, for example using a function based on the</span>
+<span class="w">  </span><span class="c1">// global coordinates.</span>
+<span class="w">  </span><span class="n">data</span><span class="p">[</span><span class="n">l</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">gx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">gx</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">gx</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Alternatively, we can use a triple loop:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">int64_t</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pinfo_x</span><span class="p">.</span><span class="n">lo</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">pinfo_x</span><span class="p">.</span><span class="n">halo_extents</span><span class="p">[</span><span class="n">pinfo_x</span><span class="p">.</span><span class="n">order</span><span class="p">[</span><span class="mi">2</span><span class="p">]];</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">pinfo_x</span><span class="p">.</span><span class="n">hi</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">pinfo_x</span><span class="p">.</span><span class="n">halo_extents</span><span class="p">[</span><span class="n">pinfo_x</span><span class="p">.</span><span class="n">order</span><span class="p">[</span><span class="mi">2</span><span class="p">]];</span><span class="w"> </span><span class="o">++</span><span class="n">k</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pinfo_x</span><span class="p">.</span><span class="n">lo</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">pinfo_x</span><span class="p">.</span><span class="n">halo_extents</span><span class="p">[</span><span class="n">pinfo_x</span><span class="p">.</span><span class="n">order</span><span class="p">[</span><span class="mi">1</span><span class="p">]];</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">pinfo_x</span><span class="p">.</span><span class="n">hi</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">pinfo_x</span><span class="p">.</span><span class="n">halo_extents</span><span class="p">[</span><span class="n">pinfo_x</span><span class="p">.</span><span class="n">order</span><span class="p">[</span><span class="mi">1</span><span class="p">]];</span><span class="w"> </span><span class="o">++</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pinfo_x</span><span class="p">.</span><span class="n">lo</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">pinfo_x</span><span class="p">.</span><span class="n">halo_extents</span><span class="p">[</span><span class="n">pinfo_x</span><span class="p">.</span><span class="n">order</span><span class="p">[</span><span class="mi">0</span><span class="p">]];</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">pinfo_x</span><span class="p">.</span><span class="n">hi</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">pinfo_x</span><span class="p">.</span><span class="n">halo_extents</span><span class="p">[</span><span class="n">pinfo_x</span><span class="p">.</span><span class="n">order</span><span class="p">[</span><span class="mi">0</span><span class="p">]];</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+
+<span class="w">      </span><span class="c1">// i, j, k are global coordinate values. Use order array to map to global</span>
+<span class="w">      </span><span class="c1">// coordinate order.</span>
+<span class="w">      </span><span class="kt">int</span><span class="w"> </span><span class="n">gx</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span><span class="w"></span>
+<span class="w">      </span><span class="n">gx</span><span class="p">[</span><span class="n">pinfo_x</span><span class="p">.</span><span class="n">order</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="p">;</span><span class="w"></span>
+<span class="w">      </span><span class="n">gx</span><span class="p">[</span><span class="n">pinfo_x</span><span class="p">.</span><span class="n">order</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">j</span><span class="p">;</span><span class="w"></span>
+<span class="w">      </span><span class="n">gx</span><span class="p">[</span><span class="n">pinfo_x</span><span class="p">.</span><span class="n">order</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">k</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">      </span><span class="c1">// Set the buffer element.</span>
+<span class="w">      </span><span class="n">data</span><span class="p">[</span><span class="n">l</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">gx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">gx</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">gx</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span><span class="w"></span>
+<span class="w">      </span><span class="n">l</span><span class="o">++</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>After assigning values on the host, we can copy the initialized host data to the GPU using <code class="code docutils literal notranslate"><span class="pre">cudaMemcopy</span></code>:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">CHECK_CUDA_EXIT</span><span class="p">(</span><span class="n">cudaMemcpy</span><span class="p">(</span><span class="n">data_d</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="n">pinfo_x</span><span class="p">.</span><span class="n">size</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="o">*</span><span class="n">data</span><span class="p">),</span><span class="w"> </span><span class="n">cudaMemcpyHostToDevice</span><span class="p">));</span><span class="w"></span>
+</pre></div>
+</div>
+<p>It is also possible to access/set the pencil data on the GPU directly within a CUDA kernel by passing in the pencil
+info structure to the kernel as an argument. For example, we can write a CUDA kernel to initialize the pencil buffer, using a similar
+access pattern as the flattened array example above:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">__global__</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">initialize_pencil</span><span class="p">(</span><span class="kt">double</span><span class="o">*</span><span class="w"> </span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="n">cudecompPencilInfo_t</span><span class="w"> </span><span class="n">pinfo</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+
+<span class="w">  </span><span class="kt">int64_t</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">blockIdx</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">blockDim</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">threadIdx</span><span class="p">.</span><span class="n">x</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">l</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">pinfo</span><span class="p">.</span><span class="n">size</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="n">pinfo</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span><span class="w"></span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">pinfo</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="n">pinfo</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span><span class="w"></span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="n">pinfo</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">pinfo</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span><span class="w"></span>
+
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">gx</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span><span class="w"></span>
+<span class="w">  </span><span class="n">gx</span><span class="p">[</span><span class="n">pinfo</span><span class="p">.</span><span class="n">order</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">pinfo</span><span class="p">.</span><span class="n">lo</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span><span class="w"></span>
+<span class="w">  </span><span class="n">gx</span><span class="p">[</span><span class="n">pinfo</span><span class="p">.</span><span class="n">order</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">pinfo</span><span class="p">.</span><span class="n">lo</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span><span class="w"></span>
+<span class="w">  </span><span class="n">gx</span><span class="p">[</span><span class="n">pinfo</span><span class="p">.</span><span class="n">order</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">pinfo</span><span class="p">.</span><span class="n">lo</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">gx</span><span class="p">[</span><span class="n">pinfo</span><span class="p">.</span><span class="n">order</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="w"> </span><span class="o">-=</span><span class="w">  </span><span class="n">pinfo</span><span class="p">.</span><span class="n">halo_extents</span><span class="p">[</span><span class="n">pinfo</span><span class="p">.</span><span class="n">order</span><span class="p">[</span><span class="mi">0</span><span class="p">]];</span><span class="w"></span>
+<span class="w">  </span><span class="n">gx</span><span class="p">[</span><span class="n">pinfo</span><span class="p">.</span><span class="n">order</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span><span class="w"> </span><span class="o">-=</span><span class="w">  </span><span class="n">pinfo</span><span class="p">.</span><span class="n">halo_extents</span><span class="p">[</span><span class="n">pinfo</span><span class="p">.</span><span class="n">order</span><span class="p">[</span><span class="mi">1</span><span class="p">]];</span><span class="w"></span>
+<span class="w">  </span><span class="n">gx</span><span class="p">[</span><span class="n">pinfo</span><span class="p">.</span><span class="n">order</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span><span class="w"> </span><span class="o">-=</span><span class="w">  </span><span class="n">pinfo</span><span class="p">.</span><span class="n">halo_extents</span><span class="p">[</span><span class="n">pinfo</span><span class="p">.</span><span class="n">order</span><span class="p">[</span><span class="mi">2</span><span class="p">]];</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">gx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">gx</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">gx</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span><span class="w"></span>
+
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>and launch the kernel, passing in <code class="code docutils literal notranslate"><span class="pre">data_d</span></code> and <code class="code docutils literal notranslate"><span class="pre">pinfo_x</span></code>:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="n">threads_per_block</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">256</span><span class="p">;</span><span class="w"></span>
+<span class="kt">int</span><span class="w"> </span><span class="n">nblocks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">pinfo_x</span><span class="p">.</span><span class="n">size</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">threads_per_block</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">threads_per_block</span><span class="p">;</span><span class="w"></span>
+<span class="n">initialize_pencil</span><span class="o">&lt;&lt;&lt;</span><span class="n">nblocks</span><span class="p">,</span><span class="w"> </span><span class="n">threads_per_block</span><span class="o">&gt;&gt;&gt;</span><span class="p">(</span><span class="n">data_d</span><span class="p">,</span><span class="w"> </span><span class="n">pinfo_x</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="fortran">
+<h3>Fortran<a class="headerlink" href="#fortran" title="Permalink to this headline">¶</a></h3>
+<p>When using Fortran, it is convenient to use pointers associated with the pencil data buffers to
+enable more straightforward access using 3D indexing. For example, we can create pointers for each of the three
+pencil configurations, associated with a common host or device data array:</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="p">,</span><span class="w"> </span><span class="k">contiguous</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">data_x</span><span class="p">(:,:,:),</span><span class="w"> </span><span class="n">data_y</span><span class="p">(:,:,:),</span><span class="w"> </span><span class="n">data_z</span><span class="p">(:,:,:)</span><span class="w"></span>
+<span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="p">,</span><span class="w"> </span><span class="n">device</span><span class="p">,</span><span class="w"> </span><span class="k">contiguous</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">data_x_d</span><span class="p">(:,:,:),</span><span class="w"> </span><span class="n">data_y_d</span><span class="p">(:,:,:),</span><span class="w"> </span><span class="n">data_z_d</span><span class="p">(:,:,:)</span><span class="w"></span>
+<span class="p">...</span><span class="w"></span>
+
+<span class="c">! Host pointers</span>
+<span class="n">data_x</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">pinfo_x</span><span class="p">%</span><span class="nb">shape</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="mi">1</span><span class="p">:</span><span class="n">pinfo_x</span><span class="p">%</span><span class="nb">shape</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span><span class="w"> </span><span class="mi">1</span><span class="p">:</span><span class="n">pinfo_x</span><span class="p">%</span><span class="nb">shape</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="k">data</span><span class="p">(:)</span><span class="w"></span>
+<span class="n">data_y</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">pinfo_y</span><span class="p">%</span><span class="nb">shape</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="mi">1</span><span class="p">:</span><span class="n">pinfo_y</span><span class="p">%</span><span class="nb">shape</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span><span class="w"> </span><span class="mi">1</span><span class="p">:</span><span class="n">pinfo_y</span><span class="p">%</span><span class="nb">shape</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="k">data</span><span class="p">(:)</span><span class="w"></span>
+<span class="n">data_z</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">pinfo_z</span><span class="p">%</span><span class="nb">shape</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="mi">1</span><span class="p">:</span><span class="n">pinfo_z</span><span class="p">%</span><span class="nb">shape</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span><span class="w"> </span><span class="mi">1</span><span class="p">:</span><span class="n">pinfo_z</span><span class="p">%</span><span class="nb">shape</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="k">data</span><span class="p">(:)</span><span class="w"></span>
+
+<span class="c">! Device pointers</span>
+<span class="n">data_x_d</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">pinfo_x</span><span class="p">%</span><span class="nb">shape</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="mi">1</span><span class="p">:</span><span class="n">pinfo_x</span><span class="p">%</span><span class="nb">shape</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span><span class="w"> </span><span class="mi">1</span><span class="p">:</span><span class="n">pinfo_x</span><span class="p">%</span><span class="nb">shape</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">data_d</span><span class="p">(:)</span><span class="w"></span>
+<span class="n">data_y_d</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">pinfo_y</span><span class="p">%</span><span class="nb">shape</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="mi">1</span><span class="p">:</span><span class="n">pinfo_y</span><span class="p">%</span><span class="nb">shape</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span><span class="w"> </span><span class="mi">1</span><span class="p">:</span><span class="n">pinfo_y</span><span class="p">%</span><span class="nb">shape</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">data_d</span><span class="p">(:)</span><span class="w"></span>
+<span class="n">data_z_d</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">pinfo_z</span><span class="p">%</span><span class="nb">shape</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="mi">1</span><span class="p">:</span><span class="n">pinfo_z</span><span class="p">%</span><span class="nb">shape</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span><span class="w"> </span><span class="mi">1</span><span class="p">:</span><span class="n">pinfo_z</span><span class="p">%</span><span class="nb">shape</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">data_d</span><span class="p">(:)</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Here is an example of accessing the <span class="math notranslate nohighlight">\(X\)</span>-pencil buffer data on the host using a triple loop with the <code class="code docutils literal notranslate"><span class="pre">data_x</span></code> pointer:</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">gx</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="w"></span>
+<span class="p">...</span><span class="w"></span>
+
+<span class="k">do </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">pinfo_x</span><span class="p">%</span><span class="nb">shape</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="k">do </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">pinfo_x</span><span class="p">%</span><span class="nb">shape</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="k">do </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">pinfo_x</span><span class="p">%</span><span class="nb">shape</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="c">! Compute global grid coordinates. To compute these, we offset the local coordinates</span>
+<span class="w">      </span><span class="c">! using the lower bound, lo, and use the order array to map the local coordinate order</span>
+<span class="w">      </span><span class="c">! to the global coordinate order.</span>
+<span class="w">      </span><span class="n">gx</span><span class="p">(</span><span class="n">pinfo_x</span><span class="p">%</span><span class="n">order</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">pinfo_x</span><span class="p">%</span><span class="n">lo</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="w">      </span><span class="n">gx</span><span class="p">(</span><span class="n">pinfo_x</span><span class="p">%</span><span class="n">order</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">pinfo_x</span><span class="p">%</span><span class="n">lo</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="w">      </span><span class="n">gx</span><span class="p">(</span><span class="n">pinfo_x</span><span class="p">%</span><span class="n">order</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">pinfo_x</span><span class="p">%</span><span class="n">lo</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+
+<span class="w">      </span><span class="c">! Since the X-pencil also has halo elements, we apply an additional offset for the halo</span>
+<span class="w">      </span><span class="c">! elements in each direction, again using the order array to apply the extent to the</span>
+<span class="w">      </span><span class="c">! appropriate global coordinate</span>
+<span class="w">      </span><span class="n">gx</span><span class="p">(</span><span class="n">pinfo_x</span><span class="p">%</span><span class="n">order</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="w"> </span><span class="o">=</span><span class="w">  </span><span class="n">gx</span><span class="p">(</span><span class="n">pinfo_x</span><span class="p">%</span><span class="n">order</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">pinfo_x</span><span class="p">%</span><span class="n">halo_extents</span><span class="p">(</span><span class="n">pinfo_x</span><span class="p">%</span><span class="n">order</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="w"></span>
+<span class="w">      </span><span class="n">gx</span><span class="p">(</span><span class="n">pinfo_x</span><span class="p">%</span><span class="n">order</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="w"> </span><span class="o">=</span><span class="w">  </span><span class="n">gx</span><span class="p">(</span><span class="n">pinfo_x</span><span class="p">%</span><span class="n">order</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">pinfo_x</span><span class="p">%</span><span class="n">halo_extents</span><span class="p">(</span><span class="n">pinfo_x</span><span class="p">%</span><span class="n">order</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="w"></span>
+<span class="w">      </span><span class="n">gx</span><span class="p">(</span><span class="n">pinfo_x</span><span class="p">%</span><span class="n">order</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span><span class="w"> </span><span class="o">=</span><span class="w">  </span><span class="n">gx</span><span class="p">(</span><span class="n">pinfo_x</span><span class="p">%</span><span class="n">order</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">pinfo_x</span><span class="p">%</span><span class="n">halo_extents</span><span class="p">(</span><span class="n">pinfo_x</span><span class="p">%</span><span class="n">order</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span><span class="w"></span>
+
+<span class="w">      </span><span class="c">! Finally, we can set the buffer element, for example using a function based on the</span>
+<span class="w">      </span><span class="c">! global coordinates.</span>
+<span class="w">      </span><span class="n">data_x</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">gx</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">gx</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">gx</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">enddo</span>
+<span class="k">  enddo</span>
+<span class="k">enddo</span><span class="w"></span>
+</pre></div>
+</div>
+<p>We can then copy the initialized host data to the GPU, in this case using direct assignment from CUDA Fortran:</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="n">data_d</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">data</span><span class="w"></span>
+</pre></div>
+</div>
+<p>We can also initialize the data directly on the device via a CUDA Fortran kernel, similar to the example shown in the C/C++ section above. For Fortran programs however, it is more common to use directive-based approaches like OpenACC or CUDA Fortran CUF kernel directives. For example, using an OpenACC directive (highlighted), we can directly use a triple loop like on the host to initialize the buffer on the device.</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="hll"><span class="c">!$acc parallel loop collapse(3) private(gx)</span>
+</span><span class="k">do </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">pinfo_x</span><span class="p">%</span><span class="nb">shape</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="k">do </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">pinfo_x</span><span class="p">%</span><span class="nb">shape</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="k">do </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">pinfo_x</span><span class="p">%</span><span class="nb">shape</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="c">! Compute global grid coordinates. To compute these, we offset the local coordinates</span>
+<span class="w">      </span><span class="c">! using the lower bound, lo, and use the order array to map the local coordinate order</span>
+<span class="w">      </span><span class="c">! to the global coordinate order.</span>
+<span class="w">      </span><span class="n">gx</span><span class="p">(</span><span class="n">pinfo_x</span><span class="p">%</span><span class="n">order</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">pinfo_x</span><span class="p">%</span><span class="n">lo</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="w">      </span><span class="n">gx</span><span class="p">(</span><span class="n">pinfo_x</span><span class="p">%</span><span class="n">order</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">pinfo_x</span><span class="p">%</span><span class="n">lo</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="w">      </span><span class="n">gx</span><span class="p">(</span><span class="n">pinfo_x</span><span class="p">%</span><span class="n">order</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">pinfo_x</span><span class="p">%</span><span class="n">lo</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+
+<span class="w">      </span><span class="c">! Since the X-pencil also has halo elements, we apply an additional offset for the halo</span>
+<span class="w">      </span><span class="c">! elements in each direction, again using the order array to apply the extent to the</span>
+<span class="w">      </span><span class="c">! appropriate global coordinate</span>
+<span class="w">      </span><span class="n">gx</span><span class="p">(</span><span class="n">pinfo_x</span><span class="p">%</span><span class="n">order</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="w"> </span><span class="o">=</span><span class="w">  </span><span class="n">gx</span><span class="p">(</span><span class="n">pinfo_x</span><span class="p">%</span><span class="n">order</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">pinfo_x</span><span class="p">%</span><span class="n">halo_extents</span><span class="p">(</span><span class="n">pinfo_x</span><span class="p">%</span><span class="n">order</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="w"></span>
+<span class="w">      </span><span class="n">gx</span><span class="p">(</span><span class="n">pinfo_x</span><span class="p">%</span><span class="n">order</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="w"> </span><span class="o">=</span><span class="w">  </span><span class="n">gx</span><span class="p">(</span><span class="n">pinfo_x</span><span class="p">%</span><span class="n">order</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">pinfo_x</span><span class="p">%</span><span class="n">halo_extents</span><span class="p">(</span><span class="n">pinfo_x</span><span class="p">%</span><span class="n">order</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="w"></span>
+<span class="w">      </span><span class="n">gx</span><span class="p">(</span><span class="n">pinfo_x</span><span class="p">%</span><span class="n">order</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span><span class="w"> </span><span class="o">=</span><span class="w">  </span><span class="n">gx</span><span class="p">(</span><span class="n">pinfo_x</span><span class="p">%</span><span class="n">order</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">pinfo_x</span><span class="p">%</span><span class="n">halo_extents</span><span class="p">(</span><span class="n">pinfo_x</span><span class="p">%</span><span class="n">order</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span><span class="w"></span>
+
+<span class="w">      </span><span class="c">! Finally, we can set the buffer element, for example using a function based on the</span>
+<span class="w">      </span><span class="c">! global coordinates.</span>
+<span class="w">      </span><span class="n">data_x_d</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">gx</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">gx</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">gx</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">enddo</span>
+<span class="k">  enddo</span>
+<span class="k">enddo</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="allocating-workspace">
+<h2>Allocating workspace<a class="headerlink" href="#allocating-workspace" title="Permalink to this headline">¶</a></h2>
+<p>Besides device memory to store pencil data, cuDecomp also requires workspace buffers on the device. For transposes, the workspace
+is used to facilitate local packing/unpacking and transposition operations (which are currently performed
+out-of-place). As a result, this workspace buffer will be approximately 2x the size of the largest pencil
+assigned to this process. For halo communication, the workspace is used to facilitate local packing of non-contiguous
+halo elements. We can query the required workspace sizes, in number of elements, using the
+<a class="reference internal" href="api/c_api.html#cudecompgettransposeworkspacesize-ref"><span class="std std-ref">cudecompGetTransposeWorkspaceSize</span></a> and <a class="reference internal" href="api/c_api.html#cudecompgethaloworkspacesize-ref"><span class="std std-ref">cudecompGetHaloWorkspaceSize</span></a> functions.</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-10-Qysr" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-10-Qysr" name="Qysr" role="tab" tabindex="0">C++</button><button aria-controls="panel-10-Rm9ydHJhbg==" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-10-Rm9ydHJhbg==" name="Rm9ydHJhbg==" role="tab" tabindex="-1">Fortran</button></div><div aria-labelledby="tab-10-Qysr" class="sphinx-tabs-panel code-tab group-tab" id="panel-10-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">int64_t</span><span class="w"> </span><span class="n">transpose_work_num_elements</span><span class="p">;</span><span class="w"></span>
+<span class="n">CHECK_CUDECOMP_EXIT</span><span class="p">(</span><span class="n">cudecompGetTransposeWorkspaceSize</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="n">grid_desc</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                                      </span><span class="o">&amp;</span><span class="n">transpose_work_num_elements</span><span class="p">));</span><span class="w"></span>
+
+<span class="kt">int64_t</span><span class="w"> </span><span class="n">halo_work_num_elements</span><span class="p">;</span><span class="w"></span>
+<span class="n">CHECK_CUDECOMP_EXIT</span><span class="p">(</span><span class="n">cudecompGetHaloWorkspaceSize</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="n">grid_desc</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">pinfo_x</span><span class="p">.</span><span class="n">halo_extents</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                                 </span><span class="o">&amp;</span><span class="n">halo_work_num_elements</span><span class="p">));</span><span class="w"></span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-10-Rm9ydHJhbg==" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-10-Rm9ydHJhbg==" name="Rm9ydHJhbg==" role="tabpanel" tabindex="0"><div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="kt">integer</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">transpose_work_num_elements</span><span class="p">,</span><span class="w"> </span><span class="n">halo_work_num_elements</span><span class="w"></span>
+
+<span class="p">...</span><span class="w"></span>
+
+<span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cudecompGetTransposeWorkspaceSize</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="n">grid_desc</span><span class="p">,</span><span class="w"> </span><span class="n">transpose_work_num_elements</span><span class="p">)</span><span class="w"></span>
+<span class="k">call </span><span class="n">CHECK_CUDECOMP_EXIT</span><span class="p">(</span><span class="n">istat</span><span class="p">)</span><span class="w"></span>
+
+<span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cudecompGetHaloWorkspaceSize</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="n">grid_desc</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="n">halo_work_num_elements</span><span class="p">)</span><span class="w"></span>
+<span class="k">call </span><span class="n">CHECK_CUDECOMP_EXIT</span><span class="p">(</span><span class="n">istat</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+</div></div>
+<p>To allocate the workspaces, use the provided <a class="reference internal" href="api/c_api.html#cudecompmalloc-ref"><span class="std std-ref">cudecompMalloc</span></a> function. This allocation function will
+often use <code class="code docutils literal notranslate"><span class="pre">cudaMalloc</span></code> to allocate the workspace buffer; however, if the grid descriptor passed in is using an
+NVSHMEM-enabled communication backend, it will use nvshmem_malloc to allocate memory on the symmetric heap, which
+is required for NVSHMEM operations (see NVSHMEM documentation for more details).</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-11-Qysr" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-11-Qysr" name="Qysr" role="tab" tabindex="0">C++</button><button aria-controls="panel-11-Rm9ydHJhbg==" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-11-Rm9ydHJhbg==" name="Rm9ydHJhbg==" role="tab" tabindex="-1">Fortran</button></div><div aria-labelledby="tab-11-Qysr" class="sphinx-tabs-panel code-tab group-tab" id="panel-11-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">int64_t</span><span class="w"> </span><span class="n">dtype_size</span><span class="p">;</span><span class="w"></span>
+<span class="n">CHECK_CUDECOMP_EXIT</span><span class="p">(</span><span class="n">cudecompGetDataTypeSize</span><span class="p">(</span><span class="n">CUDECOMP_DOUBLE</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">dtype_size</span><span class="p">));</span><span class="w"></span>
+
+<span class="kt">double</span><span class="o">*</span><span class="w"> </span><span class="n">transpose_work_d</span><span class="p">;</span><span class="w"></span>
+<span class="n">CHECK_CUDECOMP_EXIT</span><span class="p">(</span><span class="n">cudecompMalloc</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="n">grid_desc</span><span class="p">,</span><span class="w"> </span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">**&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">transpose_work_d</span><span class="p">),</span><span class="w"></span>
+<span class="w">                    </span><span class="n">transpose_work_num_elements</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">dtype_size</span><span class="p">));</span><span class="w"></span>
+
+<span class="kt">double</span><span class="o">*</span><span class="w"> </span><span class="n">halo_work_d</span><span class="p">;</span><span class="w"></span>
+<span class="n">CHECK_CUDECOMP_EXIT</span><span class="p">(</span><span class="n">cudecompMalloc</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="n">grid_desc</span><span class="p">,</span><span class="w"> </span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">**&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">halo_work_d</span><span class="p">),</span><span class="w"></span>
+<span class="w">                    </span><span class="n">halo_work_num_elements</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">dtype_size</span><span class="p">));</span><span class="w"></span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-11-Rm9ydHJhbg==" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-11-Rm9ydHJhbg==" name="Rm9ydHJhbg==" role="tabpanel" tabindex="0"><div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="kt">real</span><span class="p">(</span><span class="n">real64</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="p">,</span><span class="w"> </span><span class="n">device</span><span class="p">,</span><span class="w"> </span><span class="k">contiguous</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">transpose_work_d</span><span class="p">(:),</span><span class="w"> </span><span class="n">halo_work_d</span><span class="p">(:)</span><span class="w"></span>
+<span class="p">...</span><span class="w"></span>
+
+<span class="c">! Note: *_work_d arrays are of type consistent with cudecompDataType to be used (CUDECOMP_DOUBLE). Otherwise,</span>
+<span class="c">! must adjust workspace_num_elements to allocate enough workspace.</span>
+<span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cudecompMalloc</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="n">grid_desc</span><span class="p">,</span><span class="w"> </span><span class="n">transpose_work_d</span><span class="p">,</span><span class="w"> </span><span class="n">transpose_work_num_elements</span><span class="p">)</span><span class="w"></span>
+<span class="k">call </span><span class="n">CHECK_CUDECOMP_EXIT</span><span class="p">(</span><span class="n">istat</span><span class="p">)</span><span class="w"></span>
+
+<span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cudecompMalloc</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="n">grid_desc</span><span class="p">,</span><span class="w"> </span><span class="n">halo_work_d</span><span class="p">,</span><span class="w"> </span><span class="n">halo_work_num_elements</span><span class="p">)</span><span class="w"></span>
+<span class="k">call </span><span class="n">CHECK_CUDECOMP_EXIT</span><span class="p">(</span><span class="n">istat</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+</div></div>
+</section>
+<section id="transposing-the-data">
+<h2>Transposing the data<a class="headerlink" href="#transposing-the-data" title="Permalink to this headline">¶</a></h2>
+<p>Now, we can use cuDecomp’s transposition routines to transpose our data. In these calls, we are using
+the <code class="code docutils literal notranslate"><span class="pre">data_d</span></code> array as both input and output (in-place), but you can also use distinct input and output buffers for
+out-of-place operations. For the transposes between <span class="math notranslate nohighlight">\(Y\)</span>- and <span class="math notranslate nohighlight">\(Z\)</span>-pencils, we can pass
+null pointers to the halo extent arguments to the routines to ignore them in C/C++, or leave them unspecified in Fortran.</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-12-Qysr" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-12-Qysr" name="Qysr" role="tab" tabindex="0">C++</button><button aria-controls="panel-12-Rm9ydHJhbg==" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-12-Rm9ydHJhbg==" name="Rm9ydHJhbg==" role="tab" tabindex="-1">Fortran</button></div><div aria-labelledby="tab-12-Qysr" class="sphinx-tabs-panel code-tab group-tab" id="panel-12-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// Transpose from X-pencils to Y-pencils.</span>
+<span class="n">CHECK_CUDECOMP_EXIT</span><span class="p">(</span><span class="n">cudecompTransposeXToY</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="n">grid_desc</span><span class="p">,</span><span class="w"> </span><span class="n">data_d</span><span class="p">,</span><span class="w"> </span><span class="n">data_d</span><span class="p">,</span><span class="w"> </span><span class="n">transpose_work_d</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                          </span><span class="n">CUDECOMP_DOUBLE</span><span class="p">,</span><span class="w"> </span><span class="n">pinfo_x</span><span class="p">.</span><span class="n">halo_extents</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">));</span><span class="w"></span>
+
+<span class="c1">// Transpose from Y-pencils to Z-pencils.</span>
+<span class="n">CHECK_CUDECOMP_EXIT</span><span class="p">(</span><span class="n">cudecompTransposeYToZ</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="n">grid_desc</span><span class="p">,</span><span class="w"> </span><span class="n">data_d</span><span class="p">,</span><span class="w"> </span><span class="n">data_d</span><span class="p">,</span><span class="w"> </span><span class="n">transpose_work_d</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                          </span><span class="n">CUDECOMP_DOUBLE</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">));</span><span class="w"></span>
+
+<span class="c1">// Transpose from Z-pencils to Y-pencils.</span>
+<span class="n">CHECK_CUDECOMP_EXIT</span><span class="p">(</span><span class="n">cudecompTransposeZToY</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="n">grid_desc</span><span class="p">,</span><span class="w"> </span><span class="n">data_d</span><span class="p">,</span><span class="w"> </span><span class="n">data_d</span><span class="p">,</span><span class="w"> </span><span class="n">transpose_work_d</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                          </span><span class="n">CUDECOMP_DOUBLE</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">));</span><span class="w"></span>
+
+<span class="c1">// Transpose from Y-pencils to X-pencils.</span>
+<span class="n">CHECK_CUDECOMP_EXIT</span><span class="p">(</span><span class="n">cudecompTransposeYToX</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="n">grid_desc</span><span class="p">,</span><span class="w"> </span><span class="n">data_d</span><span class="p">,</span><span class="w"> </span><span class="n">data_d</span><span class="p">,</span><span class="w"> </span><span class="n">transpose_work_d</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                          </span><span class="n">CUDECOMP_DOUBLE</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">,</span><span class="w"> </span><span class="n">pinfo_x</span><span class="p">.</span><span class="n">halo_extents</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">));</span><span class="w"></span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-12-Rm9ydHJhbg==" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-12-Rm9ydHJhbg==" name="Rm9ydHJhbg==" role="tabpanel" tabindex="0"><div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="c">! Transpose from X-pencils to Y-pencils.</span>
+<span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cudecompTransposeXToY</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="n">grid_desc</span><span class="p">,</span><span class="w"> </span><span class="n">data_d</span><span class="p">,</span><span class="w"> </span><span class="n">data_d</span><span class="p">,</span><span class="w"> </span><span class="n">transpose_work_d</span><span class="p">,</span><span class="w"> </span><span class="n">CUDECOMP_DOUBLE</span><span class="p">,</span><span class="w"> </span><span class="n">pinfo_x</span><span class="p">%</span><span class="n">halo_extents</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span><span class="w"></span>
+<span class="k">call </span><span class="n">CHECK_CUDECOMP_EXIT</span><span class="p">(</span><span class="n">istat</span><span class="p">)</span><span class="w"></span>
+
+<span class="c">! Transpose from Y-pencils to Z-pencils.</span>
+<span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cudecompTransposeYToZ</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="n">grid_desc</span><span class="p">,</span><span class="w"> </span><span class="n">data_d</span><span class="p">,</span><span class="w"> </span><span class="n">data_d</span><span class="p">,</span><span class="w"> </span><span class="n">transpose_work_d</span><span class="p">,</span><span class="w"> </span><span class="n">CUDECOMP_DOUBLE</span><span class="p">)</span><span class="w"></span>
+<span class="k">call </span><span class="n">CHECK_CUDECOMP_EXIT</span><span class="p">(</span><span class="n">istat</span><span class="p">)</span><span class="w"></span>
+
+<span class="c">! Transpose from Z-pencils to Y-pencils.</span>
+<span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cudecompTransposeZToY</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="n">grid_desc</span><span class="p">,</span><span class="w"> </span><span class="n">data_d</span><span class="p">,</span><span class="w"> </span><span class="n">data_d</span><span class="p">,</span><span class="w"> </span><span class="n">transpose_work_d</span><span class="p">,</span><span class="w"> </span><span class="n">CUDECOMP_DOUBLE</span><span class="p">)</span><span class="w"></span>
+<span class="k">call </span><span class="n">CHECK_CUDECOMP_EXIT</span><span class="p">(</span><span class="n">istat</span><span class="p">)</span><span class="w"></span>
+
+<span class="c">! Transpose from Y-pencils to X-pencils.</span>
+<span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cudecompTransposeYToX</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="n">grid_desc</span><span class="p">,</span><span class="w"> </span><span class="n">data_d</span><span class="p">,</span><span class="w"> </span><span class="n">data_d</span><span class="p">,</span><span class="w"> </span><span class="n">transpose_work_d</span><span class="p">,</span><span class="w"> </span><span class="n">CUDECOMP_DOUBLE</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="n">pinfo_x</span><span class="p">%</span><span class="n">halo_extents</span><span class="p">)</span><span class="w"></span>
+<span class="k">call </span><span class="n">CHECK_CUDECOMP_EXIT</span><span class="p">(</span><span class="n">istat</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+</div></div>
+</section>
+<section id="updating-halo-regions">
+<h2>Updating halo regions<a class="headerlink" href="#updating-halo-regions" title="Permalink to this headline">¶</a></h2>
+<p>In this example, we have halos for the <span class="math notranslate nohighlight">\(X\)</span>-pencils only. We can use cuDecomp’s halo update
+routines to update the halo regions of this pencil in the three domain directions. In this example,
+we set the <code class="code docutils literal notranslate"><span class="pre">halo_periods</span></code> argument to enable periodic halos along all directions.</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-13-Qysr" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-13-Qysr" name="Qysr" role="tab" tabindex="0">C++</button><button aria-controls="panel-13-Rm9ydHJhbg==" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-13-Rm9ydHJhbg==" name="Rm9ydHJhbg==" role="tab" tabindex="-1">Fortran</button></div><div aria-labelledby="tab-13-Qysr" class="sphinx-tabs-panel code-tab group-tab" id="panel-13-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// Setting for periodic halos in all directions</span>
+<span class="kt">bool</span><span class="w"> </span><span class="n">halo_periods</span><span class="p">[</span><span class="mi">3</span><span class="p">]{</span><span class="nb">true</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">};</span><span class="w"></span>
+
+<span class="c1">// Update X-pencil halos in X direction</span>
+<span class="n">CHECK_CUDECOMP_EXIT</span><span class="p">(</span><span class="n">cudecompUpdateHalosX</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="n">grid_desc</span><span class="p">,</span><span class="w"> </span><span class="n">data_d</span><span class="p">,</span><span class="w"> </span><span class="n">halo_work_d</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                         </span><span class="n">CUDECOMP_DOUBLE</span><span class="p">,</span><span class="w"> </span><span class="n">pinfo_x</span><span class="p">.</span><span class="n">halo_extents</span><span class="p">,</span><span class="w"> </span><span class="n">halo_periods</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                         </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">));</span><span class="w"></span>
+
+<span class="c1">// Update X-pencil halos in Y direction</span>
+<span class="n">CHECK_CUDECOMP_EXIT</span><span class="p">(</span><span class="n">cudecompUpdateHalosX</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="n">grid_desc</span><span class="p">,</span><span class="w"> </span><span class="n">data_d</span><span class="p">,</span><span class="w"> </span><span class="n">halo_work_d</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                         </span><span class="n">CUDECOMP_DOUBLE</span><span class="p">,</span><span class="w"> </span><span class="n">pinfo_x</span><span class="p">.</span><span class="n">halo_extents</span><span class="p">,</span><span class="w"> </span><span class="n">halo_periods</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                         </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">));</span><span class="w"></span>
+
+<span class="c1">// Update X-pencil halos in Z direction</span>
+<span class="n">CHECK_CUDECOMP_EXIT</span><span class="p">(</span><span class="n">cudecompUpdateHalosX</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="n">grid_desc</span><span class="p">,</span><span class="w"> </span><span class="n">data_d</span><span class="p">,</span><span class="w"> </span><span class="n">halo_work_d</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                         </span><span class="n">CUDECOMP_DOUBLE</span><span class="p">,</span><span class="w"> </span><span class="n">pinfo_x</span><span class="p">.</span><span class="n">halo_extents</span><span class="p">,</span><span class="w"> </span><span class="n">halo_periods</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                         </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">));</span><span class="w"></span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-13-Rm9ydHJhbg==" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-13-Rm9ydHJhbg==" name="Rm9ydHJhbg==" role="tabpanel" tabindex="0"><div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="c">! Setting for periodic halos in all directions</span>
+<span class="n">halo_periods</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[.</span><span class="n">true</span><span class="p">.,</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.,</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.]</span><span class="w"></span>
+
+<span class="c">! Update X-pencil halos in X direction</span>
+<span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cudecompUpdateHalosX</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="n">grid_desc</span><span class="p">,</span><span class="w"> </span><span class="n">data_d</span><span class="p">,</span><span class="w"> </span><span class="n">halo_work_d</span><span class="p">,</span><span class="w"> </span><span class="n">CUDECOMP_DOUBLE</span><span class="p">,</span><span class="w"> </span><span class="n">pinfo_x</span><span class="p">%</span><span class="n">halo_extents</span><span class="p">,</span><span class="w"> </span><span class="n">halo_periods</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="k">call </span><span class="n">CHECK_CUDECOMP_EXIT</span><span class="p">(</span><span class="n">istat</span><span class="p">)</span><span class="w"></span>
+
+<span class="c">! Update X-pencil halos in Y direction</span>
+<span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cudecompUpdateHalosX</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="n">grid_desc</span><span class="p">,</span><span class="w"> </span><span class="n">data_d</span><span class="p">,</span><span class="w"> </span><span class="n">halo_work_d</span><span class="p">,</span><span class="w"> </span><span class="n">CUDECOMP_DOUBLE</span><span class="p">,</span><span class="w"> </span><span class="n">pinfo_x</span><span class="p">%</span><span class="n">halo_extents</span><span class="p">,</span><span class="w"> </span><span class="n">halo_periods</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
+<span class="k">call </span><span class="n">CHECK_CUDECOMP_EXIT</span><span class="p">(</span><span class="n">istat</span><span class="p">)</span><span class="w"></span>
+
+<span class="c">! Update X-pencil halos in Z direction</span>
+<span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cudecompUpdateHalosX</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="n">grid_desc</span><span class="p">,</span><span class="w"> </span><span class="n">data_d</span><span class="p">,</span><span class="w"> </span><span class="n">halo_work_d</span><span class="p">,</span><span class="w"> </span><span class="n">CUDECOMP_DOUBLE</span><span class="p">,</span><span class="w"> </span><span class="n">pinfo_x</span><span class="p">%</span><span class="n">halo_extents</span><span class="p">,</span><span class="w"> </span><span class="n">halo_periods</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="w"></span>
+<span class="k">call </span><span class="n">CHECK_CUDECOMP_EXIT</span><span class="p">(</span><span class="n">istat</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+</div></div>
+</section>
+<section id="cleaning-up-and-finalizing-the-library">
+<h2>Cleaning up and finalizing the library<a class="headerlink" href="#cleaning-up-and-finalizing-the-library" title="Permalink to this headline">¶</a></h2>
+<p>Finally, we can clean up resources. Note the usage of <a class="reference internal" href="api/c_api.html#cudecompfree-ref"><span class="std std-ref">cudecompFree</span></a> to deallocate the workspace arrays
+allocated with <a class="reference internal" href="api/c_api.html#cudecompmalloc-ref"><span class="std std-ref">cudecompMalloc</span></a>.</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-14-Qysr" aria-selected="true" class="sphinx-tabs-tab code-tab group-tab" id="tab-14-Qysr" name="Qysr" role="tab" tabindex="0">C++</button><button aria-controls="panel-14-Rm9ydHJhbg==" aria-selected="false" class="sphinx-tabs-tab code-tab group-tab" id="tab-14-Rm9ydHJhbg==" name="Rm9ydHJhbg==" role="tab" tabindex="-1">Fortran</button></div><div aria-labelledby="tab-14-Qysr" class="sphinx-tabs-panel code-tab group-tab" id="panel-14-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">free</span><span class="p">(</span><span class="n">data</span><span class="p">);</span><span class="w"></span>
+<span class="n">CHECK_CUDA_EXIT</span><span class="p">(</span><span class="n">cudaFree</span><span class="p">(</span><span class="n">data_d</span><span class="p">));</span><span class="w"></span>
+<span class="n">CHECK_CUDECOMP_EXIT</span><span class="p">(</span><span class="n">cudecompFree</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="n">grid_desc</span><span class="p">,</span><span class="w"> </span><span class="n">transpose_work_d</span><span class="p">));</span><span class="w"></span>
+<span class="n">CHECK_CUDECOMP_EXIT</span><span class="p">(</span><span class="n">cudecompFree</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="n">grid_desc</span><span class="p">,</span><span class="w"> </span><span class="n">halo_work_d</span><span class="p">));</span><span class="w"></span>
+<span class="n">CHECK_CUDECOMP_EXIT</span><span class="p">(</span><span class="n">cudecompGridDescDestroy</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="n">grid_desc</span><span class="p">));</span><span class="w"></span>
+<span class="n">CHECK_CUDECOMP_EXIT</span><span class="p">(</span><span class="n">cudecompFinalize</span><span class="p">(</span><span class="n">handle</span><span class="p">));</span><span class="w"></span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-14-Rm9ydHJhbg==" class="sphinx-tabs-panel code-tab group-tab" hidden="true" id="panel-14-Rm9ydHJhbg==" name="Rm9ydHJhbg==" role="tabpanel" tabindex="0"><div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">deallocate</span><span class="p">(</span><span class="k">data</span><span class="p">)</span><span class="w"></span>
+<span class="k">deallocate</span><span class="p">(</span><span class="n">data_d</span><span class="p">)</span><span class="w"></span>
+<span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cudecompFree</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="n">grid_desc</span><span class="p">,</span><span class="w"> </span><span class="n">transpose_work_d</span><span class="p">)</span><span class="w"></span>
+<span class="k">call </span><span class="n">CHECK_CUDECOMP_EXIT</span><span class="p">(</span><span class="n">istat</span><span class="p">)</span><span class="w"></span>
+<span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cudecompFree</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="n">grid_desc</span><span class="p">,</span><span class="w"> </span><span class="n">halo_work_d</span><span class="p">)</span><span class="w"></span>
+<span class="k">call </span><span class="n">CHECK_CUDECOMP_EXIT</span><span class="p">(</span><span class="n">istat</span><span class="p">)</span><span class="w"></span>
+<span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cudecompGridDescDestroy</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span><span class="w"> </span><span class="n">grid_desc</span><span class="p">)</span><span class="w"></span>
+<span class="k">call </span><span class="n">CHECK_CUDECOMP_EXIT</span><span class="p">(</span><span class="n">istat</span><span class="p">)</span><span class="w"></span>
+<span class="n">istat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cudecompFinalize</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span><span class="w"></span>
+<span class="k">call </span><span class="n">CHECK_CUDECOMP_EXIT</span><span class="p">(</span><span class="n">istat</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+</div></div>
+</section>
+<section id="building-and-running-the-example">
+<h2>Building and running the example<a class="headerlink" href="#building-and-running-the-example" title="Permalink to this headline">¶</a></h2>
+<p>Refer to the Makefiles in the basic usage example directories to see how to compile a program with the cuDecomp library.</p>
+<p>Once compiled, the program can be executed using <code class="code docutils literal notranslate"><span class="pre">mpirun</span></code> or equivalent  parallel launcher.</p>
+<p>We highly suggest making usage of the <code class="code docutils literal notranslate"><span class="pre">bind.sh</span></code> shell script in the <code class="code docutils literal notranslate"><span class="pre">utils</span></code> directory to assist in process/NUMA binding,
+to ensure processes are bound to node resources optimally (e.g. that processes are launched on CPU cores with close affinity to GPUs.) This is an example usage of the <code class="code docutils literal notranslate"><span class="pre">bind.sh</span></code> script for Perlmutter system:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">srun</span><span class="w"> </span><span class="o">-</span><span class="n">N1</span><span class="w"> </span><span class="o">--</span><span class="n">tasks</span><span class="o">-</span><span class="n">per</span><span class="o">-</span><span class="n">node</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="o">--</span><span class="n">bind</span><span class="o">=</span><span class="n">none</span><span class="w"> </span><span class="n">bind</span><span class="p">.</span><span class="n">sh</span><span class="w"> </span><span class="o">--</span><span class="n">cpu</span><span class="o">=</span><span class="n">pm_map</span><span class="p">.</span><span class="n">sh</span><span class="w"> </span><span class="o">--</span><span class="n">mem</span><span class="o">=</span><span class="n">pm_map</span><span class="p">.</span><span class="n">sh</span><span class="w"> </span><span class="o">--</span><span class="w"> </span><span class="n">basic_usage</span><span class="w"></span>
+</pre></div>
+</div>
+<p>The <code class="code docutils literal notranslate"><span class="pre">pm_map.sh</span></code> is a file (which can be found in the <code class="code docutils literal notranslate"><span class="pre">utils</span></code> directory) containing the following:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">bind_cpu_cores</span><span class="o">=</span><span class="p">([</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="s">&quot;48-63,112-127&quot;</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="s">&quot;32-47,96-111&quot;</span><span class="w"> </span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="s">&quot;16-31,80-95&quot;</span><span class="w"> </span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">=</span><span class="s">&quot;0-15,64-79&quot;</span><span class="p">)</span><span class="w"></span>
+
+<span class="n">bind_mem</span><span class="o">=</span><span class="p">([</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="s">&quot;3&quot;</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="s">&quot;2&quot;</span><span class="w"> </span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="s">&quot;1&quot;</span><span class="w"> </span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">=</span><span class="s">&quot;0&quot;</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+<p>These bash arrays list CPU core ranges (<code class="code docutils literal notranslate"><span class="pre">bind_cpu_cores</span></code>) and NUMA domains (<code class="code docutils literal notranslate"><span class="pre">bind_mem</span></code>)  to pin each process to, by local rank. The <code class="code docutils literal notranslate"><span class="pre">bind.sh</span></code> script will use these arrays to pin processes using <code class="code docutils literal notranslate"><span class="pre">numactl</span></code>.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="overview.html" class="btn btn-neutral float-left" title="Overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="autotuning.html" class="btn btn-neutral float-right" title="Autotuning" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, NVIDIA Corporation.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>  
+
+  <style>
+  a:link, a:visited {
+    color: #76b900;
+  }
+
+  a:hover {
+    color: #8c0;
+  }
+
+  .rst-content dl:not(.docutils) dt {
+    background: rgba(118, 185, 0, 0.1);
+    color: rgba(59,93,0,1);
+    border-top: solid 3px rgba(59,93,0,1);
+  }
+  </style>
+  
+
+</body>
+</html>
