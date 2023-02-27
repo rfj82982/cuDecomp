@@ -13,8 +13,10 @@ cc:
 f90:
 	cd fortran/basic_usage; make
 	cd fortran/poisson; make
+	cd fortran/fft_c2c_x; make
 clean:
 	cd cc/basic_usage; make clean
 	cd cc/taylor_green; make clean
 	cd fortran/basic_usage; make clean
 	cd fortran/poisson; make clean
+	cd fortran/fft_c2c_x; make clean

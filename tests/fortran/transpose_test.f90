@@ -172,6 +172,10 @@ program main
   ARRTYPE, pointer, device:: input(:), output(:)
   integer :: dtype = DTYPE
 
+  ! Timing 
+  double precision :: t1, t2, t3, t4, t5, t6, t7, t8
+  integer :: itest, ntest=10
+
   integer :: i, j, k, idt
   logical :: skip_next
   character(len=16) :: arg
@@ -363,78 +367,114 @@ program main
     call flat_copy(xref, data_d, pinfo_x%size)
   endif
 
-  if (use_managed_memory) then
-    input => data_m
-    output => data_m
-    if (out_of_place) output => data_2_m
-  else
-    input => data_d
-    output => data_d
-    if (out_of_place) output => data_2_d
-  endif
-
-  work_d = 0
-  CHECK_CUDECOMP_EXIT(cudecompTransposeXToY(handle, grid_desc, input, output, work_d, dtype, pinfo_x%halo_extents, pinfo_y%halo_extents))
-  data = output
-  if (compare_pencils(yref, data, pinfo_y)) then
-    print*, "FAILED cudecompTranposeXToY"
-    call exit(1)
-  endif
-
-  if (out_of_place) then
+  t2=0.d0
+  t4=0.d0
+  t6=0.d0
+  t8=0.d0
+  do itest=1,ntest
+    write(*,*) 'ITER ',itest
+    ! Time for X->Y
+    t1=MPI_WTIME()
     if (use_managed_memory) then
-      output => data_m
-      input => data_2_m
-    else
-      output => data_d
-      input => data_2_d
-    endif
-  endif
-
-  work_d = 0
-  CHECK_CUDECOMP_EXIT(cudecompTransposeYToZ(handle, grid_desc, input, output, work_d, dtype, pinfo_y%halo_extents, pinfo_z%halo_extents))
-  data = output
-  if (compare_pencils(zref, data, pinfo_z)) then
-    print*, "FAILED cudecompTranposeYToZ"
-    call exit(1)
-  endif
-
-  if (out_of_place) then
-    if (use_managed_memory) then
-      output => data_2_m
       input => data_m
-    else
-      output => data_2_d
-      input => data_d
-    endif
-  endif
-
-  work_d = 0
-  CHECK_CUDECOMP_EXIT(cudecompTransposeZToY(handle, grid_desc, input, output, work_d, dtype, pinfo_z%halo_extents, pinfo_y%halo_extents))
-  data = output
-  if (compare_pencils(yref, data, pinfo_y)) then
-    print*, "FAILED cudecompTranposeZToY"
-    call exit(1)
-  endif
-
-  if (out_of_place) then
-    if (use_managed_memory) then
       output => data_m
-      input => data_2_m
+      if (out_of_place) output => data_2_m
     else
+      input => data_d
       output => data_d
-      input => data_2_d
+      if (out_of_place) output => data_2_d
     endif
-  endif
 
-  work_d = 0
-  CHECK_CUDECOMP_EXIT(cudecompTransposeYToX(handle, grid_desc, input, output, work_d, dtype, pinfo_y%halo_extents, pinfo_x%halo_extents))
-  data = output
-  if (compare_pencils(xref, data, pinfo_x)) then
-    print*, "FAILED cudecompTranposeXToY"
-    call exit(1)
-  endif
+    work_d = 0
+    CHECK_CUDECOMP_EXIT(cudecompTransposeXToY(handle, grid_desc, input, output, work_d, dtype, pinfo_x%halo_extents, pinfo_y%halo_extents))
+    t2 = t2 + MPI_WTIME() - t1
+    data = output
+    if (compare_pencils(yref, data, pinfo_y)) then
+      print*, "FAILED cudecompTranposeXToY"
+      call exit(1)
+    endif
 
+    t3=MPI_WTIME()
+    if (out_of_place) then
+      if (use_managed_memory) then
+        output => data_m
+        input => data_2_m
+      else
+        output => data_d
+        input => data_2_d
+      endif
+    endif
+
+    work_d = 0
+    CHECK_CUDECOMP_EXIT(cudecompTransposeYToZ(handle, grid_desc, input, output, work_d, dtype, pinfo_y%halo_extents, pinfo_z%halo_extents))
+    t4 = t4 + MPI_WTIME() - t3
+    data = output
+    if (compare_pencils(zref, data, pinfo_z)) then
+      print*, "FAILED cudecompTranposeYToZ"
+      call exit(1)
+    endif
+
+    t5=MPI_WTIME()
+    if (out_of_place) then
+      if (use_managed_memory) then
+        output => data_2_m
+        input => data_m
+      else
+        output => data_2_d
+        input => data_d
+      endif
+    endif
+
+    work_d = 0
+    CHECK_CUDECOMP_EXIT(cudecompTransposeZToY(handle, grid_desc, input, output, work_d, dtype, pinfo_z%halo_extents, pinfo_y%halo_extents))
+    t6 = t6 + MPI_WTIME() - t5
+    data = output
+    if (compare_pencils(yref, data, pinfo_y)) then
+      print*, "FAILED cudecompTranposeZToY"
+      call exit(1)
+    endif
+
+    t7=MPI_WTIME()
+    if (out_of_place) then
+      if (use_managed_memory) then
+        output => data_m
+        input => data_2_m
+      else
+        output => data_d
+        input => data_2_d
+      endif
+    endif
+
+    work_d = 0
+    CHECK_CUDECOMP_EXIT(cudecompTransposeYToX(handle, grid_desc, input, output, work_d, dtype, pinfo_y%halo_extents, pinfo_x%halo_extents))
+    t8 = t8 + MPI_WTIME() - t7
+    data = output
+    if (compare_pencils(xref, data, pinfo_x)) then
+      print*, "FAILED cudecompTranposeXToY"
+      call exit(1)
+    endif
+  enddo
+
+  call MPI_ALLREDUCE(t2, t1, 1, MPI_DOUBLE_PRECISION, MPI_SUM, &
+                      MPI_COMM_WORLD, ierr)
+  t1 = t1 / real(nranks)
+  call MPI_ALLREDUCE(t4, t3, 1, MPI_DOUBLE_PRECISION, MPI_SUM, &
+                      MPI_COMM_WORLD, ierr)
+  t3 = t3 / real(nranks)
+  call MPI_ALLREDUCE(t6, t5, 1, MPI_DOUBLE_PRECISION, MPI_SUM, &
+                      MPI_COMM_WORLD, ierr)
+  t5 = t5 / real(nranks)
+  call MPI_ALLREDUCE(t8, t7, 1, MPI_DOUBLE_PRECISION, MPI_SUM, &
+                      MPI_COMM_WORLD, ierr)
+  t7 = t7 / real(nranks)
+  t8 = t1+t3+t5+t8
+  if (rank == 0) then
+    write(*,*) 'Time X->Y ', t1
+    write(*,*) 'Time Y->Z ', t3
+    write(*,*) 'Time Z->Y ', t5
+    write(*,*) 'Time Y->X ', t7
+    write(*,*) 'Time TOT  ', t8
+  endif
   if (use_managed_memory) then
     deallocate(data_m)
     if (out_of_place) deallocate(data_2_m)
